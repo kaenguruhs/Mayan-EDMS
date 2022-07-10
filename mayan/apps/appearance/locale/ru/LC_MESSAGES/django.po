@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 09:21+0000\n"
+"POT-Creation-Date: 2022-06-24 20:40+0000\n"
 "PO-Revision-Date: 2022-02-03 10:11+0000\n"
 "Last-Translator: Ilya Pavlov <spirkaa@gmail.com>, 2022\n"
 "Language-Team: Russian (https://www.transifex.com/rosarior/teams/13584/ru/)\n"
@@ -164,10 +164,14 @@ msgid "View existing themes"
 msgstr "Просмотр существующих тем"
 
 #: settings.py:15
+msgid "Custom HTTP response code for AJAX redirections."
+msgstr ""
+
+#: settings.py:21
 msgid "Maximum number of characters that will be displayed as the view title."
 msgstr "Максимальное количество символов, отображаемое в заголовке."
 
-#: settings.py:22
+#: settings.py:28
 msgid ""
 "Position where the system message will be displayed. Options are: top-left, "
 "top-center, top-right, bottom-left, bottom-center, bottom-right."
@@ -175,7 +179,7 @@ msgstr ""
 "Расположение всплывающих системных сообщений. Варианты: top-left, top-"
 "center, top-right, bottom-left, bottom-center, bottom-right."
 
-#: settings.py:30
+#: settings.py:36
 msgid ""
 "Delay in milliseconds after which the menus will be checked for updates."
 msgstr ""
@@ -217,7 +221,7 @@ msgstr ""
 "разрешений для доступа к элементу."
 
 #: templates/500.html:5 templates/500.html:30
-#: templates/appearance/root.html:48
+#: templates/appearance/root.html:47
 msgid "Server error"
 msgstr "Ошибка сервера"
 
@@ -431,15 +435,15 @@ msgstr "Переключение выпадающего списка"
 msgid "No results"
 msgstr "Нет результатов"
 
-#: templates/appearance/root.html:53
+#: templates/appearance/root.html:52
 msgid "Close"
 msgstr "Закрыть"
 
-#: templates/appearance/root.html:61
+#: templates/appearance/root.html:60
 msgid "Server communication error"
 msgstr "Ошибка связи с сервером"
 
-#: templates/appearance/root.html:63
+#: templates/appearance/root.html:62
 msgid "Check you network connection and try again in a few moments."
 msgstr "Проверьте ваше подключение к сети и повторите попытку позже."
 

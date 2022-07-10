@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 09:21+0000\n"
+"POT-Creation-Date: 2022-06-24 20:40+0000\n"
 "PO-Revision-Date: 2022-02-03 10:11+0000\n"
 "Last-Translator: Marwan Rahhal <Marwanr@sssit.net>, 2022\n"
 "Language-Team: Arabic (https://www.transifex.com/rosarior/teams/13584/ar/)\n"
@@ -162,10 +162,14 @@ msgid "View existing themes"
 msgstr "استعراض القالب الحالي"
 
 #: settings.py:15
+msgid "Custom HTTP response code for AJAX redirections."
+msgstr ""
+
+#: settings.py:21
 msgid "Maximum number of characters that will be displayed as the view title."
 msgstr "اكبر عدد من الحروف ستظهر "
 
-#: settings.py:22
+#: settings.py:28
 msgid ""
 "Position where the system message will be displayed. Options are: top-left, "
 "top-center, top-right, bottom-left, bottom-center, bottom-right."
@@ -173,7 +177,7 @@ msgstr ""
 "الموضع الذي سيتم فيه عرض رسالة النظام. الخيارات هي: أعلى اليسار ، أعلى الوسط"
 " ، أعلى اليمين ، أسفل اليسار ، أسفل الوسط ، أسفل اليمين."
 
-#: settings.py:30
+#: settings.py:36
 msgid ""
 "Delay in milliseconds after which the menus will be checked for updates."
 msgstr ""
@@ -213,7 +217,7 @@ msgid ""
 msgstr "لا تملك الصلاحيات اللازمة للوصول ، مراجعة مدير النظام"
 
 #: templates/500.html:5 templates/500.html:30
-#: templates/appearance/root.html:48
+#: templates/appearance/root.html:47
 msgid "Server error"
 msgstr "مشكلة في الخوادم"
 
@@ -424,15 +428,15 @@ msgstr "تغير القائمة المنسدلة"
 msgid "No results"
 msgstr "لا يوجد نتائج"
 
-#: templates/appearance/root.html:53
+#: templates/appearance/root.html:52
 msgid "Close"
 msgstr "إغلاق"
 
-#: templates/appearance/root.html:61
+#: templates/appearance/root.html:60
 msgid "Server communication error"
 msgstr "خطأ في الاتصال بالخوادم"
 
-#: templates/appearance/root.html:63
+#: templates/appearance/root.html:62
 msgid "Check you network connection and try again in a few moments."
 msgstr "مشكلة إتصال ! يرجى مراجعة مدير النظام "
 

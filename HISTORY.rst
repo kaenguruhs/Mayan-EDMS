@@ -1,3 +1,131 @@
+4.2.7 (2022-07-01)
+==================
+- Intercept document file and document version page transformation errors
+  and show a corresponding error template. This allows accessing the page
+  to fix the transformation error. Closes GitLab issue #1101. Thanks to
+  Munzir Taha (@munzirtaha) for the report.
+- Backport search fixes from 4.3:
+
+  - Normalize how the search "Match all" parameter is evaluated.
+  - Fix evaluation of "Match all" when using a single level scoped search.
+  - Improve extraction of URL search query parameters.
+
+4.2.6 (2022-06-25)
+==================
+- Backport document content parsing template method. This fix
+  allows accessing the parsed content of a document directly
+  in a template.
+- Backport permission form widget choice grouping and sorting improvements.
+
+4.2.5 (2022-05-21)
+==================
+- Remove unused authentication view.
+- Task manager app updates:
+
+  - Add backend Celery queue deduplication to the ``CeleryQueue``.
+  - Enable app tests.
+  - Add and improve tests.
+  - Add support for runtime removal of queues.
+
+- Remove unused event link.
+- Make document version OCR submit view messages translatable.
+- Make file caching purge view messages translatable.
+- Make document file metadata submit view messages translatable.
+- Fix asset transformations hash calculation.
+- Fix asset image API view docstring.
+- Fix repeated model manager definition in ``DocumentFilePage``
+  models.
+- Transformation improvements:
+
+  - Fix wrong parameter in the ``ImageDraw.Draw`` usage of the
+    ``TransformationDrawRectangle`` transformation.
+  - Add sanity check to reject negative zoom values for the
+    ``TransformationZoom`` transformation.
+
+- Add warning message when users attempting to delete their own accounts.
+- Convert the signal handler that triggers search indexing on many to many
+  fields changes into a background task. Solves user interface blocking
+  when changing the document type to index template association on large
+  installations.
+- Update Django from version 3.2.12 to 3.2.13.
+- Retry search indexing task when the object is not found. There are
+  situations where the broker will route the message to the workers faster
+  than the database can commit the data.
+- Fix favorite document links reacting to favorite documents beyond the
+  active user. Closes GitLab issue #1104. Thanks to
+  Biel Frontera (@bielfrontera) for the report and initial implementation.
+
+4.2.4 (2022-04-29)
+==================
+- Fix the documentation paths to the OTP backends. Closes GitLab
+  issue #1099. Thanks to Matthias Löblich (@startmat) for the
+  report.
+- Fix Docker pull counter.
+- Remove repeated Whoosh backend line of code from merge.
+- Add portainer installation files and documentation.
+- Remove hardcoded search model variable name from ``search_box.html``
+  template.
+- Fix the search model API URL reference. Closes GitLab issue #1098. Thanks
+  to Bastian (@Basti-Fantasti) for the report.
+- Use the ``SEARCH_MODEL_NAME_KWARG`` instead of hard coding the search model
+  API URL reference.
+- Filter trashed documents from the tag document count column.
+- Filter trashed documents from the cabinet document retrieval method. This
+  brings code parity with tags which work in a very similar way.
+- Improve Python 3.10 compatibility. Add a compatibility module to
+  encapsulate import of the ``Iterable`` class. Improves GitLab issue #1083.
+  Thanks to Bw (@bwakkie) for the report and code samples.
+- Type cast LUT values when masking an asset for pasting via Pillow's
+  ``point()``.
+- Document metadata edit form validation updates:
+
+  - Remove ``disabled`` attribute from the metadata type label field to
+    avoid having its value removed when there is a validation error.
+  - Remove the ``required`` flag from the value field when there is a
+    required metadata for a document. The previous behavior cause the tabular
+    form to display "(required)" in column title confusing users and causing
+    them to think that all metadata type fields were required.
+  - Raise validation error for specific required metadata entries and no for
+    the entire form. This help users better understand which metadata field
+    needs to be corrected.
+  - Improve the required metadata validation logic to take into account
+    existing values and empty forms when data was entered into the field
+    but the update checkbox was left unchecked.
+
+- Bulk object search indexing updates:
+
+  - Retry failed bulk indexing tasks.
+  - Add max retry value to ``task_index_search_models``.
+  - Improve tasks error logging.
+
+- Update the Debian Docker image from version 11.2-slim to 11.3-slim.
+- Downgrade the Python Docker image from version 3.11-slim to 3.10-slim.
+- Pin Jinja2 version to workaround Sphinx bug. Sphinx Jinja2 dependency is
+  not pinned or immutable, and causes the installation of an incompatible
+  version breaking builds.
+
+4.2.3 (2022-04-01)
+==================
+- Add restart policy to the Traefik container definition.
+- Remove duplicated ``Document.get_label`` method.
+- Fix an issue where a staging folder would not tag uploaded
+  documents.
+
+4.2.2 (2022-03-21)
+==================
+- Ensure the object copy permission is required for the object copy link.
+- Migrate old workflow ``EmailAction`` instances instead of sub-classing
+  for backwards compatibility. Improves commit
+  ``b522dac80f7f6cfb8c5db8a74d6d2d22bc8b281a`` and avoids a double entry in
+  the workflow state action selection downdown list.
+- Ensure new document and file links access works like their respective
+  views. The links will be active when the access is granted for the source
+  as well as the document/document type.
+- Filter unread message count badge by message read permission.
+- Update document metadata model field label from "Metadata type value"
+  to "Metadata value".
+- Fix document file signature serializer label.
+
 4.2.1 (2022-02-16)
 ==================
 - Merge improvements from version 4.1.6.
@@ -165,9 +293,9 @@
 
 - Add Time based One Time Password (TOTP) support. To enable set the
   setting ``AUTHENTICATION_BACKEND`` to
-  ``mayan.apps.authentication.authentication_backends.AuthenticationBackendModelUsernamePasswordTOTP``
+  ``mayan.apps.authentication_otp.authentication_backends.AuthenticationBackendModelUsernamePasswordTOTP``
   for username and TOTP login. For email and TOTP logins use
-  ``mayan.apps.authentication.authentication_backends.AuthenticationBackendModelEmailPasswordTOTP``.
+  ``mayan.apps.authentication_otp.authentication_backends.AuthenticationBackendModelEmailPasswordTOTP``.
   New management commands to support OTP:
 
     - ``authentication_otp_disable``: disables OTP for a user
@@ -247,6 +375,86 @@
   to be optional.
 - Redirect to current user to user detail view after password change.
 - Support two different ``psycopg2`` versions for upgrade testing.
+
+4.1.9 (2022-04-24)
+==================
+- Remove hardcoded search model variable name from ``search_box.html``
+  template.
+
+4.1.8 (2022-04-23)
+==================
+- Fix the search model API URL reference. Closes GitLab issue #1098. Thanks
+  to Bastian (@Basti-Fantasti) for the report.
+- Use the ``SEARCH_MODEL_NAME_KWARG`` instead of hard coding the search model
+  API URL reference.
+- Merged changes from version 4.0.22:
+
+  - Remove usage of flat values list in document checkout manager.
+  - Remove usage of flat ``values_list`` queryset in metadata managers module.
+  - Cleanup markup of the confirmation form.
+  - Remove redundant modal close button.
+  - Fix search proxies method decorator.
+  - Reorganize converter office MIME type list.
+  - Improve metadata validation error message.
+  - Don't display API URL links to indexing instance and template parents that
+    are also root nodes as these are not accessible.
+  - Remove repeated partition file close call.
+  - Update Django version 2.2.24 to 2.2.28.
+
+- Reduce the Sentry client default ``traces_sample_rate`` from 0.25 to 0.05.
+- Add keyword argument to ``self.stderr`` and ``self.stdout`` usage.
+- In ``FilteredRelatedFieldMixin``, split retrieval of the queryset to
+  avoid the exception handler from capturing an ``AttributeError`` that it
+  shouldn't.
+- Updated the ``subject`` and ``body`` fields of the document email
+  workflow action to be optional.
+- Migrate old workflow ``EmailAction`` instances instead of sub-classing
+  for backwards compatibility. Improves commit
+  ``b522dac80f7f6cfb8c5db8a74d6d2d22bc8b281a`` and avoids a double entry in
+  the workflow state action selection dropbox.
+- Partials navigation updates:
+
+  - Streamline JavaScript partials navigation code.
+  - Make the AJAX response redirect code configurable. New setting
+    ``APPEARANCE_AJAX_REDIRECTION_CODE`` added.
+  - Remove repeated AJAX redirection middleware.
+
+- Add keyword arguments to zip file calls.
+- ``PartialNavigation.js`` improvements.
+
+  - Clean URL query on form submit and use form data as the URL query.
+  - Remove dead code.
+  - Use constants where appropriate.
+
+- Backport new document link condition logic. Ensure new document and file
+  links access works like their respective views. The links will be active
+  when the access is granted for the source as well as the document/document
+  type. Closes GitLab issue #1102. Thanks to Julian Marié (@Angelfs) for the
+  report and debug information.
+- Improve logic of the new document file link
+
+  - Access the view user in a more reliable way.
+  - Test the new file permission of the document and not
+    of the document type.
+  - If no document is present in the view exit fast.
+  - Update tests.
+
+4.1.7 (2022-04-01)
+==================
+- Backport fixes from version 4.2.3
+
+  - Add restart policy to the Traefik container definition.
+  - Remove duplicated ``Document.get_label`` method.
+  - Fix an issue where a staging folder would not tag uploaded
+    documents.
+  - Fix document file signature serializer label.
+  - Update document metadata model field label from "Metadata type value"
+    to "Metadata value".
+  - Filter unread message count badge by message read permission.
+  - Update signature view permission label from
+    "View details of document signatures" to "View document signature".
+  - Ensure the object copy permission is required for the object copy link.
+  - Fix ``GUNICORN_REQUESTS_JITTER`` documentation setting name reference.
 
 4.1.6 (2022-02-15)
 ==================
@@ -872,6 +1080,33 @@
 - Add document template state action API endpoints. Closes GitLab issue #1043
   Thanks to Ludovic Anterieur (@lanterieur) for the request.
 - Pin jsonschema to version 3.2.0 to avoid errors with
+
+4.0.22 (2022-04-22)
+===================
+- Filter unread message count badge by message read permission.
+- Remove usage of flat values list in document checkout manager.
+- Remove usage of flat ``values_list`` queryset in metadata managers module.
+- Ensure the object copy permission is required for the object copy link.
+- Update signature view permission label from
+  "View details of document signature" to "View document signatures".
+- Update document metadata model field label from "Metadata type value"
+  to "Metadata value".
+- Fix document file signature serializer label.
+- Add restart policy to the Traefik container definition.
+- Remove duplicated ``Document.get_label`` method.
+- Add Docker Compose file port comment to remove when using Traefik.
+- Print the path when failing to access the configuration file.
+- Expose the workflow template ``auto_launch`` field via the REST API.
+  Thanks to forum user @qra for the request.
+- Cleanup markup of the confirmation form.
+- Remove redundant modal close button.
+- Fix search proxies method decorator.
+- Reorganize converter office MIME type list.
+- Improve metadata validation error message.
+- Don't display API URL links to indexing instance and template parents that
+  are also root nodes as these are not accessible.
+- Remove repeated partition file close call.
+- Update Django version 2.2.24 to 2.2.28.
 
 4.0.21 (2021-11-29)
 ===================

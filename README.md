@@ -1,8 +1,8 @@
 [![pypi][pypi]][pypi-url]
 ![python][python]
 ![license][license]
-[![Docker pulls](https://img.shields.io/docker/pulls/mayanedms/mayanedms.svg?maxAge=3600)](https://hub.docker.com/r/mayanedms/mayanedms/)
-[![Docker Stars](https://img.shields.io/docker/stars/mayanedms/mayanedms.svg?maxAge=3600)](https://hub.docker.com/r/mayanedms/mayanedms/)
+[![Docker pulls](https://img.shields.io/docker/pulls/mayanedms/mayanedms.svg)](https://hub.docker.com/r/mayanedms/mayanedms/)
+[![Docker Stars](https://img.shields.io/docker/stars/mayanedms/mayanedms.svg)](https://hub.docker.com/r/mayanedms/mayanedms/)
 [![Commits][commits]][commits-url]
 [![Support][support]][support-url]
 [![Store](https://img.shields.io/badge/Online_store-black)](https://teespring.com/stores/mayan-edms)
@@ -46,6 +46,18 @@
 </p>
 
 </div>
+
+<h2 align="center">Book</h2>
+
+The final version of the book "Exploring Mayan EDMS" available now!
+
+<p align="center">
+    <a href="https://sellfy.com/p/um2fkx/">
+        <img width="400" src="https://d12swbtw719y4s.cloudfront.net/images/v6RpxW40/aP0qKLjkPiAuXZhYuB45/wDAULAzFyx.jpeg?w=548">
+    </a>
+</p>
+
+The link is https://sellfy.com/p/um2fkx/
 
 <h2 align="center">Installation</h2>
 

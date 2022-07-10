@@ -8,22 +8,22 @@
 # 425fe09b3064b9f906f637fff94056ae_a00ea56 <0fa3588fa89906bfcb3a354600956e0e_308047>, 2022
 # Emerson Soares <on.emersonsoares@gmail.com>, 2022
 # Vítor Figueiró <vfigueiro@gmail.com>, 2022
-# Márcia Ferreira, 2022
 # Bruno Martins <bruno.martins@bewgpt.com.pt>, 2022
+# Márcia Ferreira, 2022
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 09:21+0000\n"
+"POT-Creation-Date: 2022-06-24 20:40+0000\n"
 "PO-Revision-Date: 2022-02-03 10:11+0000\n"
-"Last-Translator: Bruno Martins <bruno.martins@bewgpt.com.pt>, 2022\n"
+"Last-Translator: Márcia Ferreira, 2022\n"
 "Language-Team: Portuguese (https://www.transifex.com/rosarior/teams/13584/pt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pt\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: apps.py:57 events.py:5 permissions.py:5 settings.py:10
 msgid "Appearance"
@@ -87,7 +87,7 @@ msgstr "Tema editado"
 
 #: events.py:14
 msgid "User theme edited"
-msgstr ""
+msgstr "Tema do utilizador editado. "
 
 #: links.py:18
 msgid "Theme settings"
@@ -166,10 +166,14 @@ msgid "View existing themes"
 msgstr "Ver temas existentes"
 
 #: settings.py:15
+msgid "Custom HTTP response code for AJAX redirections."
+msgstr ""
+
+#: settings.py:21
 msgid "Maximum number of characters that will be displayed as the view title."
 msgstr "Número máximo de caracteres que será mostrado como título da vista."
 
-#: settings.py:22
+#: settings.py:28
 msgid ""
 "Position where the system message will be displayed. Options are: top-left, "
 "top-center, top-right, bottom-left, bottom-center, bottom-right."
@@ -177,7 +181,7 @@ msgstr ""
 "Posição em que será mostrada a mensagem de sistema. As opções são: top-left,"
 " top-center, top-right, bottom-left, bottom-center, bottom-right."
 
-#: settings.py:30
+#: settings.py:36
 msgid ""
 "Delay in milliseconds after which the menus will be checked for updates."
 msgstr ""
@@ -221,7 +225,7 @@ msgstr ""
 "necessárias."
 
 #: templates/500.html:5 templates/500.html:30
-#: templates/appearance/root.html:48
+#: templates/appearance/root.html:47
 msgid "Server error"
 msgstr "Erro do servidor"
 
@@ -431,15 +435,15 @@ msgstr "Alternar caixa de seleção"
 msgid "No results"
 msgstr "Sem resultados"
 
-#: templates/appearance/root.html:53
+#: templates/appearance/root.html:52
 msgid "Close"
 msgstr "Fechar"
 
-#: templates/appearance/root.html:61
+#: templates/appearance/root.html:60
 msgid "Server communication error"
 msgstr "Erro de comunicação do servidor"
 
-#: templates/appearance/root.html:63
+#: templates/appearance/root.html:62
 msgid "Check you network connection and try again in a few moments."
 msgstr ""
 "Verifique a conexão à rede e tente novamente dentro de alguns momentos."
@@ -472,9 +476,9 @@ msgstr "Não existem temas"
 #: views.py:113
 #, python-format
 msgid "Theme settings for user: %s"
-msgstr ""
+msgstr "Configurações do tema para o utilizador: %s"
 
 #: views.py:134
 #, python-format
 msgid "Edit theme settings for user: %s"
-msgstr ""
+msgstr "Editar configurações de tema do utilizador %s"

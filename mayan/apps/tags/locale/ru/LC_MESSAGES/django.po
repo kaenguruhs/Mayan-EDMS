@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 09:22+0000\n"
+"POT-Creation-Date: 2022-06-24 20:40+0000\n"
 "PO-Revision-Date: 2022-02-03 10:14+0000\n"
 "Last-Translator: lilo.panic, 2022\n"
 "Language-Team: Russian (https://www.transifex.com/rosarior/teams/13584/ru/)\n"
@@ -108,15 +108,15 @@ msgstr "Цветной"
 msgid "Tag"
 msgstr "Метка"
 
-#: models.py:83
+#: models.py:85
 msgid "Preview"
 msgstr "Предпросмотр"
 
-#: models.py:112
+#: models.py:114
 msgid "Document tag"
 msgstr "Метка документа"
 
-#: models.py:113 search.py:28 search.py:34 search.py:40 search.py:46
+#: models.py:115 search.py:28 search.py:34 search.py:40 search.py:46
 msgid "Document tags"
 msgstr "Метки документов"
 

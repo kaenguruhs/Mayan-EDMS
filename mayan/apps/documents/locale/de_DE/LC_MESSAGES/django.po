@@ -16,14 +16,15 @@
 # Dennis M. Pöpperl <free-software@dm-poepperl.de>, 2022
 # Berny <berny@bernhard-marx.de>, 2022
 # Mathias Behrle <mathiasb@m9s.biz>, 2022
+# Thomas Lauterbach <lauterbachthomas@googlemail.com>, 2022
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 09:21+0000\n"
+"POT-Creation-Date: 2022-06-24 20:40+0000\n"
 "PO-Revision-Date: 2022-02-03 10:12+0000\n"
-"Last-Translator: Mathias Behrle <mathiasb@m9s.biz>, 2022\n"
+"Last-Translator: Thomas Lauterbach <lauterbachthomas@googlemail.com>, 2022\n"
 "Language-Team: German (Germany) (https://www.transifex.com/rosarior/teams/13584/de_DE/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -121,7 +122,7 @@ msgstr ""
 
 #: apps.py:582
 msgid "Access date and time"
-msgstr ""
+msgstr "Datum und Zeit des Zugriffs"
 
 #: classes.py:57
 msgid "Original"
@@ -440,8 +441,8 @@ msgstr "Vorherige Seite"
 msgid "Next page"
 msgstr "Nächste Seite"
 
-#: links/document_file_page_links.py:86 models/document_file_page_models.py:46
-#: models/document_file_page_models.py:308
+#: links/document_file_page_links.py:86 models/document_file_page_models.py:47
+#: models/document_file_page_models.py:306
 msgid "Document file pages"
 msgstr "Seiten der Dokumentendatei"
 
@@ -559,15 +560,15 @@ msgstr "Dokumentenversion"
 msgid "Document version pages"
 msgstr "Seiten der Dokumentenversion"
 
-#: links/favorite_links.py:23 views/favorite_document_views.py:36
+#: links/favorite_links.py:28 views/favorite_document_views.py:36
 msgid "Favorites"
 msgstr "Favoriten"
 
-#: links/favorite_links.py:29 links/favorite_links.py:39
+#: links/favorite_links.py:34 links/favorite_links.py:44
 msgid "Add to favorites"
 msgstr "Zu Favoriten hinzufügen"
 
-#: links/favorite_links.py:35 links/favorite_links.py:43
+#: links/favorite_links.py:40 links/favorite_links.py:48
 msgid "Remove from favorites"
 msgstr "Aus Favoriten entfernen"
 
@@ -713,20 +714,20 @@ msgstr ""
 msgid "Document files"
 msgstr "Dokumentendateien"
 
-#: models/document_file_models.py:333 models/document_file_page_models.py:267
+#: models/document_file_models.py:333 models/document_file_page_models.py:265
 #: models/document_models.py:72 models/document_models.py:318
-#: models/document_models.py:323 models/document_type_models.py:41
-#: models/document_type_models.py:203 models/document_version_models.py:236
+#: models/document_type_models.py:41 models/document_type_models.py:203
+#: models/document_version_models.py:236
 #: models/document_version_page_models.py:347
 msgid "Label"
 msgstr "Bezeichner"
 
-#: models/document_file_page_models.py:45
-#: models/document_file_page_models.py:307 search.py:84
+#: models/document_file_page_models.py:46
+#: models/document_file_page_models.py:305 search.py:84
 msgid "Document file page"
 msgstr "Seite der Dokumentendatei"
 
-#: models/document_file_page_models.py:261
+#: models/document_file_page_models.py:259
 #, python-format
 msgid "%(document_file)s - page %(page_num)d of %(total_pages)d"
 msgstr "%(document_file)s - Seite %(page_num)d von %(total_pages)d"
@@ -759,7 +760,7 @@ msgstr "Beschreibung"
 
 #: models/document_models.py:81
 msgid "The date and time of the document creation."
-msgstr ""
+msgstr "Datum und Zeit der Dokumenterstellung"
 
 #: models/document_models.py:82
 msgid "Created"
@@ -800,7 +801,7 @@ msgstr ""
 msgid "Is stub?"
 msgstr "Inkomplett"
 
-#: models/document_models.py:316 models/document_models.py:321
+#: models/document_models.py:316
 #, python-format
 msgid "Document stub, id: %d"
 msgstr "Fragment, ID: %d"
@@ -950,11 +951,11 @@ msgstr "Letzte Dokumente"
 
 #: models/recently_accessed_document_models.py:54
 msgid "Recently accessed document"
-msgstr ""
+msgstr "Kürzlich abgerufenes Dokument"
 
 #: models/recently_accessed_document_models.py:55
 msgid "Recently accessed documents"
-msgstr ""
+msgstr "Kürzlich abgerufene Dokumente"
 
 #: permissions.py:10
 msgid "Create documents"

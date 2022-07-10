@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 09:21+0000\n"
+"POT-Creation-Date: 2022-06-24 20:40+0000\n"
 "PO-Revision-Date: 2022-02-03 10:12+0000\n"
 "Last-Translator: Márcia Ferreira, 2022\n"
 "Language-Team: Portuguese (https://www.transifex.com/rosarior/teams/13584/pt/)\n"
@@ -25,18 +25,18 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pt\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: apps.py:25
 msgid "Dynamic search"
 msgstr "Busca dinâmica"
 
-#: classes.py:492
+#: classes.py:562
 #, python-format
 msgid "Unknown search model `%s`."
 msgstr "Modelo de pesquisa desconhecido `%s`."
 
-#: classes.py:549
+#: classes.py:619
 msgid "ID"
 msgstr "ID"
 
@@ -58,11 +58,11 @@ msgid "Search terms"
 msgstr "Termos de pesquisa"
 
 #: links.py:13 permissions.py:5 queues.py:7 settings.py:11
-#: templates/dynamic_search/search_box.html:45 views.py:121 views.py:134
+#: templates/dynamic_search/search_box.html:45 views.py:122 views.py:135
 msgid "Search"
 msgstr "Procurar"
 
-#: links.py:17 templates/dynamic_search/search_box.html:47 views.py:151
+#: links.py:17 templates/dynamic_search/search_box.html:47 views.py:154
 msgid "Advanced search"
 msgstr "Procura Avançada"
 
@@ -70,7 +70,7 @@ msgstr "Procura Avançada"
 msgid "Search again"
 msgstr "Buscar novamente"
 
-#: links.py:25 views.py:99
+#: links.py:25 views.py:100
 msgid "Reindex search backend"
 msgstr "Reindexar backend de pesquisa"
 
@@ -80,7 +80,7 @@ msgstr "Executar ferramentas de pesquisa"
 
 #: queues.py:10
 msgid "Search slow"
-msgstr ""
+msgstr "Pesquisa lenta"
 
 #: queues.py:15
 msgid "Remove a model instance from the search engine."
@@ -96,9 +96,16 @@ msgstr ""
 "Indexar todas as instâncias de um modelo de pesquisa para o mecanismo de "
 "pesquisa."
 
-#: queues.py:30
+#: queues.py:31
+msgid ""
+"Index all related instances of a search model after a many to many event."
+msgstr ""
+
+#: queues.py:39
 msgid "Reset the search backend indices and index all instances again."
 msgstr ""
+"Restaurar os índices backend de pesquisa e classificar todos os recursos "
+"novamente"
 
 #: settings.py:16
 msgid "Full path to the backend to be used to handle the search."
@@ -111,7 +118,7 @@ msgstr "Desabilita a busca por termo único e deixa apenas a busca avançada."
 
 #: settings.py:34
 msgid "Amount of objects to process when performing bulk indexing."
-msgstr ""
+msgstr "Quantidade de objetos a processar quando se classifica em massa"
 
 #: settings.py:40
 msgid "Sets the default state of the \"Match all\" checkbox."
@@ -125,20 +132,20 @@ msgstr "Número máximo de resultados de pesquisa para buscar e exibir."
 msgid "Advanced"
 msgstr "Avançada"
 
-#: views.py:40
+#: views.py:41
 msgid "Try again using different terms. "
 msgstr "Tentar novamente usando termos diferentes."
 
-#: views.py:42
+#: views.py:43
 msgid "No search results"
 msgstr "Não há resultados de busca"
 
-#: views.py:44
+#: views.py:45
 #, python-format
 msgid "Search results for: %s"
 msgstr "Resultados da pesquisa para: %s"
 
-#: views.py:95
+#: views.py:96
 msgid ""
 "This tool is required only for some search backends. Search results will be "
 "affected while the backend is being reindexed."
@@ -147,16 +154,16 @@ msgstr ""
 "resultados da pesquisa serão afetados enquanto o backend está sendo "
 "reindexado."
 
-#: views.py:101
+#: views.py:102
 msgid "This tool erases and populates the search backend's internal index."
 msgstr ""
 "Essa ferramenta apaga e preenche o índice interno do backend de pesquisa."
 
-#: views.py:114
+#: views.py:115
 msgid "Search backend reindexing queued."
 msgstr "Reindexação de backend da pesquisa enfileirada."
 
-#: views.py:136
+#: views.py:137
 #, python-format
 msgid "Search for: %s"
 msgstr "Buscar por: %s"

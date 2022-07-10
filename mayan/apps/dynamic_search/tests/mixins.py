@@ -1,8 +1,25 @@
+from mayan.apps.databases.literals import DATABASE_MINIMUM_ID
 from mayan.apps.documents.search import document_search
 
 from ..classes import SearchBackend, SearchModel
+from ..literals import QUERY_PARAMETER_ANY_FIELD, SEARCH_MODEL_NAME_KWARG
+from ..tasks import task_reindex_backend, task_index_search_model
 
 from .backends import TestSearchBackend
+
+
+class SearchTaskTestMixin:
+    def _execute_task_reindex_backend(self):
+        task_reindex_backend.apply_async().get()
+
+    def _execute_task_index_search_model(self):
+        task_index_search_model.apply_async(
+            kwargs={
+                'range_string': '{}-{}'.format(
+                    DATABASE_MINIMUM_ID, self.test_object.pk
+                ), 'search_model_full_name': self.test_model_search.get_full_name()
+            }
+        ).get()
 
 
 class SearchTestMixin:
@@ -46,10 +63,10 @@ class SearchTestMixin:
 
 class SearchAPIViewTestMixin(SearchTestMixin):
     def _request_search_view(self):
-        query = {'q': self.test_document.label}
+        query = {QUERY_PARAMETER_ANY_FIELD: self.test_document.label}
         return self.get(
             viewname='rest_api:search-view', kwargs={
-                'search_model_name': document_search.get_full_name()
+                SEARCH_MODEL_NAME_KWARG: document_search.get_full_name()
             }, query=query
         )
 
@@ -58,7 +75,7 @@ class SearchAPIViewTestMixin(SearchTestMixin):
 
         return self.get(
             viewname='rest_api:advanced-search-view', kwargs={
-                'search_model_name': document_search.get_full_name()
+                SEARCH_MODEL_NAME_KWARG: document_search.get_full_name()
             }, query=query
         )
 

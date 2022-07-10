@@ -154,7 +154,15 @@ class AssetTransformationMixin:
     def _update_hash(self):
         result = super()._update_hash()
         asset = self.get_asset()
-        result = hashlib.sha256(force_bytes(s=asset.get_hash()))
+        # Add the asset image hash to the transformation hash. Ensures
+        # that the content object image is updated if the asset image is
+        # updated even if the transformation itself is not updated.
+        result.update(
+            force_bytes(
+                s=asset.get_hash()
+            )
+        )
+
         return result
 
     def get_asset(self):
@@ -213,7 +221,7 @@ class AssetTransformationMixin:
             )
 
         paste_mask = image_asset.getchannel(channel='A').point(
-            lambda i: i * transparency / 100.0
+            lut=lambda pixel: int(pixel * transparency / 100)
         )
 
         return {
@@ -547,7 +555,7 @@ class TransformationDrawRectangle(BaseTransformation):
         else:
             outline_width = 0
 
-        draw = ImageDraw.Draw(image=self.image)
+        draw = ImageDraw.Draw(im=self.image)
         draw.rectangle(
             xy=(left, top, right, bottom), fill=fill_color,
             outline=outline_color, width=outline_width
@@ -823,11 +831,17 @@ class TransformationZoom(BaseTransformation):
             return self.image
 
         decimal_value = percent / 100
+
+        width = int(self.image.size[0] * decimal_value)
+        if width < 1:
+            width = 1
+
+        height = int(self.image.size[1] * decimal_value)
+        if height < 1:
+            height = 1
+
         return self.image.resize(
-            size=(
-                int(self.image.size[0] * decimal_value),
-                int(self.image.size[1] * decimal_value)
-            ), resample=Image.ANTIALIAS
+            size=(width, height), resample=Image.ANTIALIAS
         )
 
 

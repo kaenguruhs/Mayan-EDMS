@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-15 09:21+0000\n"
+"POT-Creation-Date: 2022-06-24 20:40+0000\n"
 "PO-Revision-Date: 2022-02-03 10:12+0000\n"
 "Last-Translator: Frédéric Sheedy <sheedf@gmail.com>, 2022\n"
 "Language-Team: French (https://www.transifex.com/rosarior/teams/13584/fr/)\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #: apps.py:215 apps.py:647 events.py:5 menus.py:8
 #: models/document_models.py:131 permissions.py:5 queues.py:21 settings.py:33
@@ -437,8 +437,8 @@ msgstr "Page précédente"
 msgid "Next page"
 msgstr "Page suivante"
 
-#: links/document_file_page_links.py:86 models/document_file_page_models.py:46
-#: models/document_file_page_models.py:308
+#: links/document_file_page_links.py:86 models/document_file_page_models.py:47
+#: models/document_file_page_models.py:306
 msgid "Document file pages"
 msgstr "Page du fichier de document"
 
@@ -556,15 +556,15 @@ msgstr "Version du document"
 msgid "Document version pages"
 msgstr "Pages de la version du document"
 
-#: links/favorite_links.py:23 views/favorite_document_views.py:36
+#: links/favorite_links.py:28 views/favorite_document_views.py:36
 msgid "Favorites"
 msgstr "Favoris"
 
-#: links/favorite_links.py:29 links/favorite_links.py:39
+#: links/favorite_links.py:34 links/favorite_links.py:44
 msgid "Add to favorites"
 msgstr "Ajouter aux favoris"
 
-#: links/favorite_links.py:35 links/favorite_links.py:43
+#: links/favorite_links.py:40 links/favorite_links.py:48
 msgid "Remove from favorites"
 msgstr "Retirer des favoris"
 
@@ -712,20 +712,20 @@ msgstr ""
 msgid "Document files"
 msgstr "Fichiers de document"
 
-#: models/document_file_models.py:333 models/document_file_page_models.py:267
+#: models/document_file_models.py:333 models/document_file_page_models.py:265
 #: models/document_models.py:72 models/document_models.py:318
-#: models/document_models.py:323 models/document_type_models.py:41
-#: models/document_type_models.py:203 models/document_version_models.py:236
+#: models/document_type_models.py:41 models/document_type_models.py:203
+#: models/document_version_models.py:236
 #: models/document_version_page_models.py:347
 msgid "Label"
 msgstr "Étiquette"
 
-#: models/document_file_page_models.py:45
-#: models/document_file_page_models.py:307 search.py:84
+#: models/document_file_page_models.py:46
+#: models/document_file_page_models.py:305 search.py:84
 msgid "Document file page"
 msgstr "Page du fichier de document"
 
-#: models/document_file_page_models.py:261
+#: models/document_file_page_models.py:259
 #, python-format
 msgid "%(document_file)s - page %(page_num)d of %(total_pages)d"
 msgstr "%(document_file)s - page %(page_num)d de %(total_pages)d"
@@ -766,7 +766,7 @@ msgstr "Créée"
 
 #: models/document_models.py:86
 msgid "The primary language in the document."
-msgstr "La langue principale utilisée dans document."
+msgstr "La langue principalement utilisée dans document."
 
 #: models/document_models.py:91
 msgid "Whether or not this document is in the trash."
@@ -800,7 +800,7 @@ msgstr ""
 msgid "Is stub?"
 msgstr "Parcellaire ?"
 
-#: models/document_models.py:316 models/document_models.py:321
+#: models/document_models.py:316
 #, python-format
 msgid "Document stub, id: %d"
 msgstr "Document parcellaire, id : %d"
@@ -1370,6 +1370,8 @@ msgid_plural "Recalculate the page count of the selected document files?"
 msgstr[0] "Recalculer le nombre de pages du fichier de document sélectionné ?"
 msgstr[1] ""
 "Recalculer le nombre de pages des fichiers de documents sélectionnés?"
+msgstr[2] ""
+"Recalculer le nombre de pages des fichiers de documents sélectionnés?"
 
 #: views/document_file_page_views.py:77
 #, python-format
@@ -1499,6 +1501,7 @@ msgid_plural ""
 "Clear all the page transformations for the selected document files?"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: views/document_file_views.py:280
 #, python-format
@@ -1668,6 +1671,7 @@ msgid_plural ""
 "Append all the document file pages to the selected document versions?"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: views/document_version_page_views.py:156
 #, python-format
@@ -1713,6 +1717,8 @@ msgid_plural "Reset the page list of the selected document versions?"
 msgstr[0] ""
 "Réinitialiser la liste des pages de la version de document sélectionnée ?"
 msgstr[1] ""
+"Réinitialiser la liste des pages des versions de document sélectionnées?"
+msgstr[2] ""
 "Réinitialiser la liste des pages des versions de document sélectionnées?"
 
 #: views/document_version_page_views.py:312
@@ -1854,6 +1860,9 @@ msgstr[0] ""
 msgstr[1] ""
 "Effacer toutes les transformations de page pour la version de document "
 "sélectionnée?"
+msgstr[2] ""
+"Effacer toutes les transformations de page pour la version de document "
+"sélectionnée?"
 
 #: views/document_version_views.py:334
 #, python-format
@@ -1921,6 +1930,7 @@ msgid "Change the type of the selected document"
 msgid_plural "Change the type of the selected documents"
 msgstr[0] "Changer le type du document sélectionné"
 msgstr[1] "Modifier le type des documents sélectionnés"
+msgstr[2] "Modifier le type des documents sélectionnés"
 
 #: views/document_views.py:104
 #, python-format
@@ -1975,6 +1985,7 @@ msgid "Add the selected document to favorites?"
 msgid_plural "Add the selected documents to favorites?"
 msgstr[0] "Ajouter le document sélectionné aux favoris ?"
 msgstr[1] "Ajouter les documents sélectionnés aux favoris?"
+msgstr[2] "Ajouter les documents sélectionnés aux favoris?"
 
 #: views/favorite_document_views.py:74
 #, python-format
@@ -1996,6 +2007,7 @@ msgid "Remove the selected document from favorites?"
 msgid_plural "Remove the selected documents from favorites?"
 msgstr[0] "Supprimer le document sélectionné des favoris ?"
 msgstr[1] "Supprimer les documents sélectionnés des favoris?"
+msgstr[2] "Supprimer les documents sélectionnés des favoris?"
 
 #: views/misc_views.py:44
 #, python-format
@@ -2008,7 +2020,7 @@ msgid ""
 " this user account."
 msgstr ""
 "Cette page affiche la liste des derniers documents consultés ou manipulés de"
-" quelque manière que ce soit par ce compte d'utilisateur."
+" quelque manière que ce soit par ce compte utilisateur."
 
 #: views/recently_accessed_document_views.py:27
 msgid "There are no recently accessed documents"
