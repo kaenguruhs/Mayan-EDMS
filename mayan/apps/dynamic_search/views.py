@@ -15,7 +15,10 @@ from mayan.apps.views.literals import LIST_MODE_CHOICE_ITEM
 from .classes import SearchBackend
 from .exceptions import DynamicSearchException
 from .forms import SearchForm, AdvancedSearchForm
-from .icons import icon_search_submit
+from .icons import (
+    icon_result_list, icon_search, icon_search_advanced,
+    icon_search_backend_reindex, icon_search_submit
+)
 from .links import link_search_again
 from .literals import QUERY_PARAMETER_ANY_FIELD, SEARCH_MODEL_NAME_KWARG
 from .permissions import permission_search_tools
@@ -27,6 +30,9 @@ logger = logging.getLogger(name=__name__)
 
 
 class ResultsView(SearchModelViewMixin, SingleObjectListView):
+    search_disable_list_filtering = True
+    view_icon = icon_result_list
+
     def get_extra_context(self):
         context = {
             'hide_object': True,
@@ -52,8 +58,8 @@ class ResultsView(SearchModelViewMixin, SingleObjectListView):
         return context
 
     def get_source_queryset(self):
-        query_dict = self.request.GET.copy()
-        query_dict.update(self.request.POST)
+        query_dict = self.request.GET.dict().copy()
+        query_dict.update(self.request.POST.dict())
 
         global_and_search = get_match_all_value(
             value=query_dict.get('_match_all')
@@ -107,6 +113,7 @@ class SearchBackendReindexView(ConfirmView):
             'internal index.'
         ),
     }
+    view_icon = icon_search_backend_reindex
     view_permission = permission_search_tools
 
     def get_post_action_redirect(self):
@@ -124,6 +131,7 @@ class SearchBackendReindexView(ConfirmView):
 class SearchView(SearchModelViewMixin, FormView):
     template_name = 'appearance/generic_form.html'
     title = _('Search')
+    view_icon = icon_search
 
     def get_extra_context(self):
         self.search_model = self.get_search_model()
@@ -161,6 +169,7 @@ class SearchView(SearchModelViewMixin, FormView):
 
 class AdvancedSearchView(SearchView):
     title = _('Advanced search')
+    view_icon = icon_search_advanced
 
     def get_form(self):
         return AdvancedSearchForm(
