@@ -35,7 +35,7 @@ PythonDependency(
         ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
         (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
         SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    ''', module=__name__, name='django', version_string='==3.2.14'
+    ''', module=__name__, name='django', version_string='==3.2.16'
 )
 PythonDependency(
     copyright_text='''
@@ -116,6 +116,9 @@ PythonDependency(
         IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
         CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     ''', module=__name__, name='django-mptt', version_string='==0.13.4'
+)
+PythonDependency(
+    module=__name__, name='importlib-metadata', version_string='==5.0.0'
 )
 PythonDependency(
     copyright_text='''

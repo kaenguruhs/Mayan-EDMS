@@ -60,7 +60,7 @@ def find_packages(directory):
     return packages
 
 install_requires = """
-django==3.2.14
+django==3.2.16
 CairoSVG==2.5.2
 Pillow==9.2.0
 PyPDF2==1.28.4
@@ -93,6 +93,7 @@ fusepy==3.0.1
 gevent==21.12.0
 graphviz==0.17
 gunicorn==20.1.0
+importlib-metadata==5.0.0
 jsonschema==4.4.0
 node-semver==0.8.1
 pycountry==22.3.5
