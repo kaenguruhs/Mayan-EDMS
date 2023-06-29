@@ -35,18 +35,17 @@ from mayan.apps.documents.html_widgets import ThumbnailWidget
 from mayan.apps.documents.models.document_type_models import DocumentType
 from mayan.apps.documents.permissions import permission_document_create
 from mayan.apps.navigation.classes import Link, SourceColumn
-from mayan.apps.sources.classes import SourceBackend
-from mayan.apps.sources.forms import UploadBaseForm
-from mayan.apps.sources.literals import STORAGE_NAME_SOURCE_CACHE_FOLDER
-from mayan.apps.sources.source_backends.mixins import (
-    SourceBackendCompressedMixin, SourceBackendInteractiveMixin,
-    SourceBaseMixin
-)
 from mayan.apps.storage.classes import DefinedStorage
 from mayan.apps.storage.models import SharedUploadedFile
 from mayan.apps.views.settings import setting_paginate_by
 
-from ..classes import SourceBackendAction
+from ..classes import SourceBackend, SourceBackendAction
+from ..forms import UploadBaseForm
+from ..literals import STORAGE_NAME_SOURCE_CACHE_FOLDER
+from ..source_backends.mixins import (
+    SourceBackendCompressedMixin, SourceBackendInteractiveMixin,
+    SourceBaseMixin
+)
 from ..tasks import task_process_document_upload
 
 from .literals import (
@@ -105,8 +104,14 @@ class StagingFolderFile:
         )
 
     def delete(self):
-        self.storage.delete(self.cache_filename)
-        os.unlink(self.get_full_path())
+        try:
+            self.storage.delete(self.cache_filename)
+        except FileNotFoundError:
+            """No preview was yet generated."""
+
+        os.unlink(
+            path=self.get_full_path()
+        )
 
     def generate_image(self, transformation_instance_list=None):
         # Check is transformed image is available.

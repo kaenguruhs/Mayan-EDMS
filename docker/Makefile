@@ -1,6 +1,10 @@
 #!make
 include config.env
 
+ifneq ($(wildcard config-local.env),)
+	include config-local.env
+endif
+
 HOST_IP = `/sbin/ip route|awk '/docker0/ { print $$9 }'`
 APT_PROXY ?= $(HOST_IP):3142
 CONSOLE_COLUMNS ?= `echo $$(tput cols)`
@@ -11,14 +15,16 @@ PIP_TRUSTED_HOST ?= $(HOST_IP)
 DOCKER_HOST_REGISTRY_NAME ?= $(DOCKER_HOST_REGISTRY_NAME)
 DOCKER_HOST_REGISTRY_PORT ?= $(DOCKER_HOST_REGISTRY_PORT)
 DOCKER_IMAGE_MAYAN_NAME ?= $(DOCKER_IMAGE_MAYAN_NAME)
+DOCKER_IMAGE_DATE_TIME ?= `date -Iseconds  --utc`
+DOCKER_IMAGE_LABELS ?= --label org.opencontainers.image.created="$(DOCKER_IMAGE_DATE_TIME)" --label org.opencontainers.image.version=$(IMAGE_VERSION) $(DOCKER_IMAGE_LABELS_EXTRA)
 
 docker-build: ## Build a new image locally.
 docker-build: docker-dockerfile-update
-	docker build --file docker/Dockerfile --tag $(DOCKER_IMAGE_MAYAN_NAME):$(IMAGE_VERSION) .
+	DOCKER_BUILDKIT=1 docker build --file docker/Dockerfile $(DOCKER_IMAGE_LABELS) --tag $(DOCKER_IMAGE_MAYAN_NAME):$(IMAGE_VERSION) .
 
 docker-build-with-proxy: ## Build a new image locally using an APT proxy as APT_PROXY.
 docker-build-with-proxy: docker-dockerfile-update devpi-start
-	docker build --build-arg APT_PROXY=$(APT_PROXY) --build-arg PIP_INDEX_URL=$(PIP_INDEX_URL) --build-arg PIP_TRUSTED_HOST=$(PIP_TRUSTED_HOST) --build-arg HTTP_PROXY=$(HTTP_PROXY) --build-arg HTTPS_PROXY=$(HTTPS_PROXY) --file docker/Dockerfile --tag $(DOCKER_IMAGE_MAYAN_NAME):$(IMAGE_VERSION) .
+	DOCKER_BUILDKIT=1 docker build --build-arg APT_PROXY=$(APT_PROXY) --build-arg PIP_INDEX_URL=$(PIP_INDEX_URL) --build-arg PIP_TRUSTED_HOST=$(PIP_TRUSTED_HOST) --build-arg HTTP_PROXY=$(HTTP_PROXY) --build-arg HTTPS_PROXY=$(HTTPS_PROXY) --file docker/Dockerfile $(DOCKER_IMAGE_LABELS) --tag $(DOCKER_IMAGE_MAYAN_NAME):$(IMAGE_VERSION) .
 	$(MAKE) devpi-stop
 
 docker-build-with-proxy-push: ## Build an image with an APT proxy and push to the test registry.
@@ -85,7 +91,7 @@ docker-staging-container-postgresql-start:
 	--detach \
 	--name mayan-staging-postgres \
 	--network=mayan-staging \
-	--env POSTGRES_USER=($DEFAULT_DATABASE_USER) \
+	--env POSTGRES_USER=$(DEFAULT_DATABASE_USER) \
 	--env POSTGRES_DB=$(DEFAULT_DATABASE_NAME) \
 	--env POSTGRES_PASSWORD=$(DEFAULT_DATABASE_PASSWORD) \
 	--volume mayan-staging-postgres:/var/lib/postgresql/data \
@@ -124,7 +130,7 @@ docker-staging-container-mayan-start:
 	--env MAYAN_DATABASE_ENGINE=django.db.backends.postgresql \
 	--env MAYAN_DATABASE_HOST=mayan-staging-postgres \
 	--env MAYAN_DATABASE_NAME=$(DEFAULT_DATABASE_NAME) \
-	--env MAYAN_DATABASE_PASSWORD=($DEFAULT_DATABASE_PASSWORD) \
+	--env MAYAN_DATABASE_PASSWORD=$(DEFAULT_DATABASE_PASSWORD) \
 	--env MAYAN_DATABASE_USER=mayan \
 	--env MAYAN_CELERY_BROKER_URL=$(MAYAN_CELERY_BROKER_URL) \
 	--env MAYAN_CELERY_RESULT_BACKEND="redis://:mayanredispassword@mayan-staging-redis:6379/1" \

@@ -1,10 +1,16 @@
 from django.utils.translation import ugettext_lazy as _
 
-from mayan.apps.dependencies.classes import PythonDependency
+from mayan.apps.dependencies.classes import (
+    BinaryDependency, PythonDependency
+)
 from mayan.apps.dependencies.environments import (
     environment_build, environment_development, environment_documentation,
     environment_documentation_override
 )
+from mayan.settings.literals import PYTHON_WHEEL_VERSION
+
+from .literals import DEFAULT_TX_PATH
+
 
 PythonDependency(
     copyright_text='''
@@ -35,7 +41,7 @@ PythonDependency(
         ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
         (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
         SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    ''', module=__name__, name='django', version_string='==3.2.16'
+    ''', module=__name__, name='django', version_string='==3.2.19'
 )
 PythonDependency(
     copyright_text='''
@@ -155,6 +161,10 @@ PythonDependency(
 
 # Development
 
+BinaryDependency(
+    help_text=_('Transifex Client'), label='Transifex Client',
+    module=__name__, name='tx', path=DEFAULT_TX_PATH
+)
 PythonDependency(
     module=__name__, environment=environment_development, name='devpi-server',
     version_string='==6.5.0'
@@ -195,10 +205,6 @@ PythonDependency(
     environment=environment_development,
     module=__name__, name='safety', version_string='==1.10.3'
 )
-PythonDependency(
-    environment=environment_development,
-    module=__name__, name='transifex-client', version_string='==0.14.4'
-)
 
 # Build
 
@@ -208,7 +214,9 @@ PythonDependency(
 )
 PythonDependency(
     environments=(environment_build, environment_documentation),
-    module=__name__, name='wheel', version_string='==0.37.1'
+    module=__name__, name='wheel', version_string='=={}'.format(
+        PYTHON_WHEEL_VERSION
+    )
 )
 
 # Documentation

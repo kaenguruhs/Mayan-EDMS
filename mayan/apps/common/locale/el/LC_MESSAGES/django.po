@@ -11,10 +11,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-12 03:38+0000\n"
+"POT-Creation-Date: 2023-06-02 04:35+0000\n"
 "PO-Revision-Date: 2022-07-27 05:33+0000\n"
 "Last-Translator: Hmayag Antonian <hmayag@freemail.gr>, 2022\n"
-"Language-Team: Greek (https://www.transifex.com/rosarior/teams/13584/el/)\n"
+"Language-Team: Greek (https://app.transifex.com/rosarior/teams/13584/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,21 +25,25 @@ msgstr ""
 msgid "Common"
 msgstr "Common"
 
-#: dependencies.py:169
+#: dependencies.py:165
+msgid "Transifex Client"
+msgstr ""
+
+#: dependencies.py:182
 msgid "Used to allow offline translation of the code text strings."
 msgstr ""
 "Χρησιμοποιείται για την εκτός σύνδεσης μετάφραση συμβολοσειρών κειμένου του "
 "κώδικα."
 
-#: dependencies.py:178
+#: dependencies.py:191
 msgid "Provides style checking."
 msgstr "Παρέχει έλεγχο του στυλ."
 
-#: dependencies.py:183
+#: dependencies.py:196
 msgid "Command line environment with autocompletion."
 msgstr "Γραμμή εντολών με αυτόματη συμπλήρωση."
 
-#: dependencies.py:188
+#: dependencies.py:201
 msgid "Checks proper formatting of the README file."
 msgstr "Ελέγχει την ορθή μορφοποίηση του αρχείου README."
 
@@ -87,21 +91,21 @@ msgstr "Βοήθεια"
 msgid "Tools"
 msgstr "Εργαλεία"
 
-#: literals.py:21
+#: literals.py:26
 msgid ""
 "This feature has been deprecated and will be removed in a future version."
 msgstr ""
 "Αυτό το χαρακτηριστικό είναι ξεπερασμένο και θα αφαιρεθεί σε επόμενη έκδοση."
 
-#: literals.py:29
+#: literals.py:34
 msgid "Days"
 msgstr "Ημέρες"
 
-#: literals.py:30
+#: literals.py:35
 msgid "Hours"
 msgstr "Ώρες"
 
-#: literals.py:31
+#: literals.py:36
 msgid "Minutes"
 msgstr "Λεπτά"
 

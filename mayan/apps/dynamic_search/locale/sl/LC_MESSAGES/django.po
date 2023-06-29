@@ -10,10 +10,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-11-12 03:39+0000\n"
+"POT-Creation-Date: 2023-06-02 04:35+0000\n"
 "PO-Revision-Date: 2022-07-27 05:35+0000\n"
 "Last-Translator: Jože Detečnik <joze.detecnik@3tav.si>, 2022\n"
-"Language-Team: Slovenian (https://www.transifex.com/rosarior/teams/13584/sl/)\n"
+"Language-Team: Slovenian (https://app.transifex.com/rosarior/teams/13584/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,7 +24,7 @@ msgstr ""
 msgid "Dynamic search"
 msgstr "Dinamično iskanje"
 
-#: classes.py:432
+#: classes.py:444
 #, python-format
 msgid ""
 "Search backend error. Verify that the search service is available and that "
@@ -33,12 +33,12 @@ msgstr ""
 "Napaka v ozadju iskanja. Preverite, ali je iskalna storitev na voljo in ali "
 "je sintaksa iskanja veljavna za aktivno iskalno zaledje; %s"
 
-#: classes.py:584
+#: classes.py:596
 #, python-format
 msgid "Unknown search model `%s`."
 msgstr "Neznan iskalni model `%s`."
 
-#: classes.py:640
+#: classes.py:652
 msgid "ID"
 msgstr "ID"
 
