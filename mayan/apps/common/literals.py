@@ -4,8 +4,12 @@ from django.utils.translation import ugettext_lazy as _
 
 import mayan
 
-DEFAULT_COMMON_COLLAPSE_LIST_MENU_LIST_FACET = False
-DEFAULT_COMMON_COLLAPSE_LIST_MENU_OBJECT = False
+COMMAND_NAME_COMMON_INITIAL_SETUP = 'common_initial_setup'
+COMMAND_NAME_COMMON_PERFORM_UPGRADE = 'common_perform_upgrade'
+COMMAND_NAME_MIGRATE = 'migrate'
+
+DEFAULT_COMMON_COLLAPSE_LIST_MENU_LIST_FACET = True
+DEFAULT_COMMON_COLLAPSE_LIST_MENU_OBJECT = True
 DEFAULT_COMMON_DISABLE_LOCAL_STORAGE = False
 DEFAULT_COMMON_DISABLED_APPS = settings.COMMON_DISABLED_APPS
 DEFAULT_COMMON_EXTRA_APPS = settings.COMMON_EXTRA_APPS
@@ -23,7 +27,8 @@ EMPTY_LABEL = '---------'
 DJANGO_SQLITE_BACKEND = 'django.db.backends.sqlite3'
 
 MESSAGE_DEPRECATION_WARNING = _(
-    'This feature has been deprecated and will be removed in a future version.'
+    'This feature has been deprecated and will be removed in a future '
+    'version.'
 )
 
 TIME_DELTA_UNIT_DAYS = 'days'
@@ -33,5 +38,5 @@ TIME_DELTA_UNIT_MINUTES = 'minutes'
 TIME_DELTA_UNIT_CHOICES = (
     (TIME_DELTA_UNIT_DAYS, _('Days')),
     (TIME_DELTA_UNIT_HOURS, _('Hours')),
-    (TIME_DELTA_UNIT_MINUTES, _('Minutes')),
+    (TIME_DELTA_UNIT_MINUTES, _('Minutes'))
 )

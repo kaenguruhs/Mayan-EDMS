@@ -17,6 +17,12 @@ ifndef SETTINGS
 override SETTINGS = mayan.settings.testing.development
 endif
 
+SENTRY_COMMAND = \
+	if [ $(SENTRY_DSN) ]; then \
+	export MAYAN_PLATFORM_CLIENT_BACKEND_ENABLED='["mayan.apps.platform.client_backends.ClientBackendSentry"]'; \
+	export MAYAN_PLATFORM_CLIENT_BACKEND_ARGUMENTS='{"mayan.apps.platform.client_backends.ClientBackendSentry":{"dsn":"$(SENTRY_DSN)","environment":"development"}}'; \
+	fi
+
 TEST_COMMAND = ./manage.py test $(MODULE) --settings=$(SETTINGS) $(SKIPMIGRATIONS) $(DEBUG) $(ARGUMENTS)
 
 TEST_ELASTIC_CONTAINER_NAME = mayan-test-elastic
@@ -262,7 +268,7 @@ python-sdist-test-suit: python-sdist
 	sh -c '\
 	. _virtualenv/bin/activate; \
 	pip install `ls dist/*.gz`; \
-	_virtualenv/bin/mayan-edms.py initialsetup; \
+	_virtualenv/bin/mayan-edms.py common_initial_setup; \
 	pip install --requirement requirements/testing.txt; \
 	_virtualenv/bin/mayan-edms.py test --mayan-apps \
 	'
@@ -274,7 +280,7 @@ python-wheel-test-suit: wheel
 	sh -c '\
 	. _virtualenv/bin/activate; \
 	pip install `ls dist/*.whl`; \
-	_virtualenv/bin/mayan-edms.py initialsetup; \
+	_virtualenv/bin/mayan-edms.py common_initial_setup; \
 	pip install mock==2.0.0; \
 	_virtualenv/bin/mayan-edms.py test --mayan-apps \
 	'
@@ -285,13 +291,13 @@ generate-setup: generate-requirements
 	@echo "Complete."
 
 generate-requirements: ## Generate all requirements files from the project depedency declarations.
-	@./manage.py generaterequirements build > requirements/build.txt
-	@./manage.py generaterequirements development > requirements/development.txt
-	@./manage.py generaterequirements documentation > requirements/documentation.txt
-	@./manage.py generaterequirements documentation_override > requirements/documentation_override.txt
-	@./manage.py generaterequirements testing > requirements/testing-base.txt
-	@./manage.py generaterequirements production --exclude=django > requirements/base.txt
-	@./manage.py generaterequirements production --only=django > requirements/common.txt
+	@./manage.py dependencies_generate_requirements build > requirements/build.txt
+	@./manage.py dependencies_generate_requirements development > requirements/development.txt
+	@./manage.py dependencies_generate_requirements documentation > requirements/documentation.txt
+	@./manage.py dependencies_generate_requirements documentation_override > requirements/documentation_override.txt
+	@./manage.py dependencies_generate_requirements testing > requirements/testing-base.txt
+	@./manage.py dependencies_generate_requirements production --exclude=django > requirements/base.txt
+	@./manage.py dependencies_generate_requirements production --only=django > requirements/common.txt
 
 # Dev server
 
@@ -311,10 +317,10 @@ manage-with-postgresql: ## Run the development server using a Docker PostgreSQL 
 	./manage.py $(filter-out $@,$(MAKECMDGOALS)) --settings=mayan.settings.development
 
 runserver: ## Run the development server.
-	./manage.py runserver --settings=mayan.settings.development $(ADDRPORT)
+	$(SENTRY_COMMAND); ./manage.py runserver --settings=mayan.settings.development $(ADDRPORT)
 
 runserver-plus: ## Run the Django extension's development server.
-	./manage.py runserver_plus --settings=mayan.settings.development $(ADDRPORT)
+	$(SENTRY_COMMAND); ./manage.py runserver_plus --settings=mayan.settings.development $(ADDRPORT)
 
 shell-plus: ## Run the shell_plus command.
 	./manage.py shell_plus --settings=mayan.settings.development
@@ -383,14 +389,14 @@ docker-redis-stop:
 staging-start: ## Launch and initialize production-like services using Docker (PostgreSQL and Redis).
 staging-start: staging-stop docker-postgresql-start docker-redis-start
 	export MAYAN_DATABASES="{'default':{'ENGINE':'django.db.backends.postgresql','NAME':'$(DEFAULT_DATABASE_NAME)','PASSWORD':'$(DEFAULT_DATABASE_PASSWORD)','USER':'$(DEFAULT_DATABASE_USER)','HOST':'127.0.0.1'}}"; \
-	./manage.py initialsetup --settings=mayan.settings.staging.docker
+	./manage.py common_initial_setup --settings=mayan.settings.staging.docker
 
 staging-stop: ## Stop and delete the Docker production-like services.
 staging-stop: docker-postgresql-stop docker-redis-stop
 
 staging-frontend: ## Launch a front end instance that uses the production-like services.
 	export MAYAN_DATABASES="{'default':{'ENGINE':'django.db.backends.postgresql','NAME':'$(DEFAULT_DATABASE_NAME)','PASSWORD':'$(DEFAULT_DATABASE_PASSWORD)','USER':'$(DEFAULT_DATABASE_USER)','HOST':'127.0.0.1'}}"; \
-	./manage.py runserver --settings=mayan.settings.staging.docker
+	$(SENTRY_COMMAND); ./manage.py runserver --settings=mayan.settings.staging.docker
 
 staging-worker: ## Launch a worker instance that uses the production-like services.
 	export MAYAN_DATABASES="{'default':{'ENGINE':'django.db.backends.postgresql','NAME':'$(DEFAULT_DATABASE_NAME)','PASSWORD':'$(DEFAULT_DATABASE_PASSWORD)','USER':'$(DEFAULT_DATABASE_USER)','HOST':'127.0.0.1'}}"; \
@@ -434,7 +440,7 @@ setup-dev-environment: ## Bootstrap a virtualenv by install all dependencies to 
 setup-dev-environment: setup-dev-operating-system-packages setup-dev-python-libraries
 
 setup-dev-operating-system-packages:  ## Install the operating system packages needed for development.
-	sudo apt-get install --yes exiftool gcc gettext gnupg1 graphviz libcairo2 libffi-dev libfuse2 libjpeg-dev libpng-dev poppler-utils python3-dev sane-utils tesseract-ocr-deu
+	sudo apt-get install --yes exiftool gcc gettext gnupg1 graphviz libcairo2 libffi-dev libfuse2 libjpeg-dev libldap2-dev libpng-dev libsasl2-dev poppler-utils python3-dev sane-utils tesseract-ocr-deu
 
 setup-dev-python-libraries: ## Install the Python libraries needed for development.
 	pip install --requirement requirements.txt --requirement requirements/development.txt --requirement requirements/testing-base.txt --requirement requirements/documentation.txt --requirement requirements/build.txt

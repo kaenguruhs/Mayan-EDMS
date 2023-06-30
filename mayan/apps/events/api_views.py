@@ -26,8 +26,8 @@ class APIObjectEventListView(
     ordering_fields = ('id', 'timestamp')
     serializer_class = EventSerializer
 
-    def get_queryset(self):
-        return any_stream(obj=self.external_object)
+    def get_source_queryset(self):
+        return any_stream(obj=self.get_external_object())
 
 
 class APIEventTypeNamespaceDetailView(generics.RetrieveAPIView):
@@ -48,7 +48,7 @@ class APIEventTypeNamespaceListView(generics.ListAPIView):
     get: Returns a list of all the available event type namespaces.
     """
     serializer_class = EventTypeNamespaceSerializer
-    queryset = EventTypeNamespace.all()
+    source_queryset = EventTypeNamespace.all()
 
     def get_serializer_context(self):
         return {
@@ -64,14 +64,6 @@ class APIEventTypeNamespaceEventTypeListView(generics.ListAPIView):
     """
     serializer_class = EventTypeSerializer
 
-    def get_queryset(self):
-        try:
-            return EventTypeNamespace.get(
-                name=self.kwargs['name']
-            ).get_event_types()
-        except KeyError:
-            raise Http404
-
     def get_serializer_context(self):
         return {
             'format': self.format_kwarg,
@@ -79,13 +71,21 @@ class APIEventTypeNamespaceEventTypeListView(generics.ListAPIView):
             'view': self
         }
 
+    def get_source_queryset(self):
+        try:
+            return EventTypeNamespace.get(
+                name=self.kwargs['name']
+            ).get_event_types()
+        except KeyError:
+            raise Http404
+
 
 class APIEventTypeListView(generics.ListAPIView):
     """
     get: Returns a list of all the available event types.
     """
     serializer_class = EventTypeSerializer
-    queryset = EventType.all()
+    source_queryset = EventType.all()
 
     def get_serializer_context(self):
         return {
@@ -99,10 +99,12 @@ class APIEventListView(generics.ListAPIView):
     """
     get: Returns a list of all the available events.
     """
-    mayan_view_permissions = {'GET': (permission_events_view,)}
+    mayan_view_permissions = {
+        'GET': (permission_events_view,)
+    }
     ordering_fields = ('id', 'timestamp')
-    queryset = Action.objects.all()
     serializer_class = EventSerializer
+    source_queryset = Action.objects.all()
 
     def get_serializer_context(self):
         return {
@@ -119,7 +121,7 @@ class APINotificationListView(generics.ListAPIView):
     ordering_fields = ('action__timestamp', 'id', 'read')
     serializer_class = NotificationSerializer
 
-    def get_queryset(self):
+    def get_source_queryset(self):
         parameter_read = self.request.GET.get('read')
 
         if self.request.user.is_authenticated:

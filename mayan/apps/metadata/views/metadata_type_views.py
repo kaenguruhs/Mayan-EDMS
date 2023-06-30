@@ -39,7 +39,7 @@ class MetadataTypeCreateView(SingleObjectCreateView):
 
     def get_instance_extra_data(self):
         return {
-            '_event_actor': self.request.user,
+            '_event_actor': self.request.user
         }
 
 
@@ -53,18 +53,18 @@ class MetadataTypeDeleteView(MultipleObjectDeleteView):
     post_action_redirect = reverse_lazy(
         viewname='metadata:metadata_type_list'
     )
+    success_message_plural = _(
+        '%(count)d metadata types deleted successfully.'
+    )
     success_message_single = _(
         'Metadata type "%(object)s" deleted successfully.'
     )
     success_message_singular = _(
         '%(count)d metadata type deleted successfully.'
     )
-    success_message_plural = _(
-        '%(count)d metadata types deleted successfully.'
-    )
+    title_plural = _('Delete the %(count)d selected metadata types.')
     title_single = _('Delete metadata type: %(object)s.')
     title_singular = _('Delete the %(count)d selected metadata type.')
-    title_plural = _('Delete the %(count)d selected metadata types.')
     view_icon = icon_metadata_type_single_delete
 
 
@@ -81,12 +81,12 @@ class MetadataTypeEditView(SingleObjectEditView):
     def get_extra_context(self):
         return {
             'object': self.object,
-            'title': _('Edit metadata type: %s') % self.object,
+            'title': _('Edit metadata type: %s') % self.object
         }
 
     def get_instance_extra_data(self):
         return {
-            '_event_actor': self.request.user,
+            '_event_actor': self.request.user
         }
 
 
@@ -112,7 +112,7 @@ class MetadataTypeListView(SingleObjectListView):
                 'metadata value is provided.'
             ),
             'no_results_title': _('There are no metadata types'),
-            'title': _('Metadata types'),
+            'title': _('Metadata types')
         }
 
 
@@ -149,7 +149,7 @@ class DocumentTypeMetadataTypeRelationshipView(RelationshipView):
 
     def get_form_extra_kwargs(self):
         return {
-            '_event_actor': self.request.user,
+            '_event_actor': self.request.user
         }
 
     def get_initial(self):
@@ -162,7 +162,7 @@ class DocumentTypeMetadataTypeRelationshipView(RelationshipView):
                     'object': obj,
                     'relationship_related_field': self.relationship_related_field,
                     'relationship_related_query_field': self.relationship_related_query_field,
-                    'sub_object': element,
+                    'sub_object': element
                 }
             )
         return initial
@@ -202,7 +202,7 @@ class MetadataTypesDocumentTypeRelationshipView(
                     'object': obj,
                     'relationship_related_field': self.relationship_related_field,
                     'relationship_related_query_field': self.relationship_related_query_field,
-                    'sub_object': element,
+                    'sub_object': element
                 }
             )
         return initial

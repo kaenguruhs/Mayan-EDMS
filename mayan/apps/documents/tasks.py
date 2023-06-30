@@ -87,7 +87,7 @@ def task_document_file_upload(
             document.file_new(
                 action=action, comment=comment, expand=expand,
                 file_object=file_object, filename=filename,
-                _user=user
+                user=user
             )
         except Warning as warning:
             # New document file are blocked
@@ -172,7 +172,7 @@ def task_document_upload(
         with shared_uploaded_file.open() as file_object:
             document, document_file = document_type.new_document(
                 description=description, file_object=file_object,
-                label=label, language=language, _user=user
+                label=label, language=language, user=user
             )
     except Exception as exception:
         logger.critical(
@@ -221,7 +221,9 @@ def task_document_type_document_trash_periods_check():
 # Document version
 
 @app.task(ignore_result=True)
-def task_document_version_page_list_append(document_version_id, user_id=None):
+def task_document_version_page_list_append(
+    document_version_id, user_id=None
+):
     DocumentVersion = apps.get_model(
         app_label='documents', model_name='DocumentVersion'
     )
@@ -235,7 +237,7 @@ def task_document_version_page_list_append(document_version_id, user_id=None):
     document_version = DocumentVersion.objects.get(
         pk=document_version_id
     )
-    document_version.pages_append_all(_user=user)
+    document_version.pages_append_all(user=user)
 
 
 @app.task(ignore_result=True)
@@ -253,7 +255,7 @@ def task_document_version_page_list_reset(document_version_id, user_id=None):
     document_version = DocumentVersion.objects.get(
         pk=document_version_id
     )
-    document_version.pages_reset(_user=user)
+    document_version.pages_reset(user=user)
 
 
 @app.task(ignore_result=True)
@@ -295,7 +297,8 @@ def task_document_version_export(
     )
 
     document_version.export_to_download_file(
-        organization_installation_url=organization_installation_url, user=user
+        organization_installation_url=organization_installation_url,
+        user=user
     )
 
 

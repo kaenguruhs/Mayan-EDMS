@@ -4,16 +4,16 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Roberto Rosario, 2022
-# Jože Detečnik <joze.detecnik@3tav.si>, 2022
+# Jože Detečnik <joze.detecnik@3tav.si>, 2023
+# Roberto Rosario, 2023
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-02 04:36+0000\n"
-"PO-Revision-Date: 2022-07-27 05:38+0000\n"
-"Last-Translator: Jože Detečnik <joze.detecnik@3tav.si>, 2022\n"
+"POT-Creation-Date: 2023-06-03 05:20+0000\n"
+"PO-Revision-Date: 2023-01-05 02:56+0000\n"
+"Last-Translator: Roberto Rosario, 2023\n"
 "Language-Team: Slovenian (https://app.transifex.com/rosarior/teams/13584/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,99 +21,88 @@ msgstr ""
 "Language: sl\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
-#: apps.py:28 links.py:10 permissions.py:5
+#: apps.py:28 links.py:10 permissions.py:6
 msgid "Task manager"
-msgstr "Upravitelj opravil"
+msgstr ""
 
-#: apps.py:97
+#: apps.py:99
 msgid "Label"
 msgstr "Oznaka"
 
-#: apps.py:101
+#: apps.py:103
 msgid "Name"
 msgstr "Ime"
 
-#: apps.py:106
+#: apps.py:108
 msgid "Default queue?"
-msgstr "Privzeta čakalna vrsta?"
+msgstr ""
 
-#: apps.py:111
+#: apps.py:113
 msgid "Is transient?"
-msgstr "Je prehodno?"
+msgstr ""
 
-#: apps.py:115
+#: apps.py:117
 msgid "Type"
-msgstr "Vrsta"
+msgstr ""
 
-#: apps.py:120
+#: apps.py:122
 msgid "Start time"
-msgstr "Začetni čas"
+msgstr ""
 
-#: apps.py:124
+#: apps.py:126
 msgid "Host"
 msgstr "Voditelj"
 
-#: apps.py:128
+#: apps.py:130
 msgid "Arguments"
-msgstr "Argumenti"
+msgstr ""
 
-#: apps.py:132
+#: apps.py:134
 msgid "Keyword arguments"
-msgstr "Argumenti ključnih besed"
+msgstr ""
 
-#: apps.py:136
+#: apps.py:138
 msgid "Worker process ID"
-msgstr "ID delavskega procesa"
+msgstr ""
 
-#: permissions.py:8
+#: permissions.py:10
 msgid "View tasks"
-msgstr "Oglejte si naloge"
+msgstr ""
 
-#: settings.py:10
+#: settings.py:11
 msgid "Celery"
-msgstr "Zelena"
+msgstr ""
 
-#: settings.py:15
+#: settings.py:17
 msgid "Default: \"AMQPLAIN\". Set custom amqp login method."
-msgstr "Privzeto: &quot;AMQPLAIN&quot;. Nastavite način prijave amqp po meri."
+msgstr ""
 
-#: settings.py:21
+#: settings.py:23
 msgid ""
 "Default: \"amqp://\". Default broker URL. This must be a URL in the form of:"
 " transport://userid:password@hostname:port/virtual_host Only the scheme part"
 " (transport://) is required, the rest is optional, and defaults to the "
 "specific transports default values."
 msgstr ""
-"Privzeto: &quot;amqp://&quot;. URL privzetega posrednika. To mora biti URL v"
-" obliki: transport://userid:password@hostname:port/virtual_host Potreben je "
-"samo del sheme (transport://), ostalo je izbirno in privzeto nastavljen na "
-"privzete vrednosti specifičnih transportov."
 
-#: settings.py:30
+#: settings.py:32
 msgid ""
 "Default: \"Disabled\". Toggles SSL usage on broker connection and SSL "
 "settings. The valid values for this option vary by transport."
 msgstr ""
-"Privzeto: &quot;Onemogočeno&quot;. Preklopi uporabo SSL na povezavo "
-"posrednika in nastavitve SSL. Veljavne vrednosti za to možnost se "
-"razlikujejo glede na transport."
 
-#: settings.py:38
+#: settings.py:40
 msgid ""
 "Default: No result backend enabled by default. The backend used to store "
 "task results (tombstones). Refer to "
 "http://docs.celeryproject.org/en/v4.1.0/userguide/configuration.html#result-"
 "backend"
 msgstr ""
-"Privzeto: privzeto ni omogočeno nobeno zaledje rezultatov. Zaledje, ki se "
-"uporablja za shranjevanje rezultatov nalog (nagrobniki). Glejte "
-"http://docs.celeryproject.org/en/v4.1.0/userguide/configuration.html#result-"
-"backend"
 
 #: tests/literals.py:11
 msgid "Test queue"
-msgstr "Testna čakalna vrsta"
+msgstr ""
 
 #: views.py:13
 msgid "Background task queues"
-msgstr "Čakalne vrste opravil v ozadju"
+msgstr ""

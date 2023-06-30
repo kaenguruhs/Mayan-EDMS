@@ -5,7 +5,7 @@ from mayan.apps.documents.permissions import permission_document_view
 from mayan.apps.testing.tests.base import BaseTestCase
 
 from ..events import (
-    event_cabinet_created, event_cabinet_edited,
+    event_cabinet_created, event_cabinet_deleted, event_cabinet_edited,
     event_cabinet_document_added, event_cabinet_document_removed
 )
 from ..models import Cabinet
@@ -15,7 +15,7 @@ from .mixins import CabinetTestMixin
 
 
 class CabinetTestCase(CabinetTestMixin, BaseTestCase):
-    def test_cabinet_creation(self):
+    def test_cabinet_create(self):
         self._clear_events()
 
         self._create_test_cabinet()
@@ -33,7 +33,21 @@ class CabinetTestCase(CabinetTestMixin, BaseTestCase):
         self.assertEqual(events[0].target, self._test_cabinet)
         self.assertEqual(events[0].verb, event_cabinet_created.id)
 
-    def test_cabinet_duplicate_creation(self):
+    def test_cabinet_delete(self):
+        self._create_test_cabinet()
+
+        test_cabinet_count = Cabinet.objects.count()
+
+        self._clear_events()
+
+        self._test_cabinet.delete()
+
+        self.assertEqual(Cabinet.objects.count(), test_cabinet_count - 1)
+
+        events = self._get_test_events()
+        self.assertEqual(events.count(), 0)
+
+    def test_cabinet_duplicate_create(self):
         self._create_test_cabinet()
 
         self._clear_events()
@@ -51,7 +65,7 @@ class CabinetTestCase(CabinetTestMixin, BaseTestCase):
         events = self._get_test_events()
         self.assertEqual(events.count(), 0)
 
-    def test_cabinet_editing(self):
+    def test_cabinet_edit(self):
         self._create_test_cabinet()
 
         self._clear_events()
@@ -71,7 +85,7 @@ class CabinetTestCase(CabinetTestMixin, BaseTestCase):
         self.assertEqual(events[0].target, self._test_cabinet)
         self.assertEqual(events[0].verb, event_cabinet_edited.id)
 
-    def test_inner_cabinet_creation(self):
+    def test_cabinet_child_create(self):
         self._create_test_cabinet()
 
         test_cabinet_count = Cabinet.objects.count()
@@ -91,10 +105,30 @@ class CabinetTestCase(CabinetTestMixin, BaseTestCase):
         events = self._get_test_events()
         self.assertEqual(events.count(), 1)
 
-        self.assertEqual(events[0].action_object, None)
+        self.assertEqual(events[0].action_object, self._test_cabinet)
         self.assertEqual(events[0].actor, inner_cabinet)
         self.assertEqual(events[0].target, inner_cabinet)
         self.assertEqual(events[0].verb, event_cabinet_created.id)
+
+    def test_cabinet_child_delete(self):
+        self._create_test_cabinet()
+        self._create_test_cabinet_child()
+
+        test_cabinet_count = Cabinet.objects.count()
+
+        self._clear_events()
+
+        self._test_cabinet_child.delete()
+
+        self.assertEqual(Cabinet.objects.count(), test_cabinet_count - 1)
+
+        events = self._get_test_events()
+        self.assertEqual(events.count(), 1)
+
+        self.assertEqual(events[0].action_object, self._test_cabinet)
+        self.assertEqual(events[0].actor, self._test_cabinet)
+        self.assertEqual(events[0].target, None)
+        self.assertEqual(events[0].verb, event_cabinet_deleted.id)
 
     def test_method_get_absolute_url(self):
         self._create_test_cabinet()
@@ -122,7 +156,9 @@ class CabinetDocumentTestCase(
 
         self._clear_events()
 
-        self._test_cabinet.document_add(document=self._test_document)
+        self._test_cabinet.document_add(
+            document=self._test_document, user=self._test_case_user
+        )
 
         self.assertEqual(
             self._test_cabinet.documents.count(),
@@ -136,18 +172,22 @@ class CabinetDocumentTestCase(
         self.assertEqual(events.count(), 1)
 
         self.assertEqual(events[0].action_object, self._test_cabinet)
-        self.assertEqual(events[0].actor, self._test_document)
+        self.assertEqual(events[0].actor, self._test_case_user)
         self.assertEqual(events[0].target, self._test_document)
         self.assertEqual(events[0].verb, event_cabinet_document_added.id)
 
     def test_addition_and_deletion_of_documents(self):
-        self._test_cabinet.document_add(document=self._test_document)
+        self._test_cabinet.document_add(
+            document=self._test_document, user=self._test_case_user
+        )
 
         test_cabinet_document_count = self._test_cabinet.documents.count()
 
         self._clear_events()
 
-        self._test_cabinet.document_remove(document=self._test_document)
+        self._test_cabinet.document_remove(
+            document=self._test_document, user=self._test_case_user
+        )
 
         self.assertEqual(
             self._test_cabinet.documents.count(),
@@ -159,12 +199,14 @@ class CabinetDocumentTestCase(
         self.assertEqual(events.count(), 1)
 
         self.assertEqual(events[0].action_object, self._test_cabinet)
-        self.assertEqual(events[0].actor, self._test_document)
+        self.assertEqual(events[0].actor, self._test_case_user)
         self.assertEqual(events[0].target, self._test_document)
         self.assertEqual(events[0].verb, event_cabinet_document_removed.id)
 
     def test_cabinet_get_document_count_method(self):
-        self._test_cabinet.document_add(document=self._test_document)
+        self._test_cabinet.document_add(
+            document=self._test_document, user=self._test_case_user
+        )
 
         test_cabinet_document_count = self._test_cabinet.documents.count()
 
@@ -183,7 +225,9 @@ class CabinetDocumentTestCase(
         self.assertEqual(events.count(), 0)
 
     def test_trashed_document_cabinet_document_count_method(self):
-        self._test_cabinet.document_add(document=self._test_document)
+        self._test_cabinet.document_add(
+            document=self._test_document, user=self._test_case_user
+        )
 
         test_cabinet_document_count = self._test_cabinet.documents.count()
 

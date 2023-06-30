@@ -59,15 +59,18 @@ def find_packages(directory):
 
     return packages
 
+
 install_requires = """
 django==3.2.19
 CairoSVG==2.5.2
-Pillow==9.2.0
+Pillow==9.4.0
 PyPDF2==1.28.4
 PyYAML==6.0
 Whoosh==2.7.4
 bleach==4.1.0
-celery==5.2.3
+boto3==1.24.70
+celery==5.2.7
+dateparser==1.1.1
 django-activity-stream==1.4.0
 django-auth-ldap==4.0.0
 django-celery-beat==2.2.1
@@ -78,14 +81,15 @@ django-model-utils==4.2.0
 django-mptt==0.13.4
 django-qsstats-magic==1.1.0
 django-solo==2.0.0
+django-storages==1.13.1
 django-stronghold==0.4.0
 django-widget-tweaks==1.4.12
-djangorestframework==3.13.1
+djangorestframework==3.14.0
 djangorestframework-recursive==0.1.2
-drf-yasg==1.20.0
+drf-yasg==1.21.4
 elasticsearch==7.17.1
 elasticsearch-dsl==7.4.0
-extract-msg==0.34.3
+extract-msg==0.36.4
 flanker==0.9.11
 flex==6.14.1
 furl==2.1.3
@@ -96,6 +100,7 @@ greenlet==2.0.2
 gunicorn==20.1.0
 importlib-metadata==5.0.0
 jsonschema==4.4.0
+mozilla-django-oidc==2.0.0
 node-semver==0.8.1
 pycountry==22.3.5
 pycryptodome==3.10.4
@@ -106,7 +111,7 @@ python_gnupg==0.4.8
 pytz==2022.1
 qrcode==7.3.1
 requests==2.27.1
-sentry-sdk==1.5.8
+sentry-sdk==1.12.1
 sh==1.14.2
 swagger-spec-validator==2.7.4
 whitenoise==6.0.0
@@ -132,9 +137,8 @@ setup(
         'Natural Language :: English',
         'Programming Language :: Python',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
         'Topic :: Communications :: File Sharing',
@@ -154,7 +158,7 @@ setup(
         'Source Code': 'https://gitlab.com/mayan-edms/mayan-edms',
         'Support': 'https://www.mayan-edms.com/support/'
     },
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
+    python_requires='>=3.9',
     scripts=['mayan/bin/mayan-edms.py'],
     url=mayan.__website__,
     version=mayan.__version__,

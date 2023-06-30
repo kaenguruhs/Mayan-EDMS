@@ -1,14 +1,17 @@
 from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.common.apps import MayanAppConfig
-from mayan.apps.common.menus import menu_secondary, menu_setup, menu_object
+from mayan.apps.common.menus import (
+    menu_list_facet, menu_object, menu_return, menu_setup
+)
 from mayan.apps.navigation.classes import SourceColumn
 from mayan.apps.views.html_widgets import TwoStateWidget
 
 from .classes import SettingNamespace, Setting
+from .html_widgets import WidgetSettingValue
 from .links import (
-    link_setting_namespace_detail, link_setting_namespace_list, link_namespace_root_list,
-    link_setting_edit
+    link_setting_namespace_detail, link_setting_namespace_list,
+    link_namespace_root_list, link_setting_edit
 )
 from .widgets import setting_widget
 
@@ -36,24 +39,27 @@ class SmartSettingsApp(MayanAppConfig):
         )
         SourceColumn(
             attribute='serialized_value', include_label=True,
-            label=_('Value'), source=Setting
+            label=_('Value'), widget=WidgetSettingValue, source=Setting
         )
         SourceColumn(
             attribute='is_overridden', include_label=True, source=Setting,
             widget=TwoStateWidget
         )
 
-        menu_object.bind_links(
-            links=(link_setting_namespace_detail,), sources=(SettingNamespace,)
+        menu_list_facet.bind_links(
+            links=(link_setting_namespace_detail,),
+            sources=(SettingNamespace,)
         )
         menu_object.bind_links(
             links=(link_setting_edit,), sources=(Setting,)
         )
-        menu_secondary.bind_links(
+        menu_return.bind_links(
             links=(link_namespace_root_list,), sources=(
-                SettingNamespace, Setting, 'settings:setting_namespace_list',
+                SettingNamespace, Setting
             )
         )
-        menu_setup.bind_links(links=(link_setting_namespace_list,))
+        menu_setup.bind_links(
+            links=(link_setting_namespace_list,)
+        )
 
         Setting.save_last_known_good()

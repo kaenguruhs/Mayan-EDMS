@@ -2,8 +2,13 @@ import logging
 
 from django.core.files.base import ContentFile
 from django.db import models
-from django.utils.encoding import force_text
+from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext_lazy as _, ugettext
+
+from mayan.apps.events.classes import EventManagerMethodAfter
+from mayan.apps.events.decorators import method_event
+
+from .events import event_download_file_downloaded
 
 logger = logging.getLogger(name=__name__)
 
@@ -28,8 +33,15 @@ class DatabaseFileModelMixin(models.Model):
         return super().delete(*args, **kwargs)
 
     def open(self, **kwargs):
+        # Some storage class file do not provide a mode attribute.
+        # In that case default to read only in binary mode.
+        # Python's default is read only in text format which does not work
+        # for this use case.
+        # https://docs.python.org/3/library/functions.html#open
+        mode = getattr(self.file.file, 'mode', 'rb')
+
         default_kwargs = {
-            'mode': getattr(self.file.file, 'mode', 'rb'),
+            'mode': mode,
             'name': self.file.name
         }
 
@@ -67,8 +79,30 @@ class DatabaseFileModelMixin(models.Model):
     def save(self, *args, **kwargs):
         if not self.file:
             self.file = ContentFile(
-                content='', name=self.filename or ugettext('Unnamed file')
+                content=b'', name=self.filename or ugettext('Unnamed file')
             )
 
-        self.filename = self.filename or force_text(s=self.file)
+        self.filename = self.filename or str(self.file)
         super().save(*args, **kwargs)
+
+
+class DownloadFileBusinessLogicMixin:
+    @method_event(
+        event_manager_class=EventManagerMethodAfter,
+        event=event_download_file_downloaded,
+        target='self'
+    )
+    def get_download_file_object(self):
+        return self.open(mode='rb')
+
+    def get_size_display(self):
+        return filesizeformat(bytes_=self.file.size)
+
+    get_size_display.short_description = _('Size')
+
+    def get_user_display(self):
+        if self.user.get_full_name():
+            return self.user.get_full_name()
+        else:
+            return self.user.username
+    get_user_display.short_description = _('User')

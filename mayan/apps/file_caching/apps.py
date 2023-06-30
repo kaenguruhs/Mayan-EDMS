@@ -50,7 +50,8 @@ class FileCachingConfig(MayanAppConfig):
         )
 
         SourceColumn(
-            attribute='label', is_identifier=True, is_object_absolute_url=True, source=Cache
+            attribute='label', is_identifier=True,
+            is_object_absolute_url=True, source=Cache
         )
         SourceColumn(
             attribute='get_maximum_size_display', include_label=True,
@@ -58,6 +59,14 @@ class FileCachingConfig(MayanAppConfig):
         )
         SourceColumn(
             attribute='get_total_size_display', include_label=True,
+            source=Cache
+        )
+        SourceColumn(
+            attribute='get_partition_count', include_label=True,
+            source=Cache
+        )
+        SourceColumn(
+            attribute='get_partition_file_count', include_label=True,
             source=Cache
         )
 
@@ -75,4 +84,6 @@ class FileCachingConfig(MayanAppConfig):
             )
         )
 
-        menu_tools.bind_links(links=(link_cache_list,))
+        menu_tools.bind_links(
+            links=(link_cache_list,)
+        )

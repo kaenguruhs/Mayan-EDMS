@@ -23,7 +23,7 @@ from .permissions import (
     permission_document_view, permission_document_type_view
 )
 from .statistics import (
-    new_document_pages_this_month, new_documents_this_month,
+    new_document_pages_this_month, new_documents_this_month
 )
 
 
@@ -152,7 +152,7 @@ class DashboardWidgetUserRecentlyAccessedDocuments(DashboardWidgetList):
 
 class DashboardWidgetUserRecentlyCreatedDocuments(DashboardWidgetList):
     columns = ('datetime_created', 'label',)
-    icon = link_document_recently_created_list.icon
+    icon = link_document_recently_created_list.get_icon()
     label = link_document_recently_created_list.text
     link = reverse_lazy(
         viewname=link_document_recently_created_list.view
@@ -176,7 +176,7 @@ class DashboardWidgetUserRecentlyCreatedDocuments(DashboardWidgetList):
 
 class DashboardWidgetUserFavoriteDocuments(DashboardWidgetList):
     columns = ('datetime_added', 'label',)
-    icon = link_document_favorites_list.icon
+    icon = link_document_favorites_list.get_icon()
     label = link_document_favorites_list.text
     link = reverse_lazy(
         viewname=link_document_favorites_list.view

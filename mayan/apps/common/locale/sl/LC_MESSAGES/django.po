@@ -4,16 +4,15 @@
 # 
 # Translators:
 # Translators:
-# Roberto Rosario, 2022
-# Jože Detečnik <joze.detecnik@3tav.si>, 2022
+# Jože Detečnik <joze.detecnik@3tav.si>, 2023
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-02 04:35+0000\n"
-"PO-Revision-Date: 2022-07-27 05:33+0000\n"
-"Last-Translator: Jože Detečnik <joze.detecnik@3tav.si>, 2022\n"
+"POT-Creation-Date: 2023-06-03 05:20+0000\n"
+"PO-Revision-Date: 2023-01-05 02:50+0000\n"
+"Last-Translator: Jože Detečnik <joze.detecnik@3tav.si>, 2023\n"
 "Language-Team: Slovenian (https://app.transifex.com/rosarior/teams/13584/sl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,18 +20,18 @@ msgstr ""
 "Language: sl\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
 
-#: apps.py:132 permissions.py:5 settings.py:16
+#: apps.py:132 permissions.py:6 settings.py:16
 msgid "Common"
 msgstr "Običajni"
 
 #: dependencies.py:165
 msgid "Transifex Client"
-msgstr ""
+msgstr "Odjemalec Transifex"
 
 #: dependencies.py:182
 msgid "Used to allow offline translation of the code text strings."
 msgstr ""
-"Uporablja se za omogočanje prevajanja besedilnih nizov kode brez povezave."
+"Uporablja se za omogočanje prevoda besedilnih nizov kode brez povezave."
 
 #: dependencies.py:191
 msgid "Provides style checking."
@@ -86,24 +85,24 @@ msgstr "Spletna trgovina"
 msgid "Get support"
 msgstr "Pridobite podporo"
 
-#: links.py:69 queues.py:6 views.py:131
+#: links.py:69 queues.py:7 views.py:134
 msgid "Tools"
 msgstr "Orodja"
 
-#: literals.py:26
+#: literals.py:30
 msgid ""
 "This feature has been deprecated and will be removed in a future version."
 msgstr "Ta funkcija je zastarela in bo odstranjena v prihodnji različici."
 
-#: literals.py:34
+#: literals.py:39
 msgid "Days"
 msgstr "Dnevi"
 
-#: literals.py:35
+#: literals.py:40
 msgid "Hours"
 msgstr "Ure"
 
-#: literals.py:36
+#: literals.py:41
 msgid "Minutes"
 msgstr "minute"
 
@@ -135,11 +134,11 @@ msgstr "Vrnitev"
 msgid "User"
 msgstr "Uporabnik"
 
-#: permissions.py:8
+#: permissions.py:10
 msgid "Copy object"
 msgstr "Kopiraj predmet"
 
-#: settings.py:23
+#: settings.py:24
 msgid ""
 "In list mode, show the \"list facet\" menu options as a dropdown menu "
 "instead of individual buttons."
@@ -147,7 +146,7 @@ msgstr ""
 "V načinu seznama prikažite možnosti menija »faseta seznama« kot spustni meni"
 " namesto posameznih gumbov."
 
-#: settings.py:31
+#: settings.py:33
 msgid ""
 "In list mode, show the \"object\" menu options as a dropdown menu instead of"
 " individual buttons."
@@ -155,7 +154,7 @@ msgstr ""
 "V načinu seznama prikažite možnosti menija &quot;predmet&quot; kot spustni "
 "meni namesto posameznih gumbov."
 
-#: settings.py:38
+#: settings.py:41
 msgid ""
 "Disables the use of the local `media` folder. When using this setting, all "
 "apps must be also configured via their respective storage backend settings "
@@ -165,7 +164,7 @@ msgstr ""
 " biti vse aplikacije prav tako konfigurirane prek svojih ustreznih "
 "nastavitev ozadja za shranjevanje, da uporabljajo alternativno obstojnost."
 
-#: settings.py:46
+#: settings.py:49
 msgid ""
 "A list of strings designating all applications that are to be removed from "
 "the list normally installed by Mayan EDMS. Each string should be a dotted "
@@ -177,7 +176,7 @@ msgstr ""
 "pikami do: konfiguracijskega razreda aplikacije (prednostno) ali paketa, ki "
 "vsebuje aplikacijo. Primer: [&#39;aplikacija_1&#39;, &#39;aplikacija_2&#39;]"
 
-#: settings.py:56
+#: settings.py:59
 msgid ""
 "A list of strings designating all applications that are installed beyond "
 "those normally installed by Mayan EDMS. Each string should be a dotted "
@@ -189,7 +188,7 @@ msgstr ""
 " konfiguracijskega razreda aplikacije (prednostno) ali paketa, ki vsebuje "
 "aplikacijo. Primer: [&#39;aplikacija_1&#39;, &#39;aplikacija_2&#39;]"
 
-#: settings.py:67
+#: settings.py:70
 msgid ""
 "A list of strings designating all applications that are installed beyond "
 "those normally installed by Mayan EDMS. Each string should be a dotted "
@@ -203,7 +202,7 @@ msgstr ""
 "aplikacijo. Te aplikacije bodo nameščene pred privzetimi aplikacijami. "
 "Primer: [&#39;aplikacija_1&#39;, &#39;aplikacija_2&#39;]"
 
-#: settings.py:78
+#: settings.py:81
 msgid ""
 "Name of the view attached to the brand anchor in the main menu. This is also"
 " the view to which users will be redirected after log in."
@@ -211,15 +210,15 @@ msgstr ""
 "Ime pogleda, pritrjenega sidru blagovne znamke v glavnem meniju. To je tudi "
 "pogled, na katerega bodo uporabniki preusmerjeni po prijavi."
 
-#: settings.py:87
+#: settings.py:90
 msgid "Name of the dashboard to display in the home view."
 msgstr "Ime nadzorne plošče za prikaz v domačem pogledu."
 
-#: settings.py:92
+#: settings.py:95
 msgid "Sets the project's name."
 msgstr "Nastavi ime projekta."
 
-#: settings.py:96
+#: settings.py:99
 msgid "URL of the project's homepage."
 msgstr "URL domače strani projekta."
 
@@ -227,11 +226,11 @@ msgstr "URL domače strani projekta."
 msgid "Click here to fix this."
 msgstr "Kliknite tukaj, da to popravite."
 
-#: validators.py:40
+#: validators.py:41
 msgid "Enter a valid JSON value."
 msgstr "Vnesite veljavno vrednost JSON."
 
-#: validators.py:64
+#: validators.py:65
 msgid "Enter a valid YAML value."
 msgstr "Vnesite veljavno vrednost YAML."
 
@@ -245,7 +244,7 @@ msgstr ""
 
 #: views.py:25
 msgid "About"
-msgstr " O programu"
+msgstr "O tem"
 
 #: views.py:43
 msgid "Home"
@@ -277,14 +276,14 @@ msgstr ""
 msgid "No setup options available."
 msgstr "Možnosti nastavitve niso na voljo."
 
-#: views.py:115
-msgid "Setup items"
-msgstr "Nastavitveni elementi"
-
-#: views.py:117
+#: views.py:116
 msgid "Here you can configure all aspects of the system."
 msgstr "Tukaj lahko konfigurirate vse vidike sistema."
 
-#: views.py:133
+#: views.py:118
+msgid "Setup items"
+msgstr "Nastavitveni elementi"
+
+#: views.py:132
 msgid "These modules are used to do system maintenance."
 msgstr "Ti moduli se uporabljajo za vzdrževanje sistema."

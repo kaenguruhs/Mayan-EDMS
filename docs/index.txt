@@ -22,6 +22,9 @@ repository for electronic documents.
     releases/index
     chapters/series_status
     parts/getting_started
+    chapters/document_types
+    chapters/sources
+    chapters/search
     parts/access_control
     parts/categorization
     parts/collaboration
@@ -32,6 +35,7 @@ repository for electronic documents.
     chapters/portainer/index
     parts/advanced
     parts/administration
+    parts/upgrades
     parts/troubleshooting/index
     chapters/development/index
     chapters/security

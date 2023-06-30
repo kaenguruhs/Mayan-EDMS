@@ -11,7 +11,6 @@ import requests
 from semver import max_satisfying
 
 from django.apps import apps
-from django.utils.encoding import force_text
 from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
 from django.utils.termcolors import colorize
@@ -62,7 +61,9 @@ class DependencyGroup:
 
     @classmethod
     def get_all(cls):
-        return sorted(cls._registry.values(), key=lambda x: x.label)
+        return sorted(
+            cls._registry.values(), key=lambda x: x.label
+        )
 
     def __init__(
         self, attribute_name, label, name, allow_multiple=False,
@@ -77,7 +78,7 @@ class DependencyGroup:
         self.__class__._registry[name] = self
 
     def __str__(self):
-        return force_text(s=self.label)
+        return str(self.label)
 
     @staticmethod
     def get_options_for_dependency_group(dependency_group):
@@ -112,7 +113,8 @@ class DependencyGroup:
             if dependency_group.allow_multiple:
                 for entry_index, entry in enumerate(value):
                     dictionary = {
-                        'label': label[entry_index], 'help_text': help_text[entry_index], 'value': entry
+                        'label': label[entry_index],
+                        'help_text': help_text[entry_index], 'value': entry
                     }
                     if dictionary not in result:
                         result.append(dictionary)
@@ -159,7 +161,7 @@ class DependencyGroupEntry:
         self.name = name
 
     def __str__(self):
-        return force_text(s=self.label)
+        return str(self.label)
 
     def get_dependencies(self):
         dependencies = Dependency.get_for_attribute(
@@ -176,7 +178,9 @@ class Dependency(AppsModuleLoaderMixin):
 
     @staticmethod
     def return_sorted(dependencies):
-        return sorted(dependencies, key=lambda x: x.get_label())
+        return sorted(
+            dependencies, key=lambda x: x.get_label()
+        )
 
     @classmethod
     def _check_all(cls):
@@ -196,8 +200,8 @@ class Dependency(AppsModuleLoaderMixin):
                 result.append(
                     {
                         'check': check,
-                        'check_text': check_text,
                         'check_color': check_color,
+                        'check_text': check_text,
                         'dependency': dependency
                     }
                 )
@@ -222,12 +226,12 @@ class Dependency(AppsModuleLoaderMixin):
                 print(
                     template.format(
                         dependency.name,
-                        force_text(s=dependency.class_name_verbose_name),
-                        force_text(s=dependency.get_version_string()),
-                        force_text(s=dependency.app_label_verbose_name()),
-                        force_text(s=dependency.get_environments_verbose_name()),
-                        force_text(s=dependency.get_other_data()),
-                        force_text(s=result['check'])
+                        str(dependency.class_name_verbose_name),
+                        str(dependency.get_version_string()),
+                        str(dependency.app_label_verbose_name()),
+                        str(dependency.get_environments_verbose_name()),
+                        str(dependency.get_other_data()),
+                        str(result['check'])
                     )
                 )
         else:
@@ -258,7 +262,9 @@ class Dependency(AppsModuleLoaderMixin):
     def get_all(cls, subclass_only=False):
         dependencies = cls._registry.values()
         if subclass_only:
-            dependencies = [dependency for dependency in dependencies if isinstance(dependency, cls)]
+            dependencies = [
+                dependency for dependency in dependencies if isinstance(dependency, cls)
+            ]
 
         return Dependency.return_sorted(dependencies=dependencies)
 
@@ -277,7 +283,9 @@ class Dependency(AppsModuleLoaderMixin):
         return result
 
     @classmethod
-    def install_multiple(cls, app_label=None, force=False, subclass_only=False):
+    def install_multiple(
+        cls, app_label=None, force=False, subclass_only=False
+    ):
         for dependency in cls.get_all(subclass_only=subclass_only):
             if app_label:
                 if app_label == dependency.app_label:
@@ -286,9 +294,9 @@ class Dependency(AppsModuleLoaderMixin):
                 dependency.install(force=force)
 
     def __init__(
-        self, name, environment=environment_production, app_label=None, copyright_text=None,
-        environments=None, help_text=None, label=None, module=None, replace_list=None,
-        version_string=None
+        self, name, environment=environment_production, app_label=None,
+        copyright_text=None, environments=None, help_text=None, label=None,
+        module=None, replace_list=None, version_string=None
     ):
         self._app_label = app_label
         self.copyright_text = copyright_text
@@ -313,7 +321,9 @@ class Dependency(AppsModuleLoaderMixin):
                 _('Dependency "%s" already registered.') % self.name
             )
 
-        self.__class__._registry[self.get_pk()] = self
+        self.__class__._registry[
+            self.get_pk()
+        ] = self
 
     @cached_property
     def app_label(self):
@@ -336,24 +346,34 @@ class Dependency(AppsModuleLoaderMixin):
         return self.copyright_text or ''
 
     def install(self, force=False):
-        print(_('Installing package: %s... ') % self.get_label_full(), end='')
+        print(
+            _('Installing package: %s... ') % self.get_label_full(), end=''
+        )
         sys.stdout.flush()
 
         if not force:
             if self.check():
-                print(_('Already installed.'))
+                print(
+                    _('Already installed.')
+                )
             else:
                 self._install()
-                print(_('Complete.'))
+                print(
+                    _('Complete.')
+                )
                 sys.stdout.flush()
         else:
             if self.replace_list:
                 self.patch_files()
-                print(_('Complete.'))
+                print(
+                    _('Complete.')
+                )
                 sys.stdout.flush()
 
             self.patch_files()
-            print(_('Complete.'))
+            print(
+                _('Complete.')
+            )
             sys.stdout.flush()
 
     def _install(self):
@@ -413,7 +433,9 @@ class Dependency(AppsModuleLoaderMixin):
         else:
             version_string = ''
 
-        return '{} {}'.format(self.get_label(), version_string)
+        return '{} {}'.format(
+            self.get_label(), version_string
+        )
 
     def get_other_data(self):
         return _('None')
@@ -491,12 +513,13 @@ class JavaScriptDependency(Dependency):
         except FileNotFoundError:
             return False
 
-        versions = [package_info['version']]
+        versions = [
+            package_info['version']
+        ]
         version_string = self.version_string
 
         return max_satisfying(
-            versions=versions, range_=version_string,
-            loose=True
+            loose=True, range_=version_string, versions=versions
         )
 
     def _read_package_file(self):
@@ -508,13 +531,19 @@ class JavaScriptDependency(Dependency):
 
     def _install(self, include_dependencies=False):
         self.get_metadata()
-        print(_('Downloading... '), end='')
+        print(
+            _('Downloading... '), end=''
+        )
         sys.stdout.flush()
         self.download()
-        print(_('Verifying... '), end='')
+        print(
+            _('Verifying... '), end=''
+        )
         sys.stdout.flush()
         self.verify()
-        print(_('Extracting... '), end='')
+        print(
+            _('Extracting... '), end=''
+        )
         sys.stdout.flush()
         self.extract()
 
@@ -558,7 +587,7 @@ class JavaScriptDependency(Dependency):
 
             # Clear the installation path of previous content
             shutil.rmtree(
-                path=force_text(s=path_install), ignore_errors=True
+                path=str(path_install), ignore_errors=True
             )
 
             # Scoped packages are nested under a parent directory
@@ -570,10 +599,12 @@ class JavaScriptDependency(Dependency):
             # We do a copy and delete instead of move because os.rename doesn't
             # support renames across filesystems.
             path_uncompressed_package = Path(temporary_directory, 'package')
-            shutil.rmtree(path=force_text(s=path_install))
+            shutil.rmtree(
+                path=str(path_install)
+            )
             shutil.copytree(
-                src=force_text(s=path_uncompressed_package),
-                dst=force_text(s=path_install)
+                src=str(path_uncompressed_package),
+                dst=str(path_install)
             )
 
             # Clean up temporary directory used for download
@@ -600,7 +631,9 @@ class JavaScriptDependency(Dependency):
 
         for entry in path_install_path.glob(pattern='LICENSE*'):
             with entry.open(mode='rb') as file_object:
-                return force_text(s=file_object.read())
+                return str(
+                    file_object.read()
+                )
 
         copyright_text = []
 
@@ -643,7 +676,9 @@ class JavaScriptDependency(Dependency):
         return result
 
     def get_metadata(self):
-        response = requests.get(url=self.get_url())
+        response = requests.get(
+            url=self.get_url()
+        )
         self.package_metadata = response.json()
         self.versions = self.package_metadata['versions'].keys()
         self.version_best = self.get_best_version()
@@ -669,7 +704,7 @@ class JavaScriptDependency(Dependency):
 
     def get_url(self):
         url = furl(self.repository.url)
-        url.path.segments = url.path.segments + [self.name]
+        url.path.segments += [self.name]
         return url.tostr()
 
     def verify(self):
@@ -741,12 +776,16 @@ class PythonDependency(Dependency):
     def get_latest_version(self):
         url = 'https://pypi.python.org/pypi/{}/json'.format(self.name)
         response = requests.get(url=url)
-        versions = list(response.json()['releases'])
+        versions = list(
+            response.json()['releases']
+        )
         versions.sort(key=PythonVersion)
         return versions[-1]
 
     def is_latest_version(self):
-        return self.version_string == '=={}'.format(self.get_latest_version())
+        return self.version_string == '=={}'.format(
+            self.get_latest_version()
+        )
 
 
 class GoogleFontDependency(Dependency):
@@ -759,7 +798,7 @@ class GoogleFontDependency(Dependency):
     user_agents = {
         'woff2': 'Mozilla/5.0 (Windows NT 6.1; rv:60.0) Gecko/20100101 Firefox/60.0',
         'woff': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/30.0.1599.101 Safari/537.36',
-        'ttf': 'Mozilla/5.0 (Linux; U; Android 2.2; en-us; DROID2 GLOBAL Build/S273) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1',
+        'ttf': 'Mozilla/5.0 (Linux; U; Android 2.2; en-us; DROID2 GLOBAL Build/S273) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1'
     }
 
     def __init__(self, *args, **kwargs):
@@ -771,15 +810,21 @@ class GoogleFontDependency(Dependency):
         return self.get_install_path().exists()
 
     def _install(self):
-        print(_('Downloading... '), end='')
+        print(
+            _('Downloading... '), end=''
+        )
         sys.stdout.flush()
         self.download()
-        print(_('Extracting... '), end='')
+        print(
+            _('Extracting... '), end=''
+        )
         sys.stdout.flush()
         self.extract()
 
     def download(self):
-        self.path_cache = Path(mkdtemp())
+        self.path_cache = Path(
+            mkdtemp()
+        )
         # Use .css to keep the same ContentType, otherwise the webserver
         # will use the generic octet and the browser will ignore the import
         # https://www.w3.org/TR/2013/CR-css-cascade-3-20131003/#content-type
@@ -789,20 +834,19 @@ class GoogleFontDependency(Dependency):
 
         with self.path_import_file.open(mode='w') as file_object:
             for agent_name, agent_string in self.user_agents.items():
-                import_file = force_text(
-                    s=requests.get(
-                        self.url, headers={
-                            'User-Agent': agent_string
-                        }
-                    ).content
+                response = requests.get(
+                    self.url, headers={
+                        'User-Agent': agent_string
+                    }
                 )
+
+                import_file = response.text
 
                 for line in import_file.split('\n'):
                     if 'url' in line:
                         font_url = line.split(' ')[-2][4:-1]
-                        url = furl(force_text(s=font_url))
+                        url = furl(font_url)
                         font_filename = url.path.segments[-1]
-
                         path_font_filename = self.path_cache / font_filename
                         with path_font_filename.open(mode='wb') as font_file_object:
                             with requests.get(font_url, stream=True) as response:
@@ -811,8 +855,9 @@ class GoogleFontDependency(Dependency):
                                 # content.
                                 # https://2.python-requests.org/en/master/user/quickstart/#binary-response-content
                                 shutil.copyfileobj(
-                                    fsrc=BytesIO(response.content),
-                                    fdst=font_file_object
+                                    fsrc=BytesIO(
+                                        initial_bytes=response.content
+                                    ), fdst=font_file_object
                                 )
 
                         line = line.replace(font_url, font_filename)
@@ -823,12 +868,16 @@ class GoogleFontDependency(Dependency):
         path_install = self.get_install_path()
 
         # Clear the installation path of previous content
-        shutil.rmtree(path=force_text(s=path_install), ignore_errors=True)
+        shutil.rmtree(
+            path=str(path_install), ignore_errors=True
+        )
 
         shutil.copytree(
-            src=force_text(s=self.path_cache), dst=force_text(s=path_install)
+            src=str(self.path_cache), dst=str(path_install)
         )
-        shutil.rmtree(path=force_text(s=self.path_cache), ignore_errors=True)
+        shutil.rmtree(
+            path=str(self.path_cache), ignore_errors=True
+        )
 
     def get_install_path(self):
         app = apps.get_app_config(app_label=self.app_label)

@@ -8,7 +8,6 @@ from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.db.models import CharField, Q, Value
 from django.db.models.functions import Cast, Concat
-from django.utils.encoding import force_text
 from django.utils.translation import ugettext
 
 from mayan.apps.common.utils import (
@@ -64,20 +63,26 @@ class AccessControlListManager(models.Manager):
                 # field in the case where multiple related fields are
                 # associated.
                 # Example: object_layer__content_type
-                recursive_related_reference = '__'.join(related_field_name.split('__')[0:-1])
+                recursive_related_reference = '__'.join(
+                    related_field_name.split('__')[0:-1]
+                )
 
                 # If there is at least one parent related field we add a
                 # double underscore to make it a valid filter template.
                 if recursive_related_reference:
-                    recursive_related_reference = '{}__'.format(recursive_related_reference)
+                    recursive_related_reference = '{}__'.format(
+                        recursive_related_reference
+                    )
 
                 content_type_object_id_queryset = queryset.annotate(
                     ct_fk_combination=Concat(
                         '{}{}'.format(
-                            recursive_related_reference, related_field.ct_field
+                            recursive_related_reference,
+                            related_field.ct_field
                         ), Value('-'),
                         '{}{}'.format(
-                            recursive_related_reference, related_field.fk_field
+                            recursive_related_reference,
+                            related_field.fk_field
                         ), output_field=CharField()
                     )
                 ).values('ct_fk_combination')
@@ -104,7 +109,11 @@ class AccessControlListManager(models.Manager):
                 field_lookup = '{}{}__in'.format(
                     recursive_related_reference, related_field.fk_field
                 )
-                result.append(Q(**{field_lookup: clean_acl_filter}))
+                result.append(
+                    Q(
+                        **{field_lookup: clean_acl_filter}
+                    )
+                )
             else:
                 # Case 2: Related field of a single type, single ContentType,
                 # multiple object id.
@@ -120,7 +129,11 @@ class AccessControlListManager(models.Manager):
                 # of the Q object will return an empty queryset when reduced
                 # and filter out objects that should be in the final queryset.
                 if acl_filter:
-                    result.append(Q(**{field_lookup: acl_filter}))
+                    result.append(
+                        Q(
+                            **{field_lookup: acl_filter}
+                        )
+                    )
 
                 # Case 5: Related field, has an inherited related field itself
                 # Bubble up permission check.
@@ -136,7 +149,9 @@ class AccessControlListManager(models.Manager):
                 else:
                     relation_result = []
                     for related_field_model_inheritance in related_field_model_inheritances:
-                        new_related_field_name = '{}__{}'.format(related_field_name, related_field_model_inheritance['field_name'])
+                        new_related_field_name = '{}__{}'.format(
+                            related_field_name, related_field_model_inheritance['field_name']
+                        )
                         related_field_inherited_acl_queries = self._get_acl_filters(
                             fk_field_cast=related_field_model_inheritance['fk_field_cast'],
                             queryset=queryset,
@@ -152,7 +167,9 @@ class AccessControlListManager(models.Manager):
                             )
 
                     if relation_result:
-                        result.append(reduce(operator.or_, relation_result))
+                        result.append(
+                            reduce(operator.or_, relation_result)
+                        )
         else:
             # Case 1: Original model, single ContentType, multiple object id.
             content_type = ContentType.objects.get_for_model(
@@ -163,7 +180,11 @@ class AccessControlListManager(models.Manager):
                 content_type=content_type, permissions=stored_permission,
                 role__groups__user=user
             ).values('object_id')
-            result.append(Q(**{field_lookup: acl_filter}))
+            result.append(
+                Q(
+                    **{field_lookup: acl_filter}
+                )
+            )
 
             # Case 4: Original model, has an inherited related field.
             try:
@@ -183,7 +204,8 @@ class AccessControlListManager(models.Manager):
                     inherited_acl_queries = self._get_acl_filters(
                         fk_field_cast=inheritance['fk_field_cast'],
                         queryset=queryset, stored_permission=stored_permission,
-                        related_field_name=inheritance['field_name'], user=user
+                        related_field_name=inheritance['field_name'],
+                        user=user
                     )
                     if inherited_acl_queries:
                         relation_result.append(
@@ -191,7 +213,9 @@ class AccessControlListManager(models.Manager):
                         )
 
                 if relation_result:
-                    result.append(reduce(operator.or_, relation_result))
+                    result.append(
+                        reduce(operator.or_, relation_result)
+                    )
 
             # Case 7: Has a function.
             try:
@@ -199,7 +223,10 @@ class AccessControlListManager(models.Manager):
                     model=queryset.model
                 )
             except KeyError:
-                pass
+                """
+                Does not have specialized field query function. Proceed to
+                next case.
+                """
             else:
                 function_results = field_query_function()
 
@@ -215,7 +242,9 @@ class AccessControlListManager(models.Manager):
                 # Obtain a queryset of filtered, authorized model instances.
                 acl_queryset = queryset.model._meta.default_manager.filter(
                     id__in=acl_filter
-                ).filter(**function_results['acl_filter'])
+                ).filter(
+                    **function_results['acl_filter']
+                )
 
                 if 'acl_values' in function_results:
                     acl_queryset = acl_queryset.values(
@@ -225,7 +254,9 @@ class AccessControlListManager(models.Manager):
                 # Get the final query using the filtered queryset as the
                 # reference.
                 result.append(
-                    Q(**{function_results['field_lookup']: acl_queryset})
+                    Q(
+                        **{function_results['field_lookup']: acl_queryset}
+                    )
                 )
 
         return result
@@ -242,7 +273,7 @@ class AccessControlListManager(models.Manager):
                 ugettext(
                     'Object "%s" is not a model and cannot be checked for '
                     'access.'
-                ) % force_text(s=obj)
+                ) % str(obj)
             )
             return True
         else:
@@ -260,9 +291,7 @@ class AccessControlListManager(models.Manager):
             return True
         else:
             raise PermissionDenied(
-                ugettext(message='Insufficient access for: %s') % force_text(
-                    s=obj
-                )
+                ugettext(message='Insufficient access for: %s') % str(obj)
             )
 
     def restrict_queryset(self, permission, queryset, user):
@@ -303,9 +332,7 @@ class AccessControlListManager(models.Manager):
         # Filter the permissions to the ones that apply to the model.
         queryset = ModelPermission.get_for_instance(
             instance=obj
-        ).filter(
-            pk__in=queryset
-        )
+        ).filter(pk__in=queryset)
 
         return queryset
 
@@ -330,8 +357,8 @@ class AccessControlListManager(models.Manager):
                         obj=obj, attribute=inheritance['field_name']
                     )
                 except AttributeError:
-                    # Parent accessor is not an attribute, try it as a related
-                    # field.
+                    # Parent accessor is not an attribute,
+                    # try it as a related field.
                     parent_object = return_related(
                         instance=obj, related_field=inheritance['field_name']
                     )
@@ -340,14 +367,15 @@ class AccessControlListManager(models.Manager):
                 )
                 try:
                     queryset = queryset | self.get(
-                        content_type=content_type, object_id=parent_object.pk,
-                        role=role
+                        content_type=content_type,
+                        object_id=parent_object.pk, role=role
                     ).permissions.all()
                 except self.model.DoesNotExist:
                     pass
 
                 if type(parent_object) == type(obj):
-                    # Object and parent are of the same type. Break recursion.
+                    # Object and parent are of the same type. Break
+                    # recursion.
                     return queryset
                 else:
                     queryset = queryset | self._get_inherited_object_permissions(
@@ -357,7 +385,9 @@ class AccessControlListManager(models.Manager):
         return queryset
 
     def grant(self, permission, role, obj):
-        class_permissions = ModelPermission.get_for_class(klass=obj.__class__)
+        class_permissions = ModelPermission.get_for_class(
+            klass=obj.__class__
+        )
         if permission not in class_permissions:
             raise PermissionNotValidForClass
 

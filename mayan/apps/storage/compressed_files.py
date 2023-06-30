@@ -37,12 +37,14 @@ class Archive:
         )[0]
 
         try:
-            for archive_class in cls._registry[mime_type]:
+            archives_classes = cls._registry[mime_type]
+        except KeyError:
+            raise NoMIMETypeMatch
+        else:
+            for archive_class in archives_classes:
                 instance = archive_class()
                 instance._open(file_object=file_object)
                 return instance
-        except KeyError:
-            raise NoMIMETypeMatch
 
     def _open(self, file_object):
         raise NotImplementedError
@@ -65,7 +67,8 @@ class Archive:
     def get_members(self):
         return (
             SimpleUploadedFile(
-                content=self.member_contents(filename=filename), name=filename
+                content=self.member_contents(filename=filename),
+                name=filename
             ) for filename in self.members()
         )
 
@@ -112,11 +115,15 @@ class MsgArchive(Archive):
 
     def open_member(self, filename):
         if filename == 'message.txt':
-            return BytesIO(force_bytes(s=self._archive.body))
+            return BytesIO(
+                initial_bytes=force_bytes(s=self._archive.body)
+            )
 
         for member in self._archive.attachments:
             if member.longFilename == filename:
-                return BytesIO(force_bytes(s=member.data))
+                return BytesIO(
+                    initial_bytes=force_bytes(s=member.data)
+                )
 
 
 class TarArchive(Archive):
@@ -130,6 +137,7 @@ class TarArchive(Archive):
 
     def create(self):
         self.string_buffer = BytesIO()
+        # Mode cannot be a binary mode.
         self._archive = tarfile.TarFile(fileobj=self.string_buffer, mode='w')
 
     def member_contents(self, filename):
@@ -154,6 +162,7 @@ class ZipArchive(Archive):
 
     def create(self):
         self.string_buffer = BytesIO()
+        # Mode cannot be a binary mode.
         self._archive = zipfile.ZipFile(file=self.string_buffer, mode='w')
 
     def member_contents(self, filename):
@@ -200,13 +209,17 @@ class ZipArchive(Archive):
         self.string_buffer.seek(0)
 
         if filename:
-            with open(file=filename, mode='w') as file_object:
-                file_object.write(self.string_buffer.read())
+            with open(file=filename, mode='wb') as file_object:
+                file_object.write(
+                    self.string_buffer.read()
+                )
         else:
             return self.string_buffer
 
     def as_file(self, filename):
-        return SimpleUploadedFile(name=filename, content=self.write().read())
+        return SimpleUploadedFile(
+            name=filename, content=self.write().read()
+        )
 
 
 Archive.register(

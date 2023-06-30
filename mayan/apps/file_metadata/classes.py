@@ -30,7 +30,7 @@ class FileMetadataDriver:
         driver_classes = cls._registry.get(document_file.mimetype, ())
         # Add wilcard drivers, drivers meant to be executed for all MIME
         # types.
-        driver_classes = driver_classes + tuple(cls._registry.get('*', ()))
+        driver_classes += tuple(cls._registry.get('*', ()))
 
         for driver_class in driver_classes:
             try:
@@ -57,8 +57,13 @@ class FileMetadataDriver:
         for mimetype in mimetypes:
             cls._registry.setdefault(mimetype, []).append(cls)
 
+    def __init__(self, auto_initialize=True, **kwargs):
+        self.auto_initialize = auto_initialize
+
     def get_driver_path(self):
-        return '.'.join([self.__module__, self.__class__.__name__])
+        return '.'.join(
+            [self.__module__, self.__class__.__name__]
+        )
 
     def initialize(self):
         StoredDriver = apps.get_model(

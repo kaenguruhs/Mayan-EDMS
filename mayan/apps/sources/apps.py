@@ -50,10 +50,6 @@ class SourcesApp(MayanAppConfig):
     has_static_media = True
     has_tests = True
     name = 'mayan.apps.sources'
-    static_media_ignore_patterns = (
-        'sources/node_modules/dropzone/index.js',
-        'sources/node_modules/dropzone/component.json'
-    )
     verbose_name = _('Sources')
 
     def ready(self):
@@ -148,7 +144,9 @@ class SourcesApp(MayanAppConfig):
                 'sources:source_list'
             )
         )
-        menu_setup.bind_links(links=(link_source_list,))
+        menu_setup.bind_links(
+            links=(link_source_list,)
+        )
         menu_secondary.bind_links(
             links=(link_document_file_upload,),
             sources=(

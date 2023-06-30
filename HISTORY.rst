@@ -1,3 +1,480 @@
+4.4.7 (2023-05-03)
+==================
+- Fix sitemap URL scheme format.
+- CI documentation jobs improvements:
+
+  - Install wheel to use modern Python package versions.
+  - Don't install or build the Mayan EDMS Python package and
+    instead use the development code to build the documentation.
+  - Ensure APT proxy quotes are escaped.
+
+- Fixes and improvements from versions 4.3.9, 4.2.16 and 4.2.17dev0.
+
+4.4.6 (2023-04-16)
+==================
+- Update Docker image versions:
+
+  - Debian from 11.5-slim to 11.6-slim
+  - Docker from 20-dind to 20.10.21-dind
+  - ElasticSearch from 7.17.0 to 7.17.9
+  - MySQL from 8.0 to 8.0.32
+  - PostgreSQL from 13.8 to 13.10
+  - Python from 3.10-slim to 3.10.11-slim
+  - RabbitMQ from 3.11.2-alpine to 3.11.13-alpine
+  - Redis from 7.0.5-alpine to 7.0.10-alpine
+
+- Merged changes from version 4.3.8:
+
+  - Fix sources app migration 0027 backend mapping path.
+  - Don't include local config values in app settings. Local config values
+    are meant to override CI/CD and test settings, and not meant to be
+    committed as permanent to the repository.
+  - Improve deployment stages:
+
+    - Use long setting versions.
+    - Clean up volumes using the official method.
+    - Pull images to ensure the latest copy is used even if the image
+      has the same tag as the remote.
+
+- Ensure the workflow state action column is not shown for the workflow
+  state runtime proxies where is does not make sense to show.
+- Ignore staging folder file image cache error if the image cache is not
+  already generated when deleting the staging folder file.
+- Update Docker Compose file to work backward incompatible bug introduced
+  in version 2.17.0 YAML processor
+  (https://github.com/docker/compose/issues/10411).
+
+4.4.5 (2023-03-11)
+==================
+- Merge version 4.3.6 documents app migration 80 workaround.
+  Update migration 80 of the documents app to ensure the stored size of the
+  converted document file size does not exceed the ``PositiveIntegerField``
+  database field maximum value of 2147483647
+  (https://docs.djangoproject.com/en/4.1/ref/models/fields/#positiveintegerfield).
+- Merges from version 4.3.7:
+
+  - GitOps improvements.
+  - Move the helper module ``version.py`` to the dependencies app.
+  - Add OCI metadata annotations.
+
+4.4.4 (2023-02-14)
+==================
+- Update image interface when generating QRCode image. Fixes OTP QRCode
+  rendering. Thanks to forum user Ken Robinson (@DocCyblade) for the report.
+- Simplify OTP QRCode generation to lower the chances of future regressions.
+- Add a custom REST API exception handler to workaround inconsistent
+  validation exception behavior in Django REST framework
+  (https://github.com/encode/django-rest-framework/issues/2145). Closes
+  GitLab issue #1128. Thanks to Jan Przychodniak (@janprzychodniak) for the
+  report and debug information.
+- Ensure correct index instance nodes are deleted. Don't delete all excluded
+  index instances nodes. Instead delete all the index instance nodes where
+  the document being processed is found but exclude the nodes recently
+  updated. Closes GitLab issue #1134. Thanks to Nicholas Buttigieg
+  (@nicholasbuttigieg) and Kyle Pullicino (@KPull) for the report and test
+  scenario.
+- Remove the Python Transifex client. The new Go based client is required
+  to be installed manually when working with translations
+  (https://github.com/transifex/cli).
+
+4.4.3 (2023-02-11)
+==================
+- Improve transformation views to always pass the object
+  having the transformation applied.
+- Add support to the ``Link`` class for dynamic view keyword arguments, icon,
+  resolved object, and permissions.
+- Update the transformation, decorations, and redactions links to use
+  dynamic view keyword arguments, icons, resolved objects, and permissions.
+- Move transformation and redactions links to either their own ``links.py``
+  module. In the case of the ``documents`` app, the module is named
+  ``miscellaneous_links.py``.
+- Improve permissions handling of the transformation, decorations, and
+  redactions links.
+- Improve transformation and redaction link testing.
+- Sanitize tag labels to avoid XSS abuse (CVE-2022-47419: Mayan EDMS Tag XSS).
+  This is a limited scope weakness of the tagging system markup that can be
+  used to display an arbitrary text when selecting a tag for attachment to
+  or removal from a document.
+
+  It is not possible to circumvent Mayan EDMS access control system or
+  expose arbitrary information with this weakness.
+
+  Attempting to exploit this weakness requires a privileged account and
+  is not possible to enable from a guest or an anonymous account. Visitors
+  to a Mayan EDMS installation cannot exploit this weakness.
+
+  It is also being incorrectly reported that this weakness can be used to
+  steal the session cookie and impersonate users. Since version 1.4
+  (March 23, 2012) Django has included the ``httponly``
+  attribute for the session cookie. This means that the session cookie data,
+  including ``sessionid``, is no longer accessible from JavaScript.
+  https://docs.djangoproject.com/en/4.1/releases/1.4/
+
+  Mayan EDMS currently uses Django 3.2. Under this version of Django
+  The ``SESSION_COOKIE_HTTPONLY`` defaults to ``True``, which enables the
+  ``httponly`` for the session cookie making it inaccessible to JavaScript
+  and therefore not available for impersonation via session hijacking.
+  https://docs.djangoproject.com/en/3.2/ref/settings/#session-cookie-httponly
+
+  Django's ``SESSION_COOKIE_HTTPONLY`` setting is not currently exposed by
+  Mayan EDMS' setting system, therefore it is not possible to disable this
+  protection by conventional means.
+
+  Any usage of this weakness remains logged in the event system making
+  it easy to track down any bad actors.
+
+  Due to all these factors, the surface of attack of this weakness is
+  very limited, if any.
+
+  There are no known actual or theoretical attacks exploiting this
+  weakness to expose or destroy data.
+- Drop support for Python 3.7 and Python 3.8. Python 3.9 is now the minimum
+  version supported. This change happened in version 4.4 but was not
+  documented. Closes GitLab issue #1137. Thanks to joh-ku (@joh-ku)
+  for the report and research.
+
+4.4.2 (2023-01-23)
+==================
+- Merge request !106. Do not show server communication modal
+  for interrupted AJAX requests. Thanks to
+  Nicholas Buttigieg (@nicholasbuttigieg) and
+  Kyle Pullicino (@KPull) for the patch.
+
+4.4.1 (2023-01-19)
+==================
+- Fix list filtering template issue caused by caching.
+- GitOps updates:
+
+  - Add makefile targets to trigger standalone builds.
+  - Increase artifact expiration.
+  - Add PIP and APT caching to documentation and python build stages.
+  - Add GitLab CI job dependencies.
+  - Reuse Python build in stages.
+  - Convert branches into literals.
+  - Remove duplicated code in jobs.
+
+- Simplify installation documentation.
+
+4.4 (2023-01-16)
+================
+- Update Docker image tags:
+
+  - Docker from 20-dind to 20.10.21-dind
+  - ElasticSearch from 7.17.0 to 7.17.7
+  - PostgreSQL from 12.11-alpine to 13.11.2-alpine
+  - Redis from 6.2-alpine to 7.0.5-alpine
+
+- Update dependencies versions:
+
+  - Celery from 5.1.2 to 5.2.7.
+  - extract msg from 0.34.3 to 0.36.4.
+  - djangorestframework from 3.13.1 to 3.14.0.
+  - drf-yasg from 1.20.0 to 1.21.4.
+  - sentry-sdk from 1.5.8 to 1.21.1.
+  - Pillow from 9.2.0 to 9.4.0.
+
+- Increase compatibility of the file caching storage usage with more S3
+  object storage implementations.
+- Add support for OpenID Connect (OIDC) authentication. Adds the new
+  ``authentication_oidc`` app.
+- Add the parent cabinet as the action object to the cabinet creation event
+  when a child cabinet is created.
+- Add the cabinet deleted event. This event is committed when a child cabinet
+  is deleted. The parent cabinet is recorded as the action object for the
+  event.
+- Fix the function interfaces when calling ``get_mayan_object_permissions``
+  to ``get_mayan_view_permissions`` to override an API view permission
+  layout.
+- Update navigation permission check to short circuit check when the
+  current user has not logged in yet.
+- Cabinet updates:
+
+  - Use the same permission layout to create parent and child cabinets from
+    the API as from the HTTP views.
+  - The create permission is now required to create parent as well as child
+    cabinets. This change replaces requiring the edit permission to create
+    child cabinets via the HTTP views.
+
+- Data from file and download content creation or examination now defaults
+  to byte format instead of unicode.
+- Include Django Storages and boto3 Python libraries by default.
+- Use the optimized version (``+=``) of the ``+`` operator.
+- Moved the document version export code to its own app called
+  ``document_exports``. Existing export events and permissions are
+  migrated automatically.
+- Improved invalid permission error handling. Instead of returning an error
+  that stop execution when an invalid permission identifier is requested,
+  the permission model will return a one line text indicating that the
+  permission name is invalid. This error message will be displayed in place
+  of the intended permission label.
+
+  This behavior was also extended to cover invalid permission
+  namespace requests.
+
+  A troubleshooting section is added explaining the possible
+  reasons for the and the solution.
+- Search refactor:
+
+  - Added search syntax pre processor and convert all backend to work with
+    it.
+  - Simplify scoped search syntax.
+  - Allow more than two operands per operator.
+  - Implement NOT operator.
+  - Improve AND and OR operators.
+  - Split search classes into separate modules.
+  - Add search field subclasses.
+  - Move instance value retrieval to search fields.
+  - Add virtual fields.
+  - Add an "ANY field" virtual field.
+  - All search is now conducted using an internal scope system.
+  - Move search syntax decoding to its own class and subclasses named
+    ``SearchInterpreter``.
+  - Move the search bar to the main menu top bar.
+  - Add support for data typing.
+  - Normalize data during index and search.
+
+- Testing improvement. Track test document IDs. Keep a list of the test
+  document IDs in number and string format.
+- New reusable view mixin, ``MultipleExternalObjectViewMixin``.
+- Add Hebrew to the default list of document languages.
+- Enable Docker BuildKit.
+- Add dedicated Docker build RUN cache.
+- Docker Compose file changes:
+
+  - Configurable frontend HTTP port via the .env file.
+  - Unify frontend and all_in_one profiles HTTP and Traefik configuration.
+  - Support Let's Entry TLS termination for all_in_one profile.
+  - Configurable RabbitMQ administration HTTP port via the .env file.
+  - Configurable Traefik dashboard, HTTP and HTTPS entrypoints ports via
+    the .env file.
+  - Configurable Traefik Let's Encrypt certificate volume location.
+  - Support Let's Encrypt DNS challenge.
+
+- Isolate compressed file MIME type matchin exception catching to the
+  pertinent code.
+- Download file updates:
+
+  - Associate download files to a specific users.
+  - Add delete, download, and view permissions.
+  - Add download file size column.
+
+- Support bulk document file downloads.
+- Move document file download code to the new document downloads app. Migrate
+  existing document file download permission and events.
+
+- Permission updates:
+
+  - Improve permission caching. Remove custom caching code and
+    use upstream Django caching utilities.
+  - Rename variables for clarity.
+  - Update dependent code to match class interface changes.
+
+- Short circuit the source column source object resolution code to support
+  the list template showing columns even on empty lists. Unlike models and
+  queryset, empty lists of class instances won't display any columns.
+- Download GPG keys in binary mode.
+- Show more details when a bootstrap setting parsing error occurs.
+- Add libfuse2, libsasl2-dev, and libldap2-dev to the development setup
+  makefile target.
+- Convert pagination template into a partial.
+- Add .msg file metadata drivers.
+- Convert the metadata value and the file metadata value fields from
+  character fields with a maximum length of 255 characters to text fields.
+- Improve the settings apps navigation.
+- Collapse action menus by default.
+- Split links in the list items template into action links and view (facet)
+  links.
+- Remove Docker mirror configuration from the GitLab CI file. This is up to
+  the runner to configure.
+- Show cache partitions and partition file totals. This helps determine how
+  effective is a cache maximum size value by showing how many objects and
+  files the cache size limit is able to yield.
+- Statistics updates:
+
+  - Improve statistics navigation.
+  - Add doughnut chart type statistic.
+  - Add pie chart type statistic.
+  - Add column displaying the chart type per statistic.
+  - Update chartjs from version 2.8.0 to 3.9.1.
+  - Unify chart templates.
+  - Autoload statistics modules.
+  - Unify ChartJS templates.
+  - Support passing full chart context not just plot data.
+  - Fix app URL layout.
+  - Fix app URL typo.
+  - Fix statistic queue view navigation context.
+
+- Add three document pie chart statistics: document count per document type,
+  document file count per document type, document file page count per
+  document type.
+- Add documentation directives to insert setting or setting namespace
+  instances.
+- Improve search and object storage documentation by adding automated
+  setting references.
+- Add third state to column sorting. The sorting states are now: ascending,
+  descending, none.
+- Support sorting multiple columns.
+- Add a permission count column to ACLs.
+- Add support for setting choices.
+- Add an HTML to better format setting values.
+- Fix search again view redirect. Retain the query from the previous view.
+- Rename the "Search" facet link to "Basic search".
+- Fix "Match All" behavior when using the "Search again" link.
+- Replace "Match All" field with a radio box to allow supporting search
+  again persistence and also the default state of the field.
+- Convert the "Match All" field name into a literal.
+- Split the document file creation method into smaller units. This reduces
+  the complexity of the several conditional statements.
+- Ensure the document file is created even if there are errors during the
+  uploaded file introspection.
+- Encapsulate mozilla-django-oidc settings as Mayan authentication backend
+  arguments.
+- Add support for OpenID Connect Discovery (https://openid.net/specs/openid-connect-discovery-1_0.html).
+- Add Keycloak Docker Compose service.
+- Make Docker Compose service image name configurable.
+- User interface updates:
+
+  - Collapse views and actions by default.
+  - Add collapsed views and actions icons.
+  - Move views and actions markup to their own respective partial templates.
+    This reduces duplication and improves usability of the markup.
+  - Lower the z-index of the sidebar to avoid menus to display behind it.
+  - Add simulated horizontal rulers to the body of tables.
+  - Support slim dropdown menus.
+  - Move navigation to the card footer.
+  - Fix click events passing through views and action dropdown caret icons.
+  - Make the words "Actions" and "Views" translatable.
+  - Add two new table columns. One columns for views and another the actions.
+  - Unroll single action menus to a button.
+  - Reduce table padding to increase data area.
+  - Minor spacing and margin tweaks.
+
+- Code style refactor and cleanup:
+
+  - Strip trailing commas.
+  - Sort arguments, dictionary keys and class methods.
+  - Unroll nested contexts.
+  - Separate model data and business logic code.
+  - Move add or remove code to models. Directly and as added methods to
+    external models.
+  - Pass the user to action methods instead of injecting the user as the
+    event actor. Injecting the user as the event actor will be done only
+    on immediate methods that do not allow arguments or data layer model
+    methods with well defined upstream arguments.
+  - Add keyword arguments.
+  - Rename mixins modules to be more explicit.
+  - Normalize the ``UploadWizard`` class ``step_post_upload_process`` method
+    arguments.
+  - Remove many instances of ``force_text``.
+  - Move several ``upload_to`` functions to their corresponding app's
+    ``utils`` module.
+  - Promote private ``_user`` argument to an official argument.
+
+- API views refactor:
+
+  - Remove injected objects on API views. Each API view needs to query the
+    object explicitly. This is change is less efficient but was made to
+    mirror how upstream DRF works.
+  - Pass the view object to the action object API view.
+  - Add labels to serializer fields.
+
+- Track the user when purging caches and cache partitions.
+- Create a new permission to change the type of a document.
+  When support for changing the type of a document was added, it was
+  considered a property and controlled via the document property edit
+  permission.
+
+  Since changing the type of a documents now causes a cascade of other
+  changes, it was isolated as an individual class of event along
+  with its own permission.
+
+  The new document change type permission is required for the document being
+  changed and for the document type to which the document will be changed
+  into.
+- Update the file metadata model ``verbose_name`` attribute to be the
+  ``help_text`` attribute.
+- Update the document parsing ``verbose_name`` attribute to be the
+  ``help_text`` attribute.
+- Update the document version OCR ``verbose_name`` attribute to be the
+  ``help_text`` attribute.
+- Update the search API to provide a dummy model serializer during Swagger
+  introspection.
+- Update the sources actions API to provide a dummy serializer during Swagger
+  introspection.
+- Fix Swagger schema model definition introspection. Updated REST API views
+  to behave like user interface views and returning querysets either via
+  the ``source_queryset`` property or the ``get_source_queryset`` method.
+  This prevents API views from overriding the queryset return methods and
+  allows the ``SchemaInspectionAPIViewMixin`` mixin to work in all
+  instances.
+- Add support for platform client backends to register tool links.
+- Lower the default Sentry client sample rate from 0.05 to 0.01.
+- Add new setting to disable automatic upload after dragging files to the
+  DropZone widget. The setting is named ``VIEWS_SHOW_DROPZONE_SUBMIT_BUTTON``
+  and defaults to ``False``.
+- Raise an ``ImproperlyConfigured`` exception when a model is registered for
+  error logging more than once.
+- Move error logging registration of document models to the documents app.
+- OCR updates:
+
+  - Move error logging from the document version to the document version
+    page.
+  - Add OCR backend ``_execute`` to avoid subclasses from calling the super
+    class.
+  - The base class now prepares the image to be processed and passes the
+    file object to the subclass.
+  - Move OCR finished event commit from the task to the manager.
+
+- Restore object event attributes when the event is ignored.
+- Error log registration now register error log permissions too by default.
+- Improve base settings initialization:
+
+  - Replace ``os.path`` with ``pathlib.Path`` to do path manipulation.
+  - Use the default secret key value only if the secret key file is not
+    found.
+  - Don't obscure errors when reading the secret key file.
+
+- Remove the ``home_view`` setting from the default Template context.
+  Template instances need to include their own context using the new
+  ``context`` argument.
+- Add templating support to bootstrap settings. Template names are the same
+  as the bootstrap setting but include the ``SETTING_TEMPLATE_`` prefix.
+  Environment variables, Python global and config file values are available
+  to the template.
+- Remove deprecated management commands:
+
+  - ``checkdependencies`` replaced by ``dependencies_check``.
+  - ``checkversion`` replaced by ``dependencies_check_version``.
+  - ``createautoadmin`` replaced by ``autoadmin_create``.
+  - ``generaterequirements`` replaced by ``dependencies_generate_requirements``.
+  - ``initialsetup`` replaced by ``common_initial_setup``.
+  - ``installdependencies`` replaced by ``dependencies_install``.
+  - ``mountindex`` replaced by ``mirroring_mount_index``.
+  - ``performupgrade`` replaced by ``common_perform_upgrade``.
+  - ``platformtemplate`` replaced by ``platform_template``.
+  - ``preparestatic`` replaced by ``appearance_prepare_static``.
+  - ``purgelocks`` replaced by ``lock_manager_purge_locks``.
+  - ``purgepermissions`` replaced by ``permissions_purge``.
+  - ``purgeperiodictasks`` replaced by ``task_manager_purge_periodic_tasks``.
+  - ``purgestatistics`` replaced by ``statistics_purge``.
+  - ``revertsettings`` replaced by ``settings_revert``.
+  - ``savesettings`` replaced by ``settings_save``.
+  - ``showsettings`` replaced by ``settings_show``.
+  - ``showversion`` replaced by ``dependencies_show_version``.
+
+- Update the makefile to enable the Sentry client if the ``SENTRY_DSN``
+  value is passed to the ``runserver``, ``runserver-plus``, or
+  ``staging-frontend`` targets.
+- Add new setting to disable logging message ANSI color codes. The setting
+  is named ``LOGGING_DISABLE_COLOR_FORMATTER`` and defaults to ``False``.
+- Standardize management command testing.
+- Move management command names to the ``literals`` module of each app.
+- GitOps updates:
+
+  - Add configurable remote branch for GitOps.
+  - Support a local environment config file names ``config-local.env``.
+    This file is ignored by Git and meant to override values of ``config.env``.
+
 4.3.9 (2023-05-02)
 ==================
 - Fix document parsing error logging. Use the correct argument name when
@@ -136,7 +613,7 @@
   are only downloaded from authoritative locations and each dependency is
   pinned to a specific version to guarantee immutable releases.
 
-  Due to all these factors surface of attack of this vulnerability is
+  Due to all these factors, surface of attack of this vulnerability is
   very limited for older versions of Mayan EDMS, it is also very improbable,
   very difficulty to accomplish and very difficult to remain undetected.
 
@@ -209,7 +686,10 @@
 - Support AJAX request throttling. Prevents users from requesting too many
   consecutive page loads. Defaults to a maximum of 10 requests in 5 seconds
   of less. This applies only to the user interface. The AJAX throttling
-  resets the moment the last pending AJAX request is completed.
+  resets when a pending request is completed. Added the settings
+  ``APPEARANCE_THROTTLING_MAXIMUM_REQUESTS`` and
+  ``APPEARANCE_THROTTLING_TIMEOUT``. Display a message notifying users when
+  throttling is in effect.
 - ``BaseBackend`` class improvements.
 
   - Selectable identifier via the ``_backend_identifier`` property. Defaults

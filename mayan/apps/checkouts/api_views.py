@@ -20,25 +20,19 @@ class APICheckedoutDocumentListView(generics.ListCreateAPIView):
     get: Returns a list of all the documents that are currently checked out.
     post: Checkout a document.
     """
-    def get_serializer(self, *args, **kwargs):
-        if not self.request:
-            return None
-
-        return super().get_serializer(*args, **kwargs)
-
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return NewDocumentCheckoutSerializer
         else:
             return DocumentCheckoutSerializer
 
-    def get_queryset(self):
+    def get_source_queryset(self):
         valid_document_queryset = Document.valid.all()
 
         queryset = AccessControlList.objects.restrict_queryset(
             permission=permission_document_check_out_detail_view,
             queryset=DocumentCheckout.objects.all(),
-            user=self.request.user,
+            user=self.request.user
         )
 
         return queryset.filter(document_id__in=valid_document_queryset)
@@ -47,7 +41,7 @@ class APICheckedoutDocumentListView(generics.ListCreateAPIView):
 class APICheckedoutDocumentView(generics.RetrieveDestroyAPIView):
     """
     get: Retrieve the details of the selected checked out document entry.
-    delete: Checkin a document.
+    delete: Check in a document.
     """
     lookup_url_kwarg = 'checkout_id'
     serializer_class = DocumentCheckoutSerializer
@@ -58,7 +52,7 @@ class APICheckedoutDocumentView(generics.RetrieveDestroyAPIView):
             '_event_keep_attributes': ('_event_actor',)
         }
 
-    def get_queryset(self):
+    def get_source_queryset(self):
         valid_document_queryset = Document.valid.all()
 
         if self.request.method == 'GET':
@@ -72,15 +66,15 @@ class APICheckedoutDocumentView(generics.RetrieveDestroyAPIView):
         elif self.request.method == 'DELETE':
             check_in_queryset = AccessControlList.objects.restrict_queryset(
                 permission=permission_document_check_in,
-                queryset=DocumentCheckout.objects.filter(user_id=self.request.user.pk),
-                user=self.request.user
+                queryset=DocumentCheckout.objects.filter(
+                    user_id=self.request.user.pk
+                ), user=self.request.user
             )
             check_in_override_queryset = AccessControlList.objects.restrict_queryset(
                 permission=permission_document_check_in_override,
                 queryset=DocumentCheckout.objects.exclude(
                     user_id=self.request.user.pk
-                ),
-                user=self.request.user
+                ), user=self.request.user
             )
 
             return (check_in_queryset | check_in_override_queryset).filter(
@@ -93,7 +87,7 @@ class APIDocumentCheckoutView(
 ):
     """
     get: Retrieve the checkout details of the selected document entry.
-    delete: Checkin the selected document.
+    delete: Check in the selected document.
     """
     external_object_queryset = Document.valid.all()
     external_object_pk_url_kwarg = 'document_id'
@@ -111,7 +105,7 @@ class APIDocumentCheckoutView(
     def get_mayan_object_permissions(self):
         if self.request.method == 'DELETE':
             try:
-                checkout = self.external_object.checkout
+                checkout = self.get_external_object().checkout
             except DocumentCheckout.DoesNotExist:
                 return
             else:
@@ -123,7 +117,9 @@ class APIDocumentCheckoutView(
                 return permission
 
     def get_object(self):
-        queryset = self.filter_queryset(queryset=self.get_queryset())
+        queryset = self.filter_queryset(
+            queryset=self.get_source_queryset()
+        )
 
         obj = queryset.first()
 
@@ -135,5 +131,7 @@ class APIDocumentCheckoutView(
 
         return get_object_or_404(queryset, pk=pk)
 
-    def get_queryset(self):
-        return DocumentCheckout.objects.filter(document=self.external_object)
+    def get_source_queryset(self):
+        return DocumentCheckout.objects.filter(
+            document=self.get_external_object()
+        )

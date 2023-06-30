@@ -420,7 +420,7 @@ OCR
 ^^^
 
 Support for editing the document version page OCR content was added.
-This work via the user interface and the API.
+This works via the user interface and the API.
 
 
 Parsing
@@ -694,12 +694,6 @@ Removals
 
 Upgrade process
 ---------------
-
-.. important::
-
-  If using a direct deployment, Supervisord must be upgraded to version
-  4.2.2. See troubleshooting section: :ref:`troubleshooting-version-4.1`
-
 
 .. include:: partials/upgrade-3.5-4.0.txt
 

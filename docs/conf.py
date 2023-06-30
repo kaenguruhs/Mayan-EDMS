@@ -14,9 +14,8 @@
 import os
 import sys
 
-from docutils.parsers.rst import directives
+import docutils.parsers.rst
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mayan.settings')
 sys.path.insert(
     0, os.path.abspath('..')
 )
@@ -24,12 +23,15 @@ sys.path.insert(
     1, os.path.abspath('.')
 )
 
-import mayan
-from mayan.apps.dependencies.versions import Version
+import django  # NOQA
 
-import callbacks
-import patches
-import utils
+import mayan  # NOQA
+from mayan.apps.dependencies.versions import Version  # NOQA
+
+import callbacks  # NOQA
+import directives  # NOQA
+import patches  # NOQA
+import utils  # NOQA
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -284,6 +286,9 @@ sitemap_url_scheme = '{lang}{link}'
 
 
 def setup(app):
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mayan.settings')
+    django.setup()
+
     environment_variables = utils.load_env_file()
 
     MAYAN_PYTHON_BIN_DIR = os.path.join(
@@ -323,7 +328,15 @@ def setup(app):
             substitutions=substitutions
         )
     )
-    directives.register_directive(
+    app.add_directive(
+        name='mayan_setting_namespace',
+        cls=directives.DirectiveMayanSettingNamespace
+    )
+    app.add_directive(
+        name='mayan_setting',
+        cls=directives.DirectiveMayanSetting
+    )
+    docutils.parsers.rst.directives.register_directive(
         name='include', directive=patches.monkey_patch_include(
             substitutions=substitutions
         )

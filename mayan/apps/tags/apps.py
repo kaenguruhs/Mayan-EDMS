@@ -61,7 +61,8 @@ class TagsApp(MayanAppConfig):
             app_label='documents', model_name='DocumentVersionSearchResult'
         )
         DocumentVersionPageSearchResult = apps.get_model(
-            app_label='documents', model_name='DocumentVersionPageSearchResult'
+            app_label='documents',
+            model_name='DocumentVersionPageSearchResult'
         )
 
         DocumentTag = self.get_model(model_name='DocumentTag')
@@ -72,7 +73,9 @@ class TagsApp(MayanAppConfig):
             serializer_class='mayan.apps.tags.serializers.TagSerializer'
         )
 
-        Document.add_to_class(name='get_tags', value=method_document_get_tags)
+        Document.add_to_class(
+            name='get_tags', value=method_document_get_tags
+        )
 
         EventModelRegistry.register(model=Tag)
 
@@ -80,8 +83,8 @@ class TagsApp(MayanAppConfig):
             model=Tag, bind_link=True, register_permission=True
         ).add_fields(
             field_names=(
-                'label', 'color', 'documents',
-            ),
+                'label', 'color', 'documents'
+            )
         )
 
         ModelEventType.register(
