@@ -5,7 +5,7 @@
 #              Mayan EDMS.
 ####
 
-FROM debian:11.2-slim as base_image
+FROM debian:11.7-slim as base_image
 
 LABEL maintainer="Roberto Rosario roberto.rosario@mayan-edms.com"
 
@@ -20,7 +20,8 @@ ENV MAYAN_MEDIA_ROOT=/var/lib/mayan \
 
 # Debian package caching.
 ARG APT_PROXY
-RUN set -x \
+RUN --mount=type=cache,target=/var/cache/apt \
+set -x \
 && if [ "${APT_PROXY}" ]; \
     then echo "Acquire::http { Proxy \"http://${APT_PROXY}\"; };" > /etc/apt/apt.conf.d/01proxy \
 ; fi \
@@ -60,6 +61,7 @@ apt-get update \
     tesseract-ocr \
 # install for MBA
     curl \
+    file \
 # Remove make and build dependencies.
 && apt-get remove --purge --yes \
     make \
@@ -114,7 +116,8 @@ COPY --chown=mayan:mayan \
 COPY --chown=mayan:mayan mayan /src/mayan
 
 # Install development packages needed to build the Python packages.
-RUN DEBIAN_FRONTEND=noninteractive \
+RUN --mount=type=cache,target=/var/cache/apt \
+DEBIAN_FRONTEND=noninteractive \
 apt-get install --no-install-recommends --yes \
     default-libmysqlclient-dev \
     g++ \
@@ -131,6 +134,8 @@ apt-get install --no-install-recommends --yes \
     python3-dev \
     python3-venv \
     zlib1g-dev \
+# for MBA
+    pkg-config \
 && mkdir -p "${PROJECT_INSTALL_DIR}" \
 && chown -R mayan:mayan "${PROJECT_INSTALL_DIR}" \
 && chown -R mayan:mayan /src
@@ -168,8 +173,8 @@ RUN export PATH=$PATH:$HOME/.cargo/bin \
 # Install the built Mayan EDMS package.
 && pip install --no-cache-dir dist/mayan_edms-*.whl \
 # Install the static content.
-&& mayan-edms.py installdependencies \
-&& mayan-edms.py preparestatic --link --noinput
+&& mayan-edms.py dependencies_install \
+&& mayan-edms.py appearance_prepare_static --link --noinput
 
 COPY --chown=mayan:mayan requirements/testing-base.txt "${PROJECT_INSTALL_DIR}"
 
@@ -187,7 +192,7 @@ COPY docker/rootfs /
 
 VOLUME ["/var/lib/mayan"]
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 EXPOSE 8000
 CMD ["run_all"]
