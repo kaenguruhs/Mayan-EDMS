@@ -13,15 +13,16 @@ from formtools.wizard.views import SessionWizardView
 from mayan.apps.views.view_mixins import ViewIconMixin
 
 from .classes import DocumentCreateWizardStep
+from .exceptions import SourceActionExceptionUnknown
 from .icons import (
-    icon_document_create_multiple, icon_wizard_step_first,
+    icon_document_upload_wizard, icon_wizard_step_first,
     icon_wizard_step_next, icon_wizard_step_previous
 )
 
 
 class DocumentCreateWizard(ViewIconMixin, SessionWizardView):
     template_name = 'appearance/generic_wizard.html'
-    view_icon = icon_document_create_multiple
+    view_icon = icon_document_upload_wizard
 
     @classonlymethod
     def as_view(cls, *args, **kwargs):
@@ -52,18 +53,25 @@ class DocumentCreateWizard(ViewIconMixin, SessionWizardView):
         self.form_list = result['form_list']
         self.condition_dict = result['condition_dict']
 
-        if not Source.objects.interactive().filter(enabled=True).exists():
-            messages.error(
-                message=_(
-                    'No interactive document sources have been defined or '
-                    'none have been enabled, create one before proceeding.'
-                ), request=request
-            )
-            return HttpResponseRedirect(
-                redirect_to=reverse(viewname='sources:source_list')
-            )
+        for source in Source.objects.filter(enabled=True):
+            try:
+                action = source.get_action(name='document_upload')
+                if action.has_interface(interface_name='View'):
+                    return super().dispatch(request, *args, **kwargs)
+            except SourceActionExceptionUnknown:
+                """
+                Non fatal. Ignore and try the next source.
+                """
 
-        return super().dispatch(request, *args, **kwargs)
+        messages.error(
+            message=_(
+                'No interactive document sources have been defined or '
+                'none have been enabled, create one before proceeding.'
+            ), request=request
+        )
+        return HttpResponseRedirect(
+            redirect_to=reverse(viewname='sources:source_list')
+        )
 
     def get_context_data(self, form, **kwargs):
         context = super().get_context_data(form=form, **kwargs)
@@ -112,6 +120,10 @@ class DocumentCreateWizard(ViewIconMixin, SessionWizardView):
             context['form_button_overrides'][1]['css_classes'] = 'disabled'
             context['form_button_overrides'][1]['disabled'] = True
 
+        if not wizard_step.get_next_is_enabled(wizard=self):
+            context['form_button_overrides'][2]['css_classes'] = 'disabled'
+            context['form_button_overrides'][2]['disabled'] = True
+
         return context
 
     def get_form_initial(self, step):
@@ -133,10 +145,10 @@ class DocumentCreateWizard(ViewIconMixin, SessionWizardView):
             )
 
         url = furl(
-            reverse(viewname='sources:document_upload_interactive')
+            reverse(viewname='sources:document_upload')
         )
         # Use equal and not .update() to get the same result as using
-        # urlencode(doseq=True)
+        # urlencode(doseq=True).
         url.args = query_dict
 
         return HttpResponseRedirect(

@@ -4,8 +4,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.databases.model_mixins import ValueChangeModelMixin
-from mayan.apps.events.classes import EventManagerSave
 from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import EventManagerSave
 from mayan.apps.lock_manager.decorators import locked_class_method
 
 from .events import event_cache_created, event_cache_edited
@@ -21,8 +21,9 @@ class Cache(CacheBusinessLogicMixin, ValueChangeModelMixin, models.Model):
             'Internal name of the defined storage for this cache.'
         ), max_length=96, unique=True, verbose_name=_('Defined storage name')
     )
-    maximum_size = models.BigIntegerField(
-        help_text=_('Maximum size of the cache in bytes.'), validators=[
+    maximum_size = models.PositiveBigIntegerField(
+        db_index=True, help_text=_('Maximum size of the cache in bytes.'),
+        validators=[
             validators.MinValueValidator(limit_value=1)
         ], verbose_name=_('Maximum size')
     )
@@ -46,11 +47,11 @@ class Cache(CacheBusinessLogicMixin, ValueChangeModelMixin, models.Model):
         event_manager_class=EventManagerSave,
         created={
             'event': event_cache_created,
-            'target': 'self',
+            'target': 'self'
         },
         edited={
             'event': event_cache_edited,
-            'target': 'self',
+            'target': 'self'
         }
     )
     def save(self, *args, **kwargs):

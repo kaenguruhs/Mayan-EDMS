@@ -16,7 +16,6 @@ from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _
 
-from mayan.apps.appearance.classes import Icon
 from mayan.apps.mime_types.classes import MIMETypeBackend
 from mayan.apps.navigation.classes import Link
 from mayan.apps.storage.compressed_files import MsgArchive
@@ -31,7 +30,8 @@ from .exceptions import (
 )
 from .literals import (
     CONVERTER_OFFICE_FILE_MIMETYPES, DEFAULT_LIBREOFFICE_PATH,
-    DEFAULT_PAGE_NUMBER, DEFAULT_PILLOW_FORMAT
+    DEFAULT_PAGE_NUMBER, DEFAULT_PILLOW_FORMAT,
+    MAP_PILLOW_FORMAT_TO_MIME_TYPE
 )
 from .settings import (
     setting_graphics_backend, setting_graphics_backend_arguments
@@ -49,6 +49,10 @@ logger = logging.getLogger(name=__name__)
 
 class AppImageErrorImage:
     _registry = {}
+
+    @classmethod
+    def all(cls):
+        return cls._registry.values()
 
     @classmethod
     def get(cls, name):
@@ -74,6 +78,14 @@ class ConverterBase:
     @staticmethod
     def get_converter_class():
         return import_string(dotted_path=setting_graphics_backend.value)
+
+    @staticmethod
+    def get_output_content_type():
+        output_format = setting_graphics_backend_arguments.value.get(
+            'pillow_format', DEFAULT_PILLOW_FORMAT
+        )
+
+        return MAP_PILLOW_FORMAT_TO_MIME_TYPE.get(output_format)
 
     def __init__(self, file_object, mime_type=None):
         self.file_object = file_object
@@ -310,7 +322,7 @@ class Layer:
 
     def __init__(
         self, label, name, order, permissions, default=False,
-        empty_results_text=None, symbol=None
+        empty_results_text=None, icon=None
     ):
         self.default = default
         self.empty_results_text = empty_results_text
@@ -318,7 +330,7 @@ class Layer:
         self.name = name
         self.order = order
         self.permissions = permissions
-        self.symbol = symbol
+        self.icon = icon
 
         # Check order
         layer = self.__class__.get_by_value(key='order', value=self.order)
@@ -405,9 +417,6 @@ class Layer:
                 'document file themselves.'
             )
 
-    def get_icon(self):
-        return Icon(driver_name='fontawesome', symbol=self.symbol)
-
     def get_model_instance(self):
         StoredLayer = apps.get_model(
             app_label='converter', model_name='StoredLayer'
@@ -460,8 +469,8 @@ class LayerLink(Link):
     def get_icon(self, context):
         if self.action == 'view':
             layer = self.get_layer(context=context)
-            if layer and layer.symbol:
-                return layer.get_icon()
+            if layer and layer.icon:
+                return layer.icon
 
         return super().get_icon(context=context)
 

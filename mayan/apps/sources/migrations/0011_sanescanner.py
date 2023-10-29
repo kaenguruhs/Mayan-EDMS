@@ -4,7 +4,7 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('sources', '0010_auto_20151001_0055'),
+        ('sources', '0010_auto_20151001_0055')
     ]
 
     operations = [
@@ -32,5 +32,5 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'SANE Scanners',
             },
             bases=('sources.interactivesource',),
-        ),
+        )
     ]

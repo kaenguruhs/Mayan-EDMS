@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.django_gpg.exceptions import DecryptionError
 from mayan.apps.django_gpg.models import Key
-from mayan.apps.documents.models import DocumentFile
+from mayan.apps.documents.models.document_file_models import DocumentFile
 from mayan.apps.storage.utils import NamedTemporaryFile
 
 from .events import (
@@ -88,7 +88,7 @@ class EmbeddedSignatureManager(models.Manager):
                 # Reset the file pointer and use it to create the new
                 # signed document file.
                 temporary_file_object.seek(0)
-                document_file.document.file_new(
+                document_file.document.files_upload(
                     file_object=temporary_file_object,
                     filename='{}_{}'.format(
                         str(document_file), _('signed')

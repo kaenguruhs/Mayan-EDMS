@@ -1,6 +1,6 @@
 from django.apps import apps
 
-from mayan.apps.documents.models import Document
+from mayan.apps.documents.models.document_models import Document
 from mayan.apps.events.classes import ModelEventType
 
 from ..events import event_index_template_edited
@@ -23,7 +23,7 @@ class IndexTemplateBusinessLogicMixin:
                 )
             )
 
-        IndexTemplateEventTrigger.objects.bulk_create(entries)
+        IndexTemplateEventTrigger.objects.bulk_create(objs=entries)
 
     def document_types_add(self, queryset, user):
         for document_type in queryset:

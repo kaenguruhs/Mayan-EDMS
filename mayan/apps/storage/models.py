@@ -6,10 +6,10 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.databases.model_mixins import ExtraDataModelMixin
-from mayan.apps.events.classes import (
+from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import (
     EventManagerMethodAfter, EventManagerSave
 )
-from mayan.apps.events.decorators import method_event
 
 from .classes import DefinedStorageLazy
 from .events import (
@@ -56,7 +56,8 @@ class DownloadFile(
         verbose_name_plural = _('Download files')
 
     def __str__(self):
-        return self.filename or self.label
+        # Ensure the returned value is not a promise.
+        return str(self.filename or self.label)
 
     @method_event(
         event_manager_class=EventManagerMethodAfter,

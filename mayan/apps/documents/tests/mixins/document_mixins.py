@@ -102,8 +102,6 @@ class DocumentTestMixin(DocumentTypeTestMixin):
     _test_document_language = None
     _test_document_path = None
     auto_create_test_document_stub = False
-    auto_create_test_document_type = True
-    auto_delete_test_document_type = True
     auto_upload_test_document = True
 
     def setUp(self):
@@ -111,12 +109,12 @@ class DocumentTestMixin(DocumentTypeTestMixin):
         Layer.invalidate_cache()
 
         self._test_documents = []
-        self._test_document_files = []
-        self._test_document_file_pages = []
+        self._test_document_file_list = []
+        self._test_document_file_page_list = []
         self._test_document_id_list = []
         self._test_document_id_list_string = []
-        self._test_document_versions = []
-        self._test_document_version_pages = []
+        self._test_document_version_list = []
+        self._test_document_version_page_list = []
 
         if self.auto_create_test_document_type:
             if self._test_document_count > 1:
@@ -191,7 +189,7 @@ class DocumentTestMixin(DocumentTypeTestMixin):
         document_type = document_type or self._test_document_type
 
         with open(file=self._test_document_path, mode='rb') as file_object:
-            document, document_file = document_type.new_document(
+            document = document_type.documents_upload(
                 description=test_document_description,
                 file_object=file_object, label=label,
                 language=self._test_document_language, user=user
@@ -204,15 +202,15 @@ class DocumentTestMixin(DocumentTypeTestMixin):
             str(self._test_document.pk)
         )
 
-        self._test_document_file = document_file
-        self._test_document_files.append(self._test_document_file)
-        self._test_document_file_pages = list(
+        self._test_document_file = document.file_latest
+        self._test_document_file_list.append(self._test_document_file)
+        self._test_document_file_page_list = list(
             self._test_document_file.file_pages.all()
         )
         self._test_document_file_page = self._test_document_file.file_pages.first()
         self._test_document_version = self._test_document.version_active
-        self._test_document_versions.append(self._test_document_version)
-        self._test_document_version_pages = list(
+        self._test_document_version_list.append(self._test_document_version)
+        self._test_document_version_page_list = list(
             self._test_document_version.version_pages.all()
         )
         self._test_document_version_page = self._test_document_version.version_pages.first()

@@ -10,10 +10,10 @@ from mayan.apps.converter.exceptions import AppImageError
 from mayan.apps.storage.compressed_files import Archive
 from mayan.apps.storage.exceptions import NoMIMETypeMatch
 
-from ..classes import DocumentFileAction
-from ..document_file_actions import DocumentFileActionUseNewPages
 from ..events import event_document_type_changed
-from ..literals import IMAGE_ERROR_NO_ACTIVE_VERSION
+from ..literals import (
+    DEFAULT_DOCUMENT_FILE_ACTION_NAME, IMAGE_ERROR_NO_ACTIVE_VERSION
+)
 from ..permissions import permission_document_change_type
 from ..signals import signal_post_document_type_change
 
@@ -97,18 +97,14 @@ class DocumentBusinessLogicMixin:
             document_type=document_type, force=force, user=user
         )
 
-    @property
-    def file_latest(self):
-        return self.files.order_by('timestamp').last()
-
-    def file_new(
-        self, file_object, action=None, comment=None, filename=None,
+    def files_upload(
+        self, file_object, action_name=None, comment=None, filename=None,
         expand=False, user=None
     ):
         logger.info('Creating new document file for document: %s', self)
 
-        if not action:
-            action = DocumentFileActionUseNewPages.backend_id
+        if not action_name:
+            action_name = DEFAULT_DOCUMENT_FILE_ACTION_NAME
 
         if not comment:
             comment = ''
@@ -128,8 +124,9 @@ class DocumentBusinessLogicMixin:
                         # compressed file.
                         # Don't use keyword arguments for Path to allow
                         # partials.
-                        self.file_new(
-                            action=action, comment=comment, expand=False,
+                        self.file_upload(
+                            action_name=action_name, comment=comment,
+                            expand=False,
                             file_object=compressed_file_member_file_object,
                             filename=Path(compressed_file_member).name,
                             user=user
@@ -160,12 +157,9 @@ class DocumentBusinessLogicMixin:
         else:
             logger.info('New document file queued for document: %s', self)
 
-            DocumentFileAction.get(name=action).execute(
-                document=self, document_file=document_file, comment=comment,
-                user=user
+            document_file.versions_new(
+                action_name=action_name, comment=comment, user=user
             )
-
-            return document_file
 
     def get_api_image_url(self, *args, **kwargs):
         version_active = self.version_active
@@ -194,10 +188,3 @@ class DocumentBusinessLogicMixin:
             )
 
             return DocumentVersionPage.objects.none()
-
-    @property
-    def version_active(self):
-        try:
-            return self.versions.filter(active=True).first()
-        except self.versions.model.DoesNotExist:
-            return self.versions.none()

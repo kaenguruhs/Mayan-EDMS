@@ -4,22 +4,22 @@
 # 
 # Translators:
 # Translators:
-# Robin Schubert <robin.schubert@gmx.de>, 2023
-# Bjoern Kowarsch <bjoern.kowarsch@gmail.com>, 2023
-# Dennis M. Pöpperl <free-software@dm-poepperl.de>, 2023
-# Berny <berny@bernhard-marx.de>, 2023
-# Roberto Rosario, 2023
-# Ingo Buchholz <ingo.buchholz@takwa.de>, 2023
-# Jesaja Everling <jeverling@gmail.com>, 2023
 # Marvin Haschker <marvin@haschker.me>, 2023
+# Robin Schubert <robin.schubert@gmx.de>, 2023
+# Ingo Buchholz <ingo.buchholz@takwa.de>, 2023
+# Bjoern Kowarsch <bjoern.kowarsch@gmail.com>, 2023
+# Berny <berny@bernhard-marx.de>, 2023
+# Dennis M. Pöpperl <free-software@dm-poepperl.de>, 2023
+# Roberto Rosario, 2023
+# Jesaja Everling <jeverling@gmail.com>, 2023
 # Mathias Behrle <mathiasb@m9s.biz>, 2023
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 05:20+0000\n"
-"PO-Revision-Date: 2023-01-05 02:50+0000\n"
+"POT-Creation-Date: 2023-10-13 03:51+0000\n"
+"PO-Revision-Date: 2023-09-06 21:36+0000\n"
 "Last-Translator: Mathias Behrle <mathiasb@m9s.biz>, 2023\n"
 "Language-Team: German (Germany) (https://app.transifex.com/rosarior/teams/13584/de_DE/)\n"
 "MIME-Version: 1.0\n"
@@ -32,85 +32,85 @@ msgstr ""
 msgid "Common"
 msgstr "Allgemein"
 
-#: dependencies.py:165
-msgid "Transifex Client"
-msgstr ""
-
-#: dependencies.py:182
+#: dependencies.py:186
 msgid "Used to allow offline translation of the code text strings."
-msgstr "Ermöglicht die Offline Übersetzung von Zeichenketten im Code."
+msgstr "Ermöglicht die Offline-Übersetzung von Zeichenketten im Code."
 
-#: dependencies.py:191
+#: dependencies.py:195
 msgid "Provides style checking."
 msgstr "Ermöglicht Stilüberprüfung."
 
-#: dependencies.py:196
+#: dependencies.py:200
 msgid "Command line environment with autocompletion."
 msgstr "Kommandozeilenumgebung mit Autovervollständigung."
 
-#: dependencies.py:201
+#: dependencies.py:209
 msgid "Checks proper formatting of the README file."
 msgstr "Überprüft die korrekte Formatierung der README-Datei."
 
-#: links.py:30
+#: links.py:34
 msgid "About this"
 msgstr "Über Mayan"
 
-#: links.py:33
+#: links.py:37
 msgid "Get the book"
 msgstr "Holen Sie sich das Buch"
 
-#: links.py:38
+#: links.py:42
 msgid "Documentation"
 msgstr "Dokumentation"
 
-#: links.py:41
+#: links.py:45
 msgid "Forum"
 msgstr "Forum"
 
-#: links.py:45 views.py:53
+#: links.py:50
+msgid "Knowledge base"
+msgstr "Wissensbasis"
+
+#: links.py:53 views.py:53
 msgid "License"
 msgstr "Lizenz"
 
-#: links.py:50
+#: links.py:58
 msgid "Copy"
 msgstr "Kopieren"
 
-#: links.py:54
+#: links.py:62
 msgid "Setup"
 msgstr "Einrichtung"
 
-#: links.py:57
+#: links.py:65
 msgid "Source code"
 msgstr "Quelltext"
 
-#: links.py:61
+#: links.py:69
 msgid "Online store"
 msgstr "Online-Shop"
 
-#: links.py:65
+#: links.py:73
 msgid "Get support"
 msgstr "Support erhalten"
 
-#: links.py:69 queues.py:7 views.py:134
+#: links.py:77 views.py:134
 msgid "Tools"
 msgstr "Werkzeuge"
 
-#: literals.py:30
+#: literals.py:27
 msgid ""
 "This feature has been deprecated and will be removed in a future version."
 msgstr ""
 "Diese Funktion ist veraltet und wird in einer zukünftigen Version entfernt."
 
-#: literals.py:39
+#: literals.py:36
 msgid "Days"
 msgstr "Tage"
 
-#: literals.py:40
+#: literals.py:37
 msgid "Hours"
 msgstr "Stunden"
 
-#: literals.py:41
+#: literals.py:38
 msgid "Minutes"
 msgstr "Minuten"
 
@@ -146,17 +146,25 @@ msgstr "Benutzer"
 msgid "Copy object"
 msgstr "Objekt kopieren"
 
+#: serializers.py:11
+msgid "URL"
+msgstr "URL"
+
 #: settings.py:24
 msgid ""
 "In list mode, show the \"list facet\" menu options as a dropdown menu "
 "instead of individual buttons."
 msgstr ""
+"Zeige im Listenmodus die \"Listenfacetten\"-Menüoptionen als Aufklappmenü "
+"anstelle einzelner Knöpfe."
 
 #: settings.py:33
 msgid ""
 "In list mode, show the \"object\" menu options as a dropdown menu instead of"
 " individual buttons."
 msgstr ""
+"Zeige im Listenmodus die \"Objekt\"-Menüoptionen als Aufklappmenü anstelle "
+"einzelner Knöpfe."
 
 #: settings.py:41
 msgid ""
@@ -164,6 +172,9 @@ msgid ""
 "apps must be also configured via their respective storage backend settings "
 "to use alternate persistence."
 msgstr ""
+"Deaktiviert die Verwendung des lokalen `media`-Verzeichnisses. Mit dieser "
+"Einstellung müssen auch alle Apps in ihren jeweiligen Dateispeicher-"
+"Backendeinstellungen entsprechend konfiguriert sein."
 
 #: settings.py:49
 msgid ""
@@ -172,6 +183,11 @@ msgid ""
 "Python path to: an application configuration class (preferred), or a package"
 " containing an application. Example: ['app_1', 'app_2']"
 msgstr ""
+"Eine Liste von Zeichenketten der Applikationen, die von der Liste der "
+"üblicherweise von Mayan EDMS installierten Applikationen entfernt werden "
+"sollen. Jede Zeichenkette sollte ein punktierter Pythonpfad sein: zu einer "
+"Applikationskonfigurationsklasse (bevorzugt) oder zu einem Paket, das die "
+"Applikation enthält. Beispiel: ['app_1', 'app_2']"
 
 #: settings.py:59
 msgid ""
@@ -180,6 +196,11 @@ msgid ""
 "Python path to: an application configuration class (preferred), or a package"
 " containing an application. Example: ['app_1', 'app_2']"
 msgstr ""
+"Eine Liste von Zeichenketten der Applikationen, die zu der Liste der "
+"üblicherweise von Mayan EDMS installierten Applikationen zusätzlich "
+"installiert werden sollen. Jede Zeichenkette sollte ein punktierter "
+"Pythonpfad sein: zu einer Applikationskonfigurationsklasse (bevorzugt) oder "
+"zu einem Paket, das die Applikation enthält. Beispiel: ['app_1', 'app_2']"
 
 #: settings.py:70
 msgid ""
@@ -189,6 +210,11 @@ msgid ""
 " containing an application. These apps will be installed before the default "
 "apps. Example: ['app_1', 'app_2']"
 msgstr ""
+"Eine Liste von Zeichenketten der Applikationen, die zu der Liste der "
+"üblicherweise von Mayan EDMS installierten Applikationen zusätzlich "
+"installiert werden sollen. Jede Zeichenkette sollte ein punktierter "
+"Pythonpfad sein: zu einer Applikationskonfigurationsklasse (bevorzugt) oder "
+"zu einem Paket, das die Applikation enthält. Beispiel: ['app_1', 'app_2']"
 
 #: settings.py:81
 msgid ""
@@ -201,15 +227,15 @@ msgstr ""
 
 #: settings.py:90
 msgid "Name of the dashboard to display in the home view."
-msgstr ""
+msgstr "Name des Dashboards in der Heimansicht."
 
 #: settings.py:95
 msgid "Sets the project's name."
-msgstr ""
+msgstr "Setzt den Projektnamen."
 
 #: settings.py:99
 msgid "URL of the project's homepage."
-msgstr ""
+msgstr "URL der Projekthomepage."
 
 #: templates/common/app/viewport.html:15
 msgid "Click here to fix this."

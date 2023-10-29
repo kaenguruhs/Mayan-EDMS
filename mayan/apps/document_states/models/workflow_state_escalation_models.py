@@ -7,10 +7,10 @@ from mayan.apps.common.literals import (
 from mayan.apps.databases.model_mixins import (
     ExtraDataModelMixin, ModelMixinConditionField
 )
-from mayan.apps.events.classes import (
+from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import (
     EventManagerMethodAfter, EventManagerSave
 )
-from mayan.apps.events.decorators import method_event
 
 from ..events import event_workflow_template_edited
 
@@ -79,7 +79,7 @@ class WorkflowStateEscalation(
         action_object='self',
         event_manager_class=EventManagerMethodAfter,
         event=event_workflow_template_edited,
-        target='state.workflow',
+        target='state.workflow'
     )
     def delete(self, *args, **kwargs):
         return super().delete(*args, **kwargs)
@@ -89,12 +89,12 @@ class WorkflowStateEscalation(
         created={
             'action_object': 'self',
             'event': event_workflow_template_edited,
-            'target': 'state.workflow',
+            'target': 'state.workflow'
         },
         edited={
             'action_object': 'self',
             'event': event_workflow_template_edited,
-            'target': 'state.workflow',
+            'target': 'state.workflow'
         }
     )
     def save(self, *args, **kwargs):

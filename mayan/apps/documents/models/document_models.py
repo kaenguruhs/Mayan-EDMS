@@ -7,8 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.databases.model_mixins import ExtraDataModelMixin
 from mayan.apps.common.signals import signal_mayan_pre_save
-from mayan.apps.events.classes import EventManagerSave
 from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import EventManagerSave
 
 from ..events import (
     event_document_created, event_document_edited,
@@ -19,6 +19,7 @@ from ..managers import (
     DocumentManager, TrashCanManager, ValidDocumentManager,
     ValidRecentlyCreatedDocumentManager
 )
+from ..settings import setting_language
 
 from .document_model_mixins import DocumentBusinessLogicMixin
 from .document_type_models import DocumentType
@@ -40,10 +41,16 @@ class Document(
     """
     _hooks_pre_create = []
 
+    file_latest = models.OneToOneField(
+        blank=True, null=True, on_delete=models.SET_NULL, to='DocumentFile',
+        related_name='document_latest', verbose_name=_(
+            'Latest document file'
+        )
+    )
     uuid = models.UUIDField(
         default=uuid.uuid4, editable=False, help_text=_(
-            'UUID of a document, universally Unique ID. An unique identifier '
-            'generated for each document.'
+            'UUID of a document, universally Unique ID. An unique '
+            'identifier generated for each document.'
         ), verbose_name=_('UUID')
     )
     document_type = models.ForeignKey(
@@ -87,10 +94,16 @@ class Document(
     )
     is_stub = models.BooleanField(
         db_index=True, default=True, editable=False, help_text=_(
-            'A document stub is a document with an entry on the database but '
-            'no file uploaded. This could be an interrupted upload or a '
-            'deferred upload via the API.'
+            'A document stub is a document with an entry on the database '
+            'but no file uploaded. This could be an interrupted upload or '
+            'a deferred upload via the API.'
         ), verbose_name=_('Is stub?')
+    )
+    version_active = models.OneToOneField(
+        blank=True, null=True, on_delete=models.SET_NULL,
+        to='DocumentVersion', related_name='document_active', verbose_name=_(
+            'Active document version'
+        )
     )
 
     objects = DocumentManager()
@@ -156,6 +169,10 @@ class Document(
     def save(self, *args, **kwargs):
         user = self.__dict__.pop('_event_actor', None)
         new_document = not self.pk
+
+        self.description = self.description or ''
+        self.label = self.label or ''
+        self.language = self.language or setting_language.value
 
         signal_mayan_pre_save.send(
             instance=self, sender=Document, user=user

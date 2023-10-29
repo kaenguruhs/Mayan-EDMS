@@ -1,13 +1,13 @@
 import logging
 
-from django.db import models
+from django.db import models, transaction
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.databases.model_mixins import ExtraDataModelMixin
 from mayan.apps.common.signals import signal_mayan_pre_save
-from mayan.apps.events.classes import EventManagerMethodAfter
 from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import EventManagerMethodAfter
 from mayan.apps.storage.classes import DefinedStorageLazy
 
 from ..events import event_document_file_deleted, event_document_file_edited
@@ -95,7 +95,7 @@ class DocumentFile(
             'checksum.'
         ), max_length=64, null=True, verbose_name=_('Checksum')
     )
-    size = models.PositiveIntegerField(
+    size = models.PositiveBigIntegerField(
         blank=True, db_index=True, editable=False, help_text=(
             'The size of the file in bytes.'
         ), null=True, verbose_name=_('Size')
@@ -146,10 +146,14 @@ class DocumentFile(
     @method_event(
         event_manager_class=EventManagerMethodAfter,
         event=event_document_file_deleted,
-        target='document',
+        target='document'
     )
-    def delete(self, *args, **kwargs):
+    def delete(self, user=None, *args, **kwargs):
+        if user:
+            self._event_actor = user
+
         for page in self.pages.all():
+            page._event_actor = getattr(self, '_event_actor', None)
             page.delete()
 
         name = self.file.name
@@ -157,14 +161,20 @@ class DocumentFile(
         self.file.storage.delete(name=name)
         self.cache_partition.delete()
 
-        result = super().delete(*args, **kwargs)
+        with transaction.atomic():
+            result = super().delete(*args, **kwargs)
 
-        if self.document.files.count() == 0:
-            self.document.is_stub = False
+            self.document.file_latest = self.get_document_file_latest()
+
+            if self.document.files.exclude(pk=self.pk).count() == 0:
+                self.document.is_stub = False
+
             self.document._event_ignore = True
-            self.document.save(update_fields=('is_stub',))
+            self.document.save(
+                update_fields=('file_latest', 'is_stub')
+            )
 
-        return result
+            return result
 
     def get_absolute_url(self):
         return reverse(
@@ -179,7 +189,7 @@ class DocumentFile(
         )
     natural_key.dependencies = ['documents.Document']
 
-    def save(self, *args, **kwargs):
+    def save(self, skip_introspection=False, *args, **kwargs):
         """
         Overloaded save method that updates the document file's checksum,
         mimetype, and page count when created.
@@ -189,7 +199,8 @@ class DocumentFile(
 
         if new_document_file:
             result = self._create(*args, **kwargs)
-            self._introspect()
+            if not skip_introspection:
+                self._introspect()
             return result
         else:
             return self._save(*args, **kwargs)

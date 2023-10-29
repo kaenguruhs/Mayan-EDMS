@@ -5,16 +5,17 @@
 # 
 # Translators:
 # kicior kicior <kiciorek+github@gmail.com>, 2023
-# Wojciech Warczakowski <w.warczakowski@gmail.com>, 2023
 # mic <winterfall24@gmail.com>, 2023
+# Wojciech Warczakowski <w.warczakowski@gmail.com>, 2023
+# tomkolp, 2023
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 05:20+0000\n"
-"PO-Revision-Date: 2023-01-05 02:51+0000\n"
-"Last-Translator: mic <winterfall24@gmail.com>, 2023\n"
+"POT-Creation-Date: 2023-10-25 16:03+0000\n"
+"PO-Revision-Date: 2023-09-06 21:36+0000\n"
+"Last-Translator: tomkolp, 2023\n"
 "Language-Team: Polish (https://app.transifex.com/rosarior/teams/13584/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,7 +31,7 @@ msgstr "Analiza dokumentu"
 msgid "A generator returning the document file's pages parsed content."
 msgstr ""
 
-#: apps.py:108 links.py:26 links.py:49 models.py:25 search.py:11
+#: apps.py:108 links.py:26 links.py:49 models.py:25 search.py:18
 msgid "Content"
 msgstr "Zawartość"
 
@@ -83,13 +84,13 @@ msgstr "Analizuj dokumenty według typu"
 
 #: models.py:19
 msgid "Document file page"
-msgstr ""
+msgstr "Strona pliku dokumentu"
 
 #: models.py:23
 msgid "The actual text content as extracted by the document parsing backend."
 msgstr "Treść wyodrębniona z dokumentu w trakcie parsowania."
 
-#: models.py:31
+#: models.py:31 search.py:24
 msgid "Document file page content"
 msgstr ""
 
@@ -129,15 +130,15 @@ msgstr "Nie można znaleźć pliku wykonywalnego pdftotext w lokalizacji: %s"
 
 #: permissions.py:10
 msgid "View the content of a document file"
-msgstr ""
+msgstr "Wyświetlanie zawartości pliku dokumentu"
 
 #: permissions.py:13
 msgid "Parse the content of a document file"
-msgstr ""
+msgstr "Analiza zawartość pliku dokumentu"
 
 #: permissions.py:16
 msgid "Change document type parsing settings"
-msgstr "Zmień ustawienia analizy typu dokumentu"
+msgstr "Zmiana ustawień analizy typu dokumentu"
 
 #: queues.py:7
 msgid "Parsing"
@@ -147,7 +148,7 @@ msgstr "Analiza"
 msgid "Document file parsing"
 msgstr ""
 
-#: search.py:17 search.py:24
+#: search.py:12
 msgid "Document file content"
 msgstr ""
 

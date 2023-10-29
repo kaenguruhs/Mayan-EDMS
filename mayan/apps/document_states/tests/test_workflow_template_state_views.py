@@ -1,7 +1,7 @@
 from mayan.apps.testing.tests.base import GenericViewTestCase
 
 from ..events import event_workflow_template_edited
-from ..models import WorkflowState
+from ..models.workflow_state_models import WorkflowState
 from ..permissions import (
     permission_workflow_template_edit, permission_workflow_template_view
 )
@@ -10,13 +10,11 @@ from .literals import (
     TEST_WORKFLOW_TEMPLATE_STATE_LABEL,
     TEST_WORKFLOW_TEMPLATE_STATE_COMPLETION
 )
-from .mixins.workflow_template_mixins import WorkflowTemplateTestMixin
-from .mixins.workflow_template_state_mixins import WorkflowStateViewTestMixin
+from .mixins.workflow_template_state_mixins import WorkflowTemplateStateViewTestMixin
 
 
-class WorkflowStateViewTestCase(
-    WorkflowTemplateTestMixin, WorkflowStateViewTestMixin,
-    GenericViewTestCase
+class WorkflowTemplateStateViewTestCase(
+    WorkflowTemplateStateViewTestMixin, GenericViewTestCase
 ):
     def setUp(self):
         super().setUp()

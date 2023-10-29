@@ -1,15 +1,11 @@
-from datetime import timedelta
-
 from ..events import (
     event_document_created, event_document_file_created,
     event_document_file_edited, event_document_type_changed,
-    event_document_version_created, event_document_version_page_created,
-    event_trashed_document_deleted
+    event_document_version_created, event_document_version_page_created
 )
 from ..models.document_models import Document
 from ..models.document_type_models import DocumentType
 from ..permissions import permission_document_change_type
-from ..settings import setting_stub_expiration_interval
 
 from .base import GenericDocumentTestCase
 from .literals import (
@@ -246,35 +242,3 @@ class DocumentTestCase(GenericDocumentTestCase):
 
         events = self._get_test_events()
         self.assertEqual(events.count(), 0)
-
-
-class DocumentManagerTestCase(GenericDocumentTestCase):
-    auto_upload_test_document = False
-
-    def test_document_stubs_deletion(self):
-        document_stub = Document.objects.create(
-            document_type=self._test_document_type
-        )
-
-        self._clear_events()
-
-        Document.objects.delete_stubs()
-
-        self.assertEqual(Document.objects.count(), 1)
-
-        document_stub.datetime_created = document_stub.datetime_created - timedelta(
-            seconds=setting_stub_expiration_interval.value + 1
-        )
-        document_stub.save()
-
-        Document.objects.delete_stubs()
-
-        self.assertEqual(Document.objects.count(), 0)
-
-        events = self._get_test_events()
-        self.assertEqual(events.count(), 1)
-
-        self.assertEqual(events[0].action_object, None)
-        self.assertEqual(events[0].actor, self._test_document_type)
-        self.assertEqual(events[0].target, self._test_document_type)
-        self.assertEqual(events[0].verb, event_trashed_document_deleted.id)

@@ -56,7 +56,9 @@ class DocumentQuickLabelViewTestMixin:
 
 class DocumentTypeAPIViewTestMixin:
     def _request_test_document_type_create_api_view(self):
-        pk_list = list(DocumentType.objects.values_list('pk', flat=True))
+        pk_list = list(
+            DocumentType.objects.values_list('pk', flat=True)
+        )
 
         response = self.post(
             viewname='rest_api:documenttype-list', data={
@@ -105,22 +107,6 @@ class DocumentTypeAPIViewTestMixin:
         return self.get(viewname='rest_api:documenttype-list')
 
 
-class DocumentTypeDeletionPoliciesViewTestMixin:
-    def _request_test_document_type_policies_get_view(self):
-        return self.get(
-            viewname='documents:document_type_policies', kwargs={
-                'document_type_id': self._test_document_type.pk
-            }
-        )
-
-    def _request_test_document_type_policies_post_view(self):
-        return self.post(
-            viewname='documents:document_type_policies', kwargs={
-                'document_type_id': self._test_document_type.pk
-            }
-        )
-
-
 class DocumentTypeFilenameGeneratorViewTestMixin:
     def _request_test_document_type_filename_generator_get_view(self):
         return self.get(
@@ -141,7 +127,9 @@ class DocumentTypeFilenameGeneratorViewTestMixin:
 
 class DocumentTypeQuickLabelAPIViewTestMixin:
     def _request_test_document_type_quick_label_create_api_view(self):
-        pk_list = list(DocumentTypeFilename.objects.values('pk'))
+        pk_list = list(
+            DocumentTypeFilename.objects.values_list('pk', flat=True)
+        )
 
         response = self.post(
             viewname='rest_api:documenttype-quicklabel-list', kwargs={
@@ -238,6 +226,32 @@ class DocumentTypeQuickLabelTestMixin:
     def _create_test_document_type_quick_label(self):
         self._test_document_type_quick_label = self._test_document_type.filenames.create(
             filename=TEST_DOCUMENT_TYPE_QUICK_LABEL
+        )
+
+
+class DocumentTypeRetentionPoliciesViewTestMixin:
+    def _request_test_document_type_retention_policies_get_view(self):
+        return self.get(
+            viewname='documents:document_type_retention_policies', kwargs={
+                'document_type_id': self._test_document_type.pk
+            }
+        )
+
+    def _request_test_document_type_retention_policies_post_view(
+        self, extra_data=None
+    ):
+        data = {
+            'document_stub_expiration_interval': self._test_document_type.document_stub_expiration_interval,
+            'document_stub_pruning_enabled': self._test_document_type.document_stub_pruning_enabled
+        }
+
+        if extra_data is not None:
+            data.update(extra_data)
+
+        return self.post(
+            viewname='documents:document_type_retention_policies',
+            kwargs={'document_type_id': self._test_document_type.pk},
+            data=data
         )
 
 

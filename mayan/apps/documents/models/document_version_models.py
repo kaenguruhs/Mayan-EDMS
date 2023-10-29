@@ -3,10 +3,10 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.databases.model_mixins import ExtraDataModelMixin
-from mayan.apps.events.classes import (
+from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import (
     EventManagerMethodAfter, EventManagerSave
 )
-from mayan.apps.events.decorators import method_event
 
 from ..events import (
     event_document_version_created, event_document_version_deleted,
@@ -38,7 +38,7 @@ class DocumentVersion(
         ), verbose_name=_('Comment')
     )
     active = models.BooleanField(
-        default=True, help_text=_(
+        default=False, help_text=_(
             'Determines the active version of the document.'
         ), verbose_name=_('Active')
     )
@@ -57,7 +57,7 @@ class DocumentVersion(
     @method_event(
         event_manager_class=EventManagerMethodAfter,
         event=event_document_version_deleted,
-        target='document',
+        target='document'
     )
     def delete(self, *args, **kwargs):
         for page in self.pages.all():
@@ -88,8 +88,27 @@ class DocumentVersion(
         }
     )
     def save(self, *args, **kwargs):
-        with transaction.atomic():
+        new_document_version = not self.pk
+
+        if new_document_version:
+            with transaction.atomic():
+                result = super().save(*args, **kwargs)
+
+                if self.active:
+                    # Don't save the same version again. The active value
+                    # was already save in the previous super call to
+                    # .save().
+                    self.active_set(save=False)
+
+                return result
+        else:
+            # Handle existing document versions that change the value of
+            # active directly without using the method `active_set`. Such
+            # as via the API or direct model manipulation.
             if self.active:
+                # Don't save the version. The active value will be made
+                # permanent in the `super.save` call following this
+                # statement.
                 self.active_set(save=False)
 
             return super().save(*args, **kwargs)

@@ -9,8 +9,8 @@ from django.utils.functional import cached_property
 from django.utils.text import format_lazy
 from django.utils.translation import ugettext_lazy as _
 
-from mayan.apps.events.classes import EventManagerMethodAfter
 from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import EventManagerMethodAfter
 from mayan.apps.lock_manager.backends.base import LockingBackend
 from mayan.apps.lock_manager.decorators import (
     acquire_lock_class_method, release_lock_class_method, locked_class_method
@@ -79,10 +79,12 @@ class CacheBusinessLogicMixin:
         )['file_size__sum'] or 0
 
     def get_total_size_display(self):
+        total_size = self.get_total_size()
+
         return format_lazy(
             '{} ({:0.1f}%)', filesizeformat(
-                bytes_=self.get_total_size()
-            ), self.get_total_size() / self.maximum_size * 100
+                bytes_=total_size
+            ), total_size / self.maximum_size * 100
         )
 
     get_total_size_display.short_description = _('Current size')
@@ -167,7 +169,15 @@ class CacheBusinessLogicMixin:
         else:
             for partition in self.partitions.all():
                 partition._event_action_object = self
-                partition.purge(user=user)
+                try:
+                    partition.purge(user=user)
+                except Exception as exception:
+                    logger.error(
+                        'Unable to purge partition ID: %d; %s',
+                        partition.pk, exception
+                    )
+                    # Don't raise exceptions to allow the loop to continue and
+                    # avoid a single exception from stoping the purge.
 
     @cached_property
     def storage(self):
@@ -269,7 +279,9 @@ class CachePartitionBusinessLogicMixin:
         )['file_size__sum'] or 0
 
     def get_total_size_display(self):
-        return filesizeformat(bytes_=self.get_total_size())
+        return filesizeformat(
+            bytes_=self.get_total_size()
+        )
 
     get_total_size_display.short_description = _('Current size')
     get_total_size_display.help_text = _(
@@ -284,7 +296,15 @@ class CachePartitionBusinessLogicMixin:
     def purge(self, user):
         self._event_actor = user
         for parition_file in self.files.all():
-            parition_file.delete()
+            try:
+                parition_file.delete()
+            except Exception as exception:
+                logger.error(
+                    'Unable to delete partition file ID: %d; %s',
+                    parition_file.pk, exception
+                )
+                # Don't raise exceptions to allow the loop to continue and
+                # avoid a single exception from stoping the purge.
 
 
 class CachePartitionFileBusinessLogicMixin:
@@ -317,7 +337,9 @@ class CachePartitionFileBusinessLogicMixin:
         self.file_size = self.partition.cache.storage.size(
             name=self.full_filename
         )
-        self.save(update_fields=('file_size',))
+        self.save(
+            update_fields=('file_size',)
+        )
         if self.file_size > self.partition.cache.maximum_size:
             raise FileCachingException(
                 'Cache partition file %s is bigger than the maximum cache '

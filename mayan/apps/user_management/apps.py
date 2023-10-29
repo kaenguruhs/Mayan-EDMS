@@ -11,7 +11,7 @@ from mayan.apps.common.apps import MayanAppConfig
 from mayan.apps.common.classes import ModelCopy
 from mayan.apps.common.menus import (
     menu_list_facet, menu_multi_item, menu_object, menu_related,
-    menu_secondary, menu_setup, menu_user
+    menu_return, menu_secondary, menu_setup, menu_user
 )
 from mayan.apps.dashboards.dashboards import dashboard_administrator
 from mayan.apps.events.classes import EventModelRegistry, ModelEventType
@@ -19,7 +19,7 @@ from mayan.apps.logging.classes import ErrorLog
 from mayan.apps.metadata.classes import MetadataLookup
 from mayan.apps.navigation.classes import SourceColumn
 from mayan.apps.rest_api.fields import DynamicSerializerField
-from mayan.apps.views.html_widgets import TwoStateWidget
+from mayan.apps.views.column_widgets import TwoStateWidget
 
 from .dashboard_widgets import (
     DashboardWidgetGroupTotal, DashboardWidgetUserTotal
@@ -108,6 +108,9 @@ class UserManagementApp(MayanAppConfig):
         User._meta.get_field(
             field_name='is_active'
         ).verbose_name = _('Is active?')
+        User._meta.get_field(
+            field_name='is_superuser'
+        ).verbose_name = _('Is super user?')
         User._meta.get_field(
             field_name='last_name'
         ).verbose_name = _('Last name')
@@ -245,6 +248,10 @@ class UserManagementApp(MayanAppConfig):
             source=User, widget=TwoStateWidget
         )
         SourceColumn(
+            attribute='is_superuser', include_label=True, is_sortable=True,
+            source=User, widget=TwoStateWidget
+        )
+        SourceColumn(
             attribute='has_usable_password', include_label=True, source=User,
             widget=TwoStateWidget
         )
@@ -266,12 +273,10 @@ class UserManagementApp(MayanAppConfig):
                 link_group_user_list,
             ), sources=(Group,)
         )
-
         menu_multi_item.bind_links(
             links=(link_group_multiple_delete,),
             sources=('user_management:group_list',)
         )
-
         menu_object.bind_links(
             links=(link_group_edit,),
             sources=(Group,)
@@ -280,20 +285,24 @@ class UserManagementApp(MayanAppConfig):
             links=(link_group_single_delete,), position=99,
             sources=(Group,)
         )
-
         menu_related.bind_links(
-            links=(link_user_list,), sources=(
-                'user_management:group_multiple_delete',
-                'user_management:group_list', 'user_management:group_create',
-                Group
+            links=(link_user_setup,), sources=(
+                Group, 'user_management:group_multiple_delete',
+                'user_management:group_list', 'user_management:group_create'
+
             )
         )
+        menu_return.bind_links(
+            links=(link_group_list,), sources=(
+                Group, 'user_management:group_multiple_delete',
+                'user_management:group_list', 'user_management:group_create'
 
+            )
+        )
         menu_secondary.bind_links(
-            links=(link_group_list, link_group_create), sources=(
-                'user_management:group_multiple_delete',
-                'user_management:group_list', 'user_management:group_create',
-                Group
+            links=(link_group_create,), sources=(
+                Group, 'user_management:group_multiple_delete',
+                'user_management:group_list', 'user_management:group_create'
             )
         )
 
@@ -304,18 +313,15 @@ class UserManagementApp(MayanAppConfig):
                 link_user_group_list, link_user_set_options
             ), sources=(User,)
         )
-
         menu_multi_item.bind_links(
             links=(link_user_multiple_delete,),
             sources=('user_management:user_list',)
         )
-
         menu_object.bind_links(
             links=(
                 link_user_single_delete, link_user_edit
             ), sources=(User,)
         )
-
         menu_related.bind_links(
             links=(link_group_setup,), sources=(
                 User, 'authentication:user_multiple_set_password',
@@ -323,16 +329,23 @@ class UserManagementApp(MayanAppConfig):
                 'user_management:user_list', 'user_management:user_create'
             )
         )
-
-        menu_secondary.bind_links(
-            links=(link_user_list, link_user_create), sources=(
+        menu_return.bind_links(
+            links=(link_user_list,), sources=(
                 User, 'authentication:user_multiple_set_password',
                 'user_management:user_multiple_delete',
                 'user_management:user_list', 'user_management:user_create'
             )
         )
-
-        menu_setup.bind_links(links=(link_user_setup, link_group_setup))
+        menu_secondary.bind_links(
+            links=(link_user_create,), sources=(
+                User, 'authentication:user_multiple_set_password',
+                'user_management:user_multiple_delete',
+                'user_management:user_list', 'user_management:user_create'
+            )
+        )
+        menu_setup.bind_links(
+            links=(link_user_setup, link_group_setup)
+        )
         menu_user.bind_links(
             links=(
                 text_user_label, separator_user_label,

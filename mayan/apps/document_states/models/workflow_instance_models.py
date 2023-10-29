@@ -5,9 +5,9 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.databases.model_mixins import ExtraDataModelMixin
-from mayan.apps.documents.models import Document
-from mayan.apps.events.classes import EventManagerSave
+from mayan.apps.documents.models.document_models import Document
 from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import EventManagerSave
 
 from ..events import (
     event_workflow_instance_created, event_workflow_instance_transitioned
@@ -99,8 +99,12 @@ class WorkflowInstanceLogEntry(
         blank=True, null=True, on_delete=models.CASCADE,
         to=settings.AUTH_USER_MODEL, verbose_name=_('User')
     )
-    comment = models.TextField(blank=True, verbose_name=_('Comment'))
-    extra_data = models.TextField(blank=True, verbose_name=_('Extra data'))
+    comment = models.TextField(
+        blank=True, verbose_name=_('Comment')
+    )
+    extra_data = models.TextField(
+        blank=True, verbose_name=_('Extra data')
+    )
 
     class Meta:
         ordering = ('datetime',)

@@ -3,12 +3,14 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.acls.models import AccessControlList
-from mayan.apps.databases.model_mixins import ExtraDataModelMixin
 from mayan.apps.common.validators import validate_internal_name
-from mayan.apps.documents.models import Document, DocumentType
+from mayan.apps.databases.model_mixins import ExtraDataModelMixin
+from mayan.apps.documents.models.document_models import Document
+from mayan.apps.documents.models.document_type_models import DocumentType
 from mayan.apps.documents.permissions import permission_document_view
-from mayan.apps.events.classes import EventManagerSave
 from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import EventManagerSave
+
 from ..events import (
     event_workflow_template_created, event_workflow_template_edited
 )
@@ -69,11 +71,11 @@ class Workflow(
         event_manager_class=EventManagerSave,
         created={
             'event': event_workflow_template_created,
-            'target': 'self',
+            'target': 'self'
         },
         edited={
             'event': event_workflow_template_edited,
-            'target': 'self',
+            'target': 'self'
         }
     )
     def save(self, *args, **kwargs):

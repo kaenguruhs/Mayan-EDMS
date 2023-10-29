@@ -4,19 +4,20 @@
 # 
 # Translators:
 # Translators:
-# Tomasz Szymanowicz <alakdae@gmail.com>, 2023
 # mic <winterfall24@gmail.com>, 2023
 # Daniel Winiarski <daniel.winiarski.dw@gmail.com>, 2023
-# Wojciech Warczakowski <w.warczakowski@gmail.com>, 2023
 # Marcin Lozynski <mlozynski@wp.pl>, 2023
+# Wojciech Warczakowski <w.warczakowski@gmail.com>, 2023
+# Tomasz Szymanowicz <alakdae@gmail.com>, 2023
+# tomkolp, 2023
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 05:19+0000\n"
-"PO-Revision-Date: 2023-01-05 02:49+0000\n"
-"Last-Translator: Marcin Lozynski <mlozynski@wp.pl>, 2023\n"
+"POT-Creation-Date: 2023-10-25 16:03+0000\n"
+"PO-Revision-Date: 2023-09-06 21:36+0000\n"
+"Last-Translator: tomkolp, 2023\n"
 "Language-Team: Polish (https://app.transifex.com/rosarior/teams/13584/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Language: pl\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#: apps.py:26 classes.py:200 links.py:27
+#: apps.py:26 classes.py:204 links.py:27
 msgid "ACLs"
 msgstr "Listy ACL"
 
@@ -33,8 +34,10 @@ msgid ""
 "Object for which the access is granted. When sorting objects, only the type "
 "is used and not the actual label of the object."
 msgstr ""
+"Obiekt, dla którego nadano dostęp.  Podczas sortowania obiektów używany jest"
+" tylko typ, a nie rzeczywista etykieta obiektu."
 
-#: apps.py:65
+#: apps.py:65 workflow_actions.py:128
 msgid "Object"
 msgstr "Obiekt"
 
@@ -48,7 +51,7 @@ msgstr "Utworzono listę ACL"
 
 #: events.py:13
 msgid "ACL deleted"
-msgstr ""
+msgstr "Usunięto listę ACL"
 
 #: events.py:16
 msgid "ACL edited"
@@ -66,13 +69,13 @@ msgstr "Nowa lista ACL"
 msgid "Delete"
 msgstr "Usuń"
 
-#: links.py:32 models.py:50 workflow_actions.py:46 workflow_actions.py:166
+#: links.py:32 models.py:50 workflow_actions.py:67 workflow_actions.py:203
 msgid "Permissions"
 msgstr "Uprawnienia"
 
 #: links.py:35
 msgid "Global ACLs"
-msgstr ""
+msgstr "Globalne listy ACL"
 
 #: managers.py:274
 #, python-format
@@ -91,15 +94,15 @@ msgstr "Liczba uprawnień"
 
 #: models.py:40 serializers.py:16
 msgid "Content type"
-msgstr ""
+msgstr "Typ zawartości"
 
-#: models.py:43 workflow_actions.py:32
+#: models.py:43 workflow_actions.py:53
 msgid "Object ID"
 msgstr "ID obiektu"
 
 #: models.py:54
 msgid "Role to which the access is granted for the specified object."
-msgstr ""
+msgstr "Rola, do której nadawany jest dostęp dla określonego obiektu."
 
 #: models.py:64
 msgid "Access entry"
@@ -124,19 +127,19 @@ msgstr "Przeglądaj listy ACL"
 
 #: serializers.py:19
 msgid "Permissions add URL"
-msgstr ""
+msgstr "Uprawnienia dodawania URL"
 
 #: serializers.py:39
 msgid "Permissions remove URL"
-msgstr ""
+msgstr "Uprawnienia usuwania URL"
 
 #: serializers.py:59
 msgid "Permissions URL"
-msgstr ""
+msgstr "Uprawnienia URL"
 
 #: serializers.py:82
 msgid "Role ID"
-msgstr ""
+msgstr "ID Roli"
 
 #: serializers.py:85
 msgid "URL"
@@ -144,15 +147,15 @@ msgstr "URL"
 
 #: serializers.py:118
 msgid "Primary key of the permission to add to the ACL."
-msgstr ""
+msgstr "Klucz podstawowy pozwolenia na dodanie do listy ACL."
 
 #: serializers.py:119 serializers.py:126
 msgid "Permission ID"
-msgstr ""
+msgstr "ID Uprawnienia"
 
 #: serializers.py:125
 msgid "Primary key of the permission to remove from the ACL."
-msgstr ""
+msgstr "Klucz podstawowy uprawnienia do usunięcia z listy ACL."
 
 #: views.py:44
 #, python-format
@@ -219,51 +222,55 @@ msgstr ""
 
 #: views.py:269
 msgid "There are no ACLs"
-msgstr ""
+msgstr "Brak ACL"
 
 #: views.py:278
 msgid "Global access control lists"
-msgstr ""
+msgstr "Globalne listy kontroli dostępu"
 
-#: workflow_actions.py:23
+#: workflow_actions.py:44
 msgid "Object type"
 msgstr "Typ obiektu"
 
-#: workflow_actions.py:26
+#: workflow_actions.py:47
 msgid "Type of the object for which the access will be modified."
 msgstr "Typ obiektu, dla którego dostęp zostanie zmodyfikowany."
 
-#: workflow_actions.py:35
+#: workflow_actions.py:56
 msgid ""
 "Numeric identifier of the object for which the access will be modified."
 msgstr ""
 "Numeryczny identyfikator obiektu, dla którego dostęp zostanie zmodyfikowany."
 
-#: workflow_actions.py:40 workflow_actions.py:160
+#: workflow_actions.py:61 workflow_actions.py:197
 msgid "Roles"
 msgstr "Role"
 
-#: workflow_actions.py:42 workflow_actions.py:162
+#: workflow_actions.py:63 workflow_actions.py:199
 msgid "Roles whose access will be modified."
 msgstr "Role, których dostęp zostanie zmodyfikowany."
 
-#: workflow_actions.py:49 workflow_actions.py:169
+#: workflow_actions.py:70 workflow_actions.py:206
 msgid ""
 "Permissions to grant/revoke to/from the role for the object selected above."
 msgstr "Uprawnienia do nadawania/odwoływania do/z roli dla obiektu."
 
-#: workflow_actions.py:57
+#: workflow_actions.py:77
 msgid "Grant object access"
 msgstr "Przyznaj dostęp do obiektu"
 
-#: workflow_actions.py:145
+#: workflow_actions.py:132 workflow_actions.py:231
+msgid "Access"
+msgstr "Dostęp"
+
+#: workflow_actions.py:170
 msgid "Revoke object access"
 msgstr "Odbierz dostęp do obiektu"
 
-#: workflow_actions.py:177
+#: workflow_actions.py:213
 msgid "Grant document access"
 msgstr "Przydziel dostęp dla dokumentu"
 
-#: workflow_actions.py:218
+#: workflow_actions.py:259
 msgid "Revoke document access"
 msgstr "Zabierz dostęp do dokumentu"

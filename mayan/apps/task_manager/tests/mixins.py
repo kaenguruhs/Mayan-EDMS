@@ -27,6 +27,7 @@ class TaskManagerTestMixin:
     def setUp(self):
         super().setUp()
         self._test_queue_list = []
+        self._test_task_type_list = []
         self._test_worker_list = []
 
     def tearDown(self):
@@ -45,13 +46,32 @@ class TaskManagerTestMixin:
         )
         self._test_queue_list.append(self._test_queue)
 
+    def _create_test_task_type(self):
+        self._test_task_type = self._test_queue.add_task_type(
+            dotted_path=TEST_PERIODIC_TASK_TASK, label='test task type'
+        )
+
     def _create_test_worker(self):
         self._test_worker = Worker(name=TEST_WORKER_NAME)
         self._test_worker_list.append(self._test_worker)
 
 
 class TaskManagerViewTestMixin:
-    def _request_queue_list(self):
+    def _request_queue_task_type_list(self):
         return self.get(
-            viewname='task_manager:queue_list', follow=True
+            viewname='task_manager:queue_task_type_list', kwargs={
+                'queue_name': self._test_queue.name
+            }
+        )
+
+    def _request_worker_list(self):
+        return self.get(
+            viewname='task_manager:worker_list'
+        )
+
+    def _request_worker_queue_list(self):
+        return self.get(
+            viewname='task_manager:worker_queue_list', kwargs={
+                'worker_name': self._test_worker.name
+            }
         )

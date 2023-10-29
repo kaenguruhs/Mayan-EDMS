@@ -6,10 +6,10 @@ from django.utils.translation import ugettext_lazy as _
 from mayan.apps.common.literals import TIME_DELTA_UNIT_CHOICES
 from mayan.apps.databases.model_mixins import ExtraDataModelMixin
 from mayan.apps.common.validators import YAMLValidator
-from mayan.apps.events.classes import (
+from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import (
     EventManagerMethodAfter, EventManagerSave
 )
-from mayan.apps.events.decorators import method_event
 
 from ..classes import BaseDocumentFilenameGenerator
 from ..events import (
@@ -18,7 +18,10 @@ from ..events import (
     event_document_type_quick_label_deleted,
     event_document_type_quick_label_edited
 )
-from ..literals import DEFAULT_DELETE_PERIOD, DEFAULT_DELETE_TIME_UNIT
+from ..literals import (
+    DEFAULT_DELETE_PERIOD, DEFAULT_DELETE_TIME_UNIT,
+    DEFAULT_DOCUMENT_STUB_EXPIRATION_INTERVAL
+)
 from ..managers import DocumentTypeManager
 
 from .document_type_model_mixins import DocumentTypeBusinessLogicMixin
@@ -37,27 +40,6 @@ class DocumentType(
         help_text=_('A short text identifying the document type.'),
         max_length=196, unique=True, verbose_name=_('Label')
     )
-    trash_time_period = models.PositiveIntegerField(
-        blank=True, help_text=_(
-            'Amount of time after which documents of this type will be '
-            'moved to the trash.'
-        ), null=True, verbose_name=_('Trash time period')
-    )
-    trash_time_unit = models.CharField(
-        blank=True, choices=TIME_DELTA_UNIT_CHOICES, null=True, max_length=8,
-        verbose_name=_('Trash time unit')
-    )
-    delete_time_period = models.PositiveIntegerField(
-        blank=True, default=DEFAULT_DELETE_PERIOD, help_text=_(
-            'Amount of time after which documents of this type in the trash '
-            'will be deleted.'
-        ), null=True, verbose_name=_('Delete time period')
-    )
-    delete_time_unit = models.CharField(
-        blank=True, choices=TIME_DELTA_UNIT_CHOICES,
-        default=DEFAULT_DELETE_TIME_UNIT, max_length=8, null=True,
-        verbose_name=_('Delete time unit')
-    )
     filename_generator_backend = models.CharField(
         default=BaseDocumentFilenameGenerator.get_default(), help_text=_(
             'The class responsible for producing the actual filename used '
@@ -71,6 +53,44 @@ class DocumentType(
         ), validators=[YAMLValidator()], verbose_name=_(
             'Filename generator backend arguments'
         )
+    )
+
+    # Retention policies
+
+    trash_time_period = models.PositiveIntegerField(
+        blank=True, help_text=_(
+            'Amount of time after which documents of this type will be '
+            'moved to the trash.'
+        ), null=True, verbose_name=_('Trash time period')
+    )
+    trash_time_unit = models.CharField(
+        blank=True, choices=TIME_DELTA_UNIT_CHOICES, null=True, max_length=12,
+        verbose_name=_('Trash time unit')
+    )
+    delete_time_period = models.PositiveIntegerField(
+        blank=True, default=DEFAULT_DELETE_PERIOD, help_text=_(
+            'Amount of time after which documents of this type in the trash '
+            'will be deleted.'
+        ), null=True, verbose_name=_('Delete time period')
+    )
+    delete_time_unit = models.CharField(
+        blank=True, choices=TIME_DELTA_UNIT_CHOICES,
+        default=DEFAULT_DELETE_TIME_UNIT, max_length=12, null=True,
+        verbose_name=_('Delete time unit')
+    )
+    document_stub_pruning_enabled = models.BooleanField(
+        default=True, help_text=_(
+            'Delete documents that do not contain any files after a '
+            'configured expiration interval.'
+        ), verbose_name=_('Document stub pruning')
+    )
+    document_stub_expiration_interval = models.PositiveBigIntegerField(
+        default=DEFAULT_DOCUMENT_STUB_EXPIRATION_INTERVAL, help_text=_(
+            'Time (in seconds) after which a document stub will be '
+            'considered invalid and deleted, if pruning is enabled. This '
+            'an optimization setting and should only be changed for '
+            'specific circumstances.'
+        ), verbose_name=_('Document stub expiration interval')
     )
 
     objects = DocumentTypeManager()
@@ -130,7 +150,9 @@ class DocumentTypeFilename(ExtraDataModelMixin, models.Model):
     filename = models.CharField(
         db_index=True, max_length=128, verbose_name=_('Label')
     )
-    enabled = models.BooleanField(default=True, verbose_name=_('Enabled'))
+    enabled = models.BooleanField(
+        default=True, verbose_name=_('Enabled')
+    )
 
     class Meta:
         ordering = ('filename',)

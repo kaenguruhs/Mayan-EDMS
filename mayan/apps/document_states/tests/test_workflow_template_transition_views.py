@@ -1,22 +1,16 @@
 from mayan.apps.testing.tests.base import GenericViewTestCase
 
 from ..events import event_workflow_template_edited
-from ..models import WorkflowTransition
+from ..models.workflow_transition_models import WorkflowTransition
 from ..permissions import (
     permission_workflow_template_edit, permission_workflow_template_view
 )
 
 from .literals import TEST_WORKFLOW_TEMPLATE_TRANSITION_LABEL
-from .mixins.workflow_template_mixins import (
-    WorkflowTemplateTestMixin, WorkflowTemplateViewTestMixin
-)
-from .mixins.workflow_template_transition_mixins import (
-    WorkflowTemplateTransitionViewTestMixin
-)
+from .mixins.workflow_template_transition_mixins import WorkflowTemplateTransitionViewTestMixin
 
 
-class WorkflowTransitionViewTestCase(
-    WorkflowTemplateTestMixin, WorkflowTemplateViewTestMixin,
+class WorkflowTemplateTransitionViewTestCase(
     WorkflowTemplateTransitionViewTestMixin, GenericViewTestCase
 ):
     def setUp(self):

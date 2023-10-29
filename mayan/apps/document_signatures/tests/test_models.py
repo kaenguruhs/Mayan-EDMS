@@ -5,7 +5,7 @@ from mayan.apps.django_gpg.tests.literals import (
     TEST_KEY_PRIVATE_PASSPHRASE, TEST_KEY_PUBLIC_ID
 )
 from mayan.apps.django_gpg.tests.mixins import KeyTestMixin
-from mayan.apps.documents.models import DocumentFile
+from mayan.apps.documents.models.document_file_models import DocumentFile
 from mayan.apps.documents.tests.base import GenericDocumentTestCase
 from mayan.apps.documents.tests.literals import (
     TEST_FILE_PDF_PATH, TEST_FILE_SMALL_PATH
@@ -423,13 +423,14 @@ class EmbeddedSignaturesTestCase(
         self._upload_test_document()
 
         with open(file=TEST_SIGNED_DOCUMENT_PATH, mode='rb') as file_object:
-            signed_file = self._test_document.file_new(
-                file_object=file_object, comment=''
+            self._test_document.files_upload(
+                comment='', file_object=file_object
             )
 
         self.assertEqual(EmbeddedSignature.objects.count(), 1)
 
+        test_document_file = self._test_document.file_latest
         signature = EmbeddedSignature.objects.first()
 
-        self.assertEqual(signature.document_file, signed_file)
+        self.assertEqual(signature.document_file, test_document_file)
         self.assertEqual(signature.key_id, TEST_KEY_PUBLIC_ID)

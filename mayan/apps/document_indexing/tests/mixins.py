@@ -164,10 +164,10 @@ class IndexTemplateNodeViewTestMixin:
 
 
 class IndexTemplateTestMixin:
+    _test_index_template_node_expression = None
     auto_add_test_index_template_to_test_document_type = True
     auto_create_test_index_template = True
     auto_create_test_index_template_node = True
-    _test_index_template_node_expression = None
 
     def setUp(self):
         super().setUp()
@@ -183,7 +183,7 @@ class IndexTemplateTestMixin:
             {
                 'label': '{}_1'.format(TEST_INDEX_TEMPLATE_LABEL),
                 'slug': '{}_1'.format(TEST_INDEX_TEMPLATE_SLUG)
-            },
+            }
         ]
 
         if self.auto_create_test_index_template:
@@ -253,7 +253,9 @@ class IndexTemplateActionAPIViewTestMixin:
 
 class IndexTemplateAPIViewTestMixin:
     def _request_test_index_template_create_api_view(self):
-        pk_list = list(IndexTemplate.objects.values('pk'))
+        pk_list = list(
+            IndexTemplate.objects.values_list('pk', flat=True)
+        )
 
         response = self.post(
             viewname='rest_api:indextemplate-list', data={
@@ -368,7 +370,9 @@ class IndexTemplateEventTriggerViewTestMixin:
 
 
 class IndexTemplateNodeAPITestMixin:
-    def _request_test_index_template_node_create_api_view(self, extra_data=None):
+    def _request_test_index_template_node_create_api_view(
+        self, extra_data=None
+    ):
         data = {
             'expression': TEST_INDEX_TEMPLATE_NODE_EXPRESSION
         }
@@ -376,7 +380,9 @@ class IndexTemplateNodeAPITestMixin:
         if extra_data:
             data.update(extra_data)
 
-        values = list(IndexTemplateNode.objects.values_list('pk', flat=True))
+        values = list(
+            IndexTemplateNode.objects.values_list('pk', flat=True)
+        )
 
         response = self.post(
             viewname='rest_api:indextemplatenode-list', kwargs={
@@ -458,11 +464,14 @@ class IndexToolsViewTestMixin:
 
 class IndexTemplateViewTestMixin:
     def _request_test_index_template_create_view(self):
-        pk_list = list(IndexTemplate.objects.values('pk'))
+        pk_list = list(
+            IndexTemplate.objects.values_list('pk', flat=True)
+        )
 
         response = self.post(
             viewname='indexing:index_template_create', data={
-                'label': TEST_INDEX_TEMPLATE_LABEL, 'slug': TEST_INDEX_TEMPLATE_SLUG
+                'label': TEST_INDEX_TEMPLATE_LABEL,
+                'slug': TEST_INDEX_TEMPLATE_SLUG
             }
         )
 

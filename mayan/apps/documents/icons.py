@@ -24,7 +24,7 @@ icon_dashboard_total_document = Icon(
 # Misc
 
 icon_document_image_loading = Icon(
-    driver_name='fontawesomecss', css_classes='far fa-clock fa-2x'
+    driver_name='fontawesomecss', css_classes='far fa-clock fa-2x fa-spin'
 )
 icon_document_return = Icon(
     driver_name='fontawesome-dual', primary_symbol='book',
@@ -93,14 +93,13 @@ icon_document_type_filename_generator = Icon(
     ]
 )
 
-icon_document_type_policies = Icon(driver_name='fontawesome', symbol='times')
+icon_document_type_retention_policies = Icon(
+    driver_name='fontawesome', symbol='clock'
+)
 icon_document_type_setup = icon_document_type
 
 # Document
 
-icon_document_file_page_count_update = Icon(
-    driver_name='fontawesome', symbol='copy'
-)
 icon_document_list = Icon(driver_name='fontawesome', symbol='book')
 icon_document_preview = Icon(driver_name='fontawesome', symbol='eye')
 icon_document_properties_detail = Icon(
@@ -121,6 +120,9 @@ icon_document_file_delete = Icon(
 )
 icon_document_file_edit = Icon(
     driver_name='fontawesome', symbol='pencil-alt'
+)
+icon_document_file_introspect = Icon(
+    driver_name='fontawesome', symbol='copy'
 )
 icon_document_file_list = Icon(
     driver_name='fontawesome', symbol='hdd'

@@ -16,11 +16,8 @@ DEFAULT_COMMON_EXTRA_APPS = settings.COMMON_EXTRA_APPS
 DEFAULT_COMMON_EXTRA_APPS_PRE = settings.COMMON_EXTRA_APPS_PRE
 DEFAULT_COMMON_HOME_VIEW = 'common:home'
 DEFAULT_COMMON_HOME_VIEW_DASHBOARD_NAME = 'user'
-DEFAULT_COMMON_PROJECT_TITLE = mayan.__title__
+DEFAULT_COMMON_PROJECT_TITLE = None
 DEFAULT_COMMON_PROJECT_URL = mayan.__website__
-DEFAULT_TX_PATH = '/usr/local/bin/tx'
-
-DEFAULT_TX_PATH = '/usr/local/bin/tx'
 
 EMPTY_LABEL = '---------'
 
@@ -40,3 +37,11 @@ TIME_DELTA_UNIT_CHOICES = (
     (TIME_DELTA_UNIT_HOURS, _('Hours')),
     (TIME_DELTA_UNIT_MINUTES, _('Minutes'))
 )
+
+URL_BOOK = 'https://www.mayan-edms.com/book/'
+URL_DOCUMENTATION = 'https://docs.mayan-edms.com'
+URL_FORUM = 'https://forum.mayan-edms.com'
+URL_KNOWLEDGE_BASE = 'https://forum.mayan-edms.com/t/availability-of-the-new-knowledge-base/883'
+URL_SOURCE_CODE = 'https://gitlab.com/mayan-edms/mayan-edms'
+URL_STORE = 'https://teespring.com/stores/mayan-edms'
+URL_SUPPORT = 'https://www.mayan-edms.com/support/'

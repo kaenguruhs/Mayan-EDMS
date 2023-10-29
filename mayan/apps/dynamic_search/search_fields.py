@@ -28,8 +28,6 @@ class SearchField:
     # virtual fields.
     priority = None
 
-    label = None
-
     @staticmethod
     class ValueTransformationNull(ValueTransformation):
         def _execute(self):
@@ -93,6 +91,26 @@ class SearchField:
     @cached_property
     def field_name(self):
         return self._field_name
+
+    @cached_property
+    def field_name_model_list(self):
+        result = []
+
+        model_list = get_fields_from_path(
+            model=self.model, path=self.field_name
+        )
+
+        for model in model_list:
+            remote_field = model.remote_field
+
+            if remote_field:
+                base_model = remote_field.model
+            else:
+                base_model = self.search_model.base_model
+
+            result.append(base_model)
+
+        return result
 
     def do_value_index_transform(self, search_backend, value):
         return self.do_value_transform(
@@ -238,9 +256,11 @@ class SearchFieldRelated(SearchFieldConcrete):
         ).values_list(last_field, flat=True)
 
         sub_queryset = sub_queryset.filter(
-            **{'{field_name}{lookup_separator}isnull'.format(
-                field_name=last_field, lookup_separator=LOOKUP_SEP
-            ): False}
+            **{
+                '{field_name}{lookup_separator}isnull'.format(
+                    field_name=last_field, lookup_separator=LOOKUP_SEP
+                ): False
+            }
         )
 
         if exclude_model and self.related_model == exclude_model:
@@ -248,7 +268,9 @@ class SearchFieldRelated(SearchFieldConcrete):
 
         result = []
 
-        for item in set(sub_queryset):
+        sub_queryset = sub_queryset.distinct()
+
+        for item in sub_queryset:
             item_value = self.do_value_index_transform(
                 search_backend=search_backend, value=item
             )

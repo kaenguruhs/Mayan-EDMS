@@ -3,7 +3,7 @@ from django.db import models, migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('sources', '0002_auto_20150608_1902'),
+        ('sources', '0002_auto_20150608_1902')
     ]
 
     operations = [
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                         on_delete=models.CASCADE, related_name='logs',
                         to='sources.Source', verbose_name='Source'
                     )
-                ),
+                )
             ],
             options={
                 'ordering': ['-datetime'],
@@ -39,6 +39,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Log entry',
                 'verbose_name_plural': 'Log entries',
             },
-            bases=(models.Model,),
-        ),
+            bases=(models.Model,)
+        )
     ]

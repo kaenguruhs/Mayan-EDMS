@@ -19,6 +19,7 @@ sys.path.insert(
 
 import mayan  # NOQA
 from mayan.settings import BASE_DIR as mayan_base_dir  # NOQA
+from mayan.settings import literals  # NOQA
 
 try:
     BUILD = sh.Command('git').bake('describe', '--tags', '--always', 'HEAD')
@@ -65,8 +66,9 @@ def get_requirements(base_directory, filename):
                 directory, filename = os.path.split(line)
                 result.extend(
                     get_requirements(
-                        base_directory=os.path.join(base_directory, directory),
-                        filename=filename
+                        base_directory=os.path.join(
+                            base_directory, directory
+                        ), filename=filename
                     )
                 )
             elif not line.startswith('\n'):
@@ -104,6 +106,13 @@ if __name__ == '__main__':
             mayan.__version__.split('+')[0].split('.')
         )
 
+        local_version = getattr(literals, 'LOCAL_VERSION')
+
+        if local_version:
+            version_final = '{}+{}'.format(upstream_version, local_version)
+        else:
+            version_final = upstream_version
+
         upstream_build = '0x{:06X}'.format(mayan.__build__)
 
         result = Template(template).render(
@@ -112,7 +121,7 @@ if __name__ == '__main__':
                     'build': upstream_build,
                     'build_string': generate_build_number(),
                     'timestamp': generate_commit_timestamp(),
-                    'version': upstream_version
+                    'version': version_final
                 }
             )
         )

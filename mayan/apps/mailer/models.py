@@ -2,9 +2,9 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from mayan.apps.databases.model_mixins import BackendModelMixin
-from mayan.apps.events.classes import EventManagerSave
+from mayan.apps.backends.model_mixins import BackendModelMixin
 from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import EventManagerSave
 
 from .classes import NullBackend
 from .events import event_profile_created, event_profile_edited
@@ -33,14 +33,8 @@ class UserMailer(
             'document mailing form.'
         ), verbose_name=_('Default')
     )
-    enabled = models.BooleanField(default=True, verbose_name=_('Enabled'))
-    backend_path = models.CharField(
-        max_length=128,
-        help_text=_('The dotted Python path to the backend class.'),
-        verbose_name=_('Backend path')
-    )
-    backend_data = models.TextField(
-        blank=True, verbose_name=_('Backend data')
+    enabled = models.BooleanField(
+        default=True, verbose_name=_('Enabled')
     )
 
     objects = UserMailerManager()

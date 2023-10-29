@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
-from mayan.apps.documents.models import Document
+from mayan.apps.documents.models.document_models import Document
 
 from ..managers import (
     DocumentIndexInstanceNodeManager, IndexInstanceManager
@@ -59,7 +59,7 @@ class IndexInstanceNode(IndexInstanceNodeBusinessLogicMixin, MPTTModel):
         to=IndexTemplateNode, verbose_name=_('Index template node')
     )
     value = models.CharField(
-        blank=True, db_index=True, max_length=128, verbose_name=_('Value')
+        blank=True, db_index=True, max_length=255, verbose_name=_('Value')
     )
     documents = models.ManyToManyField(
         related_name='index_instance_nodes', to=Document,

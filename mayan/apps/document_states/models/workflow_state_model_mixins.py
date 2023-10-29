@@ -5,7 +5,7 @@ from django.core import serializers
 from django.db.models import F, Max, Q
 from django.utils.translation import ugettext_lazy as _
 
-from mayan.apps.documents.models import Document
+from mayan.apps.documents.models.document_models import Document
 
 from ..literals import WORKFLOW_ACTION_ON_ENTRY, WORKFLOW_ACTION_ON_EXIT
 
@@ -28,6 +28,16 @@ class WorkflowStateBusinessLogicMixin:
         return ', '.join(field_list)
 
     get_actions_display.short_description = _('Actions')
+
+    def get_escalations_display(self):
+        field_list = [
+            str(field) for field in self.escalations.all()
+        ]
+        field_list.sort()
+
+        return ', '.join(field_list)
+
+    get_escalations_display.short_description = _('Escalations')
 
     def get_documents(self):
         WorkflowInstanceLogEntry = apps.get_model(
@@ -65,9 +75,15 @@ class WorkflowStateBusinessLogicMixin:
                 format='json', queryset=(self,)
             ).encode()
         )
+
         for action in self.actions.all():
             result.update(
                 action.get_hash().encode()
+            )
+
+        for escalation in self.escalations.all():
+            result.update(
+                escalation.get_hash().encode()
             )
 
         return result.hexdigest()

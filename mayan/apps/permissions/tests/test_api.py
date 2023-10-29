@@ -16,7 +16,7 @@ from ..permissions import (
 
 from .mixins import (
     PermissionAPIViewTestMixin, RoleAPIViewTestMixin,
-    RoleGroupAPIViewTestMixin, RolePermissionAPIViewTestMixin, RoleTestMixin
+    RoleGroupAPIViewTestMixin, RolePermissionAPIViewTestMixin
 )
 
 
@@ -36,7 +36,7 @@ class PermissionAPIViewTestCase(PermissionAPIViewTestMixin, BaseAPITestCase):
 
 
 class RoleAPIViewTestCase(
-    GroupTestMixin, RoleAPIViewTestMixin, RoleTestMixin, BaseAPITestCase
+    GroupTestMixin, RoleAPIViewTestMixin, BaseAPITestCase
 ):
     def test_role_create_api_view_no_permission(self):
         role_count = Role.objects.count()
@@ -213,8 +213,7 @@ class RoleAPIViewTestCase(
 
 
 class RoleGroupAPIViewTestCase(
-    GroupTestMixin, RoleTestMixin, RoleGroupAPIViewTestMixin,
-    BaseAPITestCase
+    GroupTestMixin, RoleGroupAPIViewTestMixin, BaseAPITestCase
 ):
     auto_create_role_test_object = True
 
@@ -277,7 +276,9 @@ class RoleGroupAPIViewTestCase(
         response = self._request_test_role_group_add_api_view()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        self.assertTrue(self._test_group in self._test_role.groups.all())
+        self.assertTrue(
+            self._test_group in self._test_role.groups.all()
+        )
 
         events = self._get_test_events()
         self.assertEqual(events.count(), 1)
@@ -441,7 +442,7 @@ class RoleGroupAPIViewTestCase(
 
 
 class RolePermissionAPIViewTestCase(
-    RoleTestMixin, RolePermissionAPIViewTestMixin, BaseAPITestCase
+    RolePermissionAPIViewTestMixin, BaseAPITestCase
 ):
     auto_create_role_test_object = True
 

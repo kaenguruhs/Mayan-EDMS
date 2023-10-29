@@ -12,7 +12,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Concat
 
-from mayan.apps.documents.models import Document
+from mayan.apps.documents.models.document_models import Document
 
 from .literals import (
     MAX_FILE_DESCRIPTOR, MIN_FILE_DESCRIPTOR, FILE_MODE, DIRECTORY_MODE
@@ -116,7 +116,7 @@ class MirrorFilesystem(LoggingMixIn, Operations):
         )
 
     def _get_next_file_descriptor(self):
-        while(True):
+        while (True):
             self.file_descriptor_count += 1
             if self.file_descriptor_count > MAX_FILE_DESCRIPTOR:
                 self.file_descriptor_count = MIN_FILE_DESCRIPTOR
@@ -302,6 +302,6 @@ class MirrorFilesystem(LoggingMixIn, Operations):
 
     def release(self, path, fh):
         self.file_descriptors[fh] = None
-        del(
+        del (
             self.file_descriptors[fh]
         )

@@ -18,7 +18,7 @@ from mayan.apps.mime_types.classes import MIMETypeBackend
 from mayan.apps.permissions import Permission
 
 from .exceptions import ActionError
-from .forms import DynamicForm, FormFieldsetMixin
+from .forms import DynamicForm, FormMixinFieldsets
 from .literals import (
     PK_LIST_SEPARATOR, TEXT_CHOICE_ITEMS, TEXT_CHOICE_LIST,
     TEXT_LIST_AS_ITEMS_PARAMETER, TEXT_LIST_AS_ITEMS_VARIABLE_NAME,
@@ -111,8 +111,8 @@ class DownloadViewMixin:
             )
             # Encoding isn't set to prevent browsers from automatically
             # uncompressing files.
-            mime_type = encoding_map.get(encoding, mime_type)
-            response.headers['Content-Type'] = mime_type or 'application/octet-stream'
+            content_type = encoding_map.get(encoding, mime_type)
+            response.headers['Content-Type'] = content_type or 'application/octet-stream'
         else:
             response.headers['Content-Type'] = 'application/octet-stream'
 
@@ -130,6 +130,16 @@ class DynamicFormViewMixin:
             }
         )
         return data
+
+
+class DynamicFieldSetFormViewMixin(DynamicFormViewMixin):
+    def get_form_class(self):
+        form_class = super().get_form_class()
+        form_class.fieldsets = self.get_form_fieldsets()
+        return form_class
+
+    def get_form_fieldsets(self):
+        return None
 
 
 class ExternalObjectBaseMixin:
@@ -283,10 +293,10 @@ class ModelFormFieldsetsViewMixin(ModelFormMixin):
     def get_form_class(self):
         form_class = super().get_form_class()
 
-        if FormFieldsetMixin in form_class.mro():
+        if FormMixinFieldsets in form_class.mro():
             return form_class
         else:
-            class FormFieldsetForm(FormFieldsetMixin, form_class):
+            class FormFieldsetForm(FormMixinFieldsets, form_class):
                 """New class with the form fieldset support."""
 
             FormFieldsetForm.fieldsets = getattr(self, 'fieldsets', None)
@@ -335,7 +345,7 @@ class MultipleObjectViewMixin(SingleObjectMixin):
     def dispatch(self, request, *args, **kwargs):
         self.object_list = self.get_object_list()
         if self.view_mode_single:
-            self.object = self.object_list.first()
+            self.object = self.get_object_first()
 
         return super().dispatch(request=request, *args, **kwargs)
 
@@ -356,6 +366,9 @@ class MultipleObjectViewMixin(SingleObjectMixin):
         Remove this method from the subclass
         """
         raise AttributeError
+
+    def get_object_first(self):
+        return self.object_list.first()
 
     def get_object_list(self, queryset=None):
         """
@@ -602,8 +615,8 @@ class RestrictedQuerysetViewMixin:
     def get_object_permission(self):
         return self.object_permission
 
-    def get_queryset(self):
-        queryset = self.get_source_queryset()
+    def get_queryset(self, source_queryset=None):
+        queryset = source_queryset or self.get_source_queryset()
         object_permission = self.get_object_permission()
 
         if object_permission:

@@ -12,7 +12,7 @@ from mayan.apps.common.apps import MayanAppConfig
 from mayan.apps.common.classes import ModelCopy
 from mayan.apps.common.menus import (
     menu_list_facet, menu_multi_item, menu_object, menu_related,
-    menu_secondary, menu_setup
+    menu_return, menu_secondary, menu_setup
 )
 from mayan.apps.databases.classes import (
     ModelFieldRelated, ModelProperty, ModelQueryFields
@@ -22,11 +22,10 @@ from mayan.apps.documents.signals import signal_post_document_type_change
 from mayan.apps.events.classes import EventModelRegistry, ModelEventType
 from mayan.apps.navigation.classes import SourceColumn
 from mayan.apps.rest_api.fields import DynamicSerializerField
-from mayan.apps.views.html_widgets import TwoStateWidget
+from mayan.apps.views.column_widgets import TwoStateWidget
 
-from .classes import (
-    DocumentMetadataHelper, MetadataParser, MetadataValidator
-)
+from .classes import MetadataParser, MetadataValidator
+from .column_widgets import DocumentMetadataWidget
 from .events import (
     event_document_metadata_added, event_document_metadata_edited,
     event_document_metadata_removed, event_metadata_type_edited,
@@ -39,7 +38,6 @@ from .handlers import (
     handler_post_document_type_change_metadata,
     handler_pre_metadata_type_delete
 )
-from .html_widgets import DocumentMetadataWidget
 from .links import (
     link_metadata_add, link_metadata_edit, link_metadata_multiple_add,
     link_metadata_multiple_edit, link_metadata_multiple_remove,
@@ -47,7 +45,7 @@ from .links import (
     link_document_type_metadata_type_relationship, link_metadata_type_create,
     link_metadata_type_multiple_delete, link_metadata_type_single_delete,
     link_metadata_type_document_type_relationship, link_metadata_type_edit,
-    link_metadata_type_list
+    link_metadata_type_list, link_metadata_type_setup
 )
 from .methods import method_document_get_metadata
 from .permissions import (
@@ -56,6 +54,7 @@ from .permissions import (
     permission_metadata_type_delete, permission_metadata_type_edit,
     permission_metadata_type_view
 )
+from .property_helpers import DocumentMetadataHelper
 
 logger = logging.getLogger(name=__name__)
 
@@ -262,7 +261,6 @@ class MetadataApp(MayanAppConfig):
                 link_metadata_multiple_remove
             ), sources=(Document,)
         )
-
         menu_secondary.bind_links(
             links=(
                 link_metadata_add, link_metadata_edit, link_metadata_remove
@@ -279,7 +277,6 @@ class MetadataApp(MayanAppConfig):
                 DocumentType,
             )
         )
-
         menu_related.bind_links(
             links=(link_metadata_type_list,),
             sources=(
@@ -295,19 +292,16 @@ class MetadataApp(MayanAppConfig):
                 link_metadata_type_document_type_relationship,
             ), sources=(MetadataType,)
         )
-
         menu_multi_item.bind_links(
             links=(
                 link_metadata_type_multiple_delete,
             ), sources=(MetadataType,)
         )
-
         menu_object.bind_links(
             links=(
                 link_metadata_type_single_delete, link_metadata_type_edit
             ), sources=(MetadataType,)
         )
-
         menu_related.bind_links(
             links=(
                 link_document_type_list,
@@ -316,18 +310,21 @@ class MetadataApp(MayanAppConfig):
                 'metadata:metadata_type_create'
             )
         )
-
-        menu_secondary.bind_links(
-            links=(
-                link_metadata_type_list,
-                link_metadata_type_create
-            ), sources=(
+        menu_return.bind_links(
+            links=(link_metadata_type_list,), sources=(
                 MetadataType, 'metadata:metadata_type_list',
                 'metadata:metadata_type_create'
             )
         )
-
-        menu_setup.bind_links(links=(link_metadata_type_list,))
+        menu_secondary.bind_links(
+            links=(link_metadata_type_create,), sources=(
+                MetadataType, 'metadata:metadata_type_list',
+                'metadata:metadata_type_create'
+            )
+        )
+        menu_setup.bind_links(
+            links=(link_metadata_type_setup,)
+        )
 
         # Signals
 

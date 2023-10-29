@@ -1,5 +1,5 @@
 from django.apps import apps
-from django.db.models.signals import post_delete, post_save, pre_delete
+from django.db.models.signals import post_save, pre_delete
 from django.utils.translation import ugettext_lazy as _
 
 from mayan.apps.acls.classes import ModelPermission
@@ -9,20 +9,20 @@ from mayan.apps.acls.permissions import (
 from mayan.apps.common.apps import MayanAppConfig
 from mayan.apps.common.classes import ModelCopy
 from mayan.apps.common.menus import (
-    menu_list_facet, menu_main, menu_object, menu_related, menu_secondary,
-    menu_setup, menu_tools
+    menu_list_facet, menu_main, menu_object, menu_related, menu_return,
+    menu_secondary, menu_setup, menu_tools
 )
 from mayan.apps.documents.links.document_type_links import link_document_type_list
 from mayan.apps.documents.signals import signal_post_initial_document_type
 from mayan.apps.events.classes import EventModelRegistry, ModelEventType
 from mayan.apps.navigation.classes import SourceColumn
 from mayan.apps.rest_api.fields import DynamicSerializerField
-from mayan.apps.views.html_widgets import TwoStateWidget
+from mayan.apps.views.column_widgets import TwoStateWidget
 
 from .events import event_index_template_created, event_index_template_edited
 from .handlers import (
-    handler_create_default_document_index, handler_delete_empty,
-    handler_event_trigger, handler_index_document, handler_remove_document
+    handler_create_default_document_index, handler_event_trigger,
+    handler_index_document, handler_remove_document
 )
 from .html_widgets import (
     get_instance_link, index_instance_item_link, node_level
@@ -312,8 +312,15 @@ class DocumentIndexingApp(MayanAppConfig):
                 'indexing:index_template_create'
             )
         )
+        menu_return.bind_links(
+            links=(link_index_template_list,),
+            sources=(
+                IndexTemplate, 'indexing:index_template_list',
+                'indexing:index_template_create'
+            )
+        )
         menu_secondary.bind_links(
-            links=(link_index_template_list, link_index_template_create),
+            links=(link_index_template_create,),
             sources=(
                 IndexTemplate, 'indexing:index_template_list',
                 'indexing:index_template_create'
@@ -326,11 +333,6 @@ class DocumentIndexingApp(MayanAppConfig):
             links=(link_index_instances_rebuild, link_index_instances_reset)
         )
 
-        post_delete.connect(
-            dispatch_uid='document_indexing_handler_delete_empty',
-            receiver=handler_delete_empty,
-            sender=Document
-        )
         post_save.connect(
             dispatch_uid='document_handler_index_document',
             receiver=handler_index_document,

@@ -35,26 +35,26 @@ from .api_views.trashed_document_api_views import (
 )
 from .views.document_file_views import (
     DocumentFileDeleteView, DocumentFileEditView, DocumentFileListView,
-    DocumentFilePrintFormView, DocumentFilePrintView,
-    DocumentFilePropertiesView, DocumentFilePreviewView,
-    DocumentFileTransformationsClearView,
+    DocumentFileIntrospectView, DocumentFilePrintFormView,
+    DocumentFilePrintView, DocumentFilePropertiesView,
+    DocumentFilePreviewView, DocumentFileTransformationsClearView,
     DocumentFileTransformationsCloneView
 )
 from .views.document_file_page_views import (
-    DocumentFilePageCountUpdateView, DocumentFilePageListView,
-    DocumentFilePageNavigationFirst, DocumentFilePageNavigationLast,
-    DocumentFilePageNavigationNext, DocumentFilePageNavigationPrevious,
-    DocumentFilePageRotateLeftView, DocumentFilePageRotateRightView,
-    DocumentFilePageView, DocumentFilePageViewResetView,
-    DocumentFilePageZoomInView, DocumentFilePageZoomOutView
+    DocumentFilePageListView, DocumentFilePageNavigationFirst,
+    DocumentFilePageNavigationLast, DocumentFilePageNavigationNext,
+    DocumentFilePageNavigationPrevious, DocumentFilePageRotateLeftView,
+    DocumentFilePageRotateRightView, DocumentFilePageView,
+    DocumentFilePageViewResetView, DocumentFilePageZoomInView,
+    DocumentFilePageZoomOutView
 )
+from .views.document_type_retention_policy_views import DocumentTypeRetentionPoliciesEditView
 from .views.document_type_views import (
     DocumentTypeCreateView, DocumentTypeDeleteView,
-    DocumentTypeDeletionPoliciesEditView, DocumentTypeDocumentListView,
-    DocumentTypeEditView, DocumentTypeFilenameGeneratorEditView,
-    DocumentTypeFilenameCreateView, DocumentTypeFilenameDeleteView,
-    DocumentTypeFilenameEditView, DocumentTypeFilenameListView,
-    DocumentTypeListView
+    DocumentTypeDocumentListView, DocumentTypeEditView,
+    DocumentTypeFilenameGeneratorEditView, DocumentTypeFilenameCreateView,
+    DocumentTypeFilenameDeleteView, DocumentTypeFilenameEditView,
+    DocumentTypeFilenameListView, DocumentTypeListView
 )
 from .views.document_version_page_views import (
     DocumentVersionPageDeleteView, DocumentVersionPageListView,
@@ -116,6 +116,16 @@ urlpatterns_document_files = [
         view=DocumentFileEditView.as_view()
     ),
     url(
+        regex=r'^documents/files/(?P<document_file_id>\d+)/introspect/$',
+        name='document_file_introspect_single',
+        view=DocumentFileIntrospectView.as_view()
+    ),
+    url(
+        regex=r'^documents/files/multiple/introspect/$',
+        name='document_file_introspect_multiple',
+        view=DocumentFileIntrospectView.as_view()
+    ),
+    url(
         regex=r'^documents/files/(?P<document_file_id>\d+)/print/form/$',
         name='document_file_print_form',
         view=DocumentFilePrintFormView.as_view()
@@ -150,16 +160,6 @@ urlpatterns_document_file_pages = [
     url(
         regex=r'^documents/files/(?P<document_file_id>\d+)/pages/$',
         name='document_file_page_list', view=DocumentFilePageListView.as_view()
-    ),
-    url(
-        regex=r'^documents/files/(?P<document_file_id>\d+)/pages/update/$',
-        name='document_file_page_count_update',
-        view=DocumentFilePageCountUpdateView.as_view()
-    ),
-    url(
-        regex=r'^documents/files/multiple/page/update/$',
-        name='document_file_multiple_page_count_update',
-        view=DocumentFilePageCountUpdateView.as_view()
     ),
     url(
         regex=r'^documents/files/pages/(?P<document_file_page_id>\d+)/$',
@@ -224,9 +224,9 @@ urlpatterns_document_types = [
         name='document_type_delete', view=DocumentTypeDeleteView.as_view()
     ),
     url(
-        regex=r'^document_types/(?P<document_type_id>\d+)/deletion_policies/$',
-        name='document_type_policies',
-        view=DocumentTypeDeletionPoliciesEditView.as_view()
+        regex=r'^document_types/(?P<document_type_id>\d+)/retention_policies/$',
+        name='document_type_retention_policies',
+        view=DocumentTypeRetentionPoliciesEditView.as_view()
     ),
     url(
         regex=r'^document_types/(?P<document_type_id>\d+)/documents/$',

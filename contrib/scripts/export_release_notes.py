@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 
 import optparse
-import os
 from pathlib import Path
-import sys
 
 from docutils import core
 from lxml import etree, html
 import sh
-
-import django
-from django.conf import settings
 
 MONTHS_TO_NUMBER = {
     'January': 1,
@@ -27,7 +22,7 @@ MONTHS_TO_NUMBER = {
     'December': 12
 }
 VERSION = '3.0'
-ignore_ids_list = ('upgrade-process', 'troubleshooting')
+ignore_ids_list = ('troubleshooting', 'upgrade-process', 'upgrading-process')
 
 
 class ReleaseNoteExporter:
@@ -51,34 +46,13 @@ class ReleaseNoteExporter:
 
         return result
 
-    def __init__(self):
-        sys.path.insert(0, os.path.abspath('..'))
-        sys.path.insert(1, os.path.abspath('.'))
-
-        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mayan.settings')
-
-        self.parser = optparse.OptionParser(
-            usage='%prog [version number]', version='%prog {}'.format(VERSION)
-        )
-        self.parser.add_option(
-            '-f', '--format', help='specify the output format',
-            dest='output_format',
-            action='store', metavar='output_format'
-        )
-
-        (self.options, args) = self.parser.parse_args()
-
-        if len(args) != 1:
-            self.parser.error('version argument is missing')
-
-        django.setup()
-
-        self.version = args[0]
+    def __init__(self, output_format, version, releases_path):
+        self.releases_path = releases_path or Path('.').resolve() / 'docs' / 'releases'
+        self.output_format = output_format
+        self.version = version
 
     def export(self):
-        path_documentation = Path(
-            settings.BASE_DIR
-        ) / '..' / 'docs' / 'releases' / '{}.txt'.format(self.version)
+        path_documentation = Path(self.releases_path) / '{}.txt'.format(self.version)
 
         with path_documentation.open(mode='r') as file_object:
             content = []
@@ -112,7 +86,7 @@ class ReleaseNoteExporter:
             tree=html.fromstring(html_fragment)
         )
 
-        if self.options.output_format == 'md':
+        if self.output_format == 'md':
             command_pandoc = sh.Command('pandoc')
 
             markdown_tag_cleanup = (
@@ -126,7 +100,7 @@ class ReleaseNoteExporter:
                 joined_result = joined_result.replace(*markdown_tag_cleanup_item)
 
             return command_pandoc(_in=joined_result, f='html', t='markdown')
-        elif self.options.output_format == 'news':
+        elif self.output_format == 'news':
             command_pandoc = sh.Command('pandoc')
 
             markdown_tag_cleanup = (
@@ -142,8 +116,6 @@ class ReleaseNoteExporter:
             result_body = command_pandoc(_in=joined_result, f='html', t='markdown')
 
             tree = html.fromstring(html_fragment)
-            # ~ title = tree[0].text
-            # ~ date tree[1].text)
 
             released, month, day, year = tree[1].text.split(' ')
 
@@ -161,6 +133,30 @@ class ReleaseNoteExporter:
 
 
 if __name__ == '__main__':
-    message_processor = ReleaseNoteExporter()
+    parser = optparse.OptionParser(
+        usage='%prog [version number]', version='%prog {}'.format(VERSION)
+    )
+    parser.add_option(
+        '-f', '--format', help='specify the output format',
+        dest='output_format',
+        action='store', metavar='output_format'
+    )
+    parser.add_option(
+        '-p', '--releases-path', help='path to the releases directory',
+        dest='releases_path',
+        action='store', metavar='releases_path'
+    )
+
+    (options, args) = parser.parse_args()
+
+    if len(args) != 1:
+        parser.error('version argument is missing')
+
+    version = args[0]
+
+    message_processor = ReleaseNoteExporter(
+        output_format=options.output_format,
+        releases_path=options.releases_path, version=args[0]
+    )
     result = message_processor.export()
     print(result)

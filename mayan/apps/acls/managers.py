@@ -318,8 +318,8 @@ class AccessControlListManager(models.Manager):
 
             return queryset.filter(final_query)
         else:
-            # User has direct permission assignment via a role, is superuser
-            # or is staff. Return the entire queryset.
+            # User has direct permission assignment via a role, is super
+            # user or is staff. Return the entire queryset.
             return queryset
 
     def get_inherited_permissions(self, obj, role):
@@ -373,7 +373,7 @@ class AccessControlListManager(models.Manager):
                 except self.model.DoesNotExist:
                     pass
 
-                if type(parent_object) == type(obj):
+                if type(parent_object) is type(obj):
                     # Object and parent are of the same type. Break
                     # recursion.
                     return queryset

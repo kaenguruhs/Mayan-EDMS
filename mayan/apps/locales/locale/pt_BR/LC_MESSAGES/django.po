@@ -4,17 +4,17 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
-# Aline Freitas <aline@alinefreitas.com.br>, 2023
 # Roberto Rosario, 2023
 # Márcia Ferreira, 2023
+# Aline Freitas <aline@alinefreitas.com.br>, 2023
 # Roberto Vasconcelos Novaes <rvnovaes@gmail.com>, 2023
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 05:20+0000\n"
-"PO-Revision-Date: 2023-01-05 02:53+0000\n"
+"POT-Creation-Date: 2023-10-25 16:03+0000\n"
+"PO-Revision-Date: 2023-09-06 21:36+0000\n"
 "Last-Translator: Roberto Vasconcelos Novaes <rvnovaes@gmail.com>, 2023\n"
 "Language-Team: Portuguese (Brazil) (https://app.transifex.com/rosarior/teams/13584/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -26,6 +26,10 @@ msgstr ""
 #: apps.py:28 events.py:6
 msgid "Locales"
 msgstr "Locais"
+
+#: dependencies.py:11
+msgid "Transifex Client"
+msgstr ""
 
 #: events.py:10
 msgid "User locale profile edited"
@@ -39,11 +43,11 @@ msgstr "Perfil do locale"
 msgid "Edit locale profile"
 msgstr "Editar perfil do locale"
 
-#: models.py:21
+#: models.py:20
 msgid "User"
 msgstr "Usuário"
 
-#: models.py:25
+#: models.py:24
 msgid "Timezone"
 msgstr "Fuso horário"
 

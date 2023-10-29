@@ -8,9 +8,9 @@ from mayan.apps.common.literals import TIME_DELTA_UNIT_DAYS
 CHECK_DELETE_PERIOD_INTERVAL = 60
 CHECK_TRASH_PERIOD_INTERVAL = 60
 
-DELETE_STALE_STUBS_INTERVAL = 60 * 10  # 10 minutes
 DEFAULT_DELETE_PERIOD = 30
 DEFAULT_DELETE_TIME_UNIT = TIME_DELTA_UNIT_DAYS
+DEFAULT_DOCUMENT_FILE_ACTION_NAME = 'replace'
 DEFAULT_DOCUMENT_TYPE_LABEL = _('Default')
 
 # Old defaults (<4.0), used for the setting migrations.
@@ -72,12 +72,17 @@ DEFAULT_LANGUAGE_CODES = (
     'hne', 'dcc', 'aka', 'kaz', 'syl', 'zul', 'ces', 'kin', 'hat', 'que',
     'swe', 'hmn', 'sna', 'mos', 'xho', 'bel', 'heb'
 )
-DEFAULT_STUB_EXPIRATION_INTERVAL = 60 * 60 * 24  # 24 hours
+DEFAULT_DOCUMENT_STUB_EXPIRATION_INTERVAL = 60 * 60 * 24  # 24 hours
+
+DOCUMENT_FILE_PAGE_CREATE_BATCH_SIZE = 100
+DOCUMENT_VERSION_PAGE_CREATE_BATCH_SIZE = 100
 
 IMAGE_ERROR_NO_ACTIVE_VERSION = 'document_no_active_version'
 IMAGE_ERROR_NO_VERSION_PAGES = 'document_no_version_pages'
 IMAGE_ERROR_FILE_PAGE_TRANSFORMATION_ERROR = 'document_file_page_transformation_error'
 IMAGE_ERROR_VERSION_PAGE_TRANSFORMATION_ERROR = 'document_version_page_transformation_error'
+
+INTERVAL_TASK_STUBS_DELETION = 60 * 10  # 10 minutes
 
 MONTH_NAMES = (
     _('January'), _('February'), _('March'), _('April'), _('May'),
@@ -94,6 +99,3 @@ PAGE_RANGE_CHOICES = (
 STORAGE_NAME_DOCUMENT_FILE_PAGE_IMAGE_CACHE = 'documents__documentfilepageimagecache'
 STORAGE_NAME_DOCUMENT_FILES = 'documents__documentfiles'
 STORAGE_NAME_DOCUMENT_VERSION_PAGE_IMAGE_CACHE = 'documents__documentversionpageimagecache'
-
-UPDATE_PAGE_COUNT_RETRY_DELAY = 10
-UPLOAD_NEW_VERSION_RETRY_DELAY = 10

@@ -6,16 +6,17 @@
 # Translators:
 # Przemysław Bodio <przemyslawbodio.dev@gmail.com>, 2023
 # mic <winterfall24@gmail.com>, 2023
-# Roberto Rosario, 2023
 # Wojciech Warczakowski <w.warczakowski@gmail.com>, 2023
+# Roberto Rosario, 2023
+# tomkolp, 2023
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 05:20+0000\n"
-"PO-Revision-Date: 2023-01-05 02:52+0000\n"
-"Last-Translator: Wojciech Warczakowski <w.warczakowski@gmail.com>, 2023\n"
+"POT-Creation-Date: 2023-10-25 16:03+0000\n"
+"PO-Revision-Date: 2023-09-06 21:36+0000\n"
+"Last-Translator: tomkolp, 2023\n"
 "Language-Team: Polish (https://app.transifex.com/rosarior/teams/13584/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,60 +24,60 @@ msgstr ""
 "Language: pl\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
-#: apps.py:31 events.py:11 links.py:52 links.py:93 permissions.py:6
-#: queues.py:7 views/event_views.py:29
+#: apps.py:32 events.py:11 links.py:52 links.py:93 permissions.py:6
+#: settings.py:7 views/event_views.py:29
 msgid "Events"
 msgstr "Zdarzenia"
 
-#: apps.py:81 apps.py:116
+#: apps.py:82 apps.py:117
 msgid "Date and time"
 msgstr "Data i godzina"
 
-#: apps.py:85 apps.py:119 serializers.py:72
+#: apps.py:86 apps.py:120 serializers.py:72
 msgid "Actor"
 msgstr "Czynnik"
 
-#: apps.py:89 apps.py:124
+#: apps.py:90 apps.py:125
 msgid "Event"
 msgstr "Zdarzenie"
 
-#: apps.py:93 apps.py:129 serializers.py:78
+#: apps.py:94 apps.py:130 serializers.py:78
 msgid "Target"
 msgstr "Cel"
 
-#: apps.py:97 apps.py:133
+#: apps.py:98 apps.py:134
 msgid "Action object"
 msgstr "Obiekt akcji"
 
-#: apps.py:104 forms.py:10 forms.py:67
+#: apps.py:105 forms.py:10 forms.py:67
 msgid "Namespace"
 msgstr "Przestrzeń nazw"
 
-#: apps.py:109 forms.py:14 forms.py:71 serializers.py:21 serializers.py:46
+#: apps.py:110 forms.py:14 forms.py:71 serializers.py:21 serializers.py:46
 msgid "Label"
 msgstr "Etykieta"
 
-#: apps.py:138
+#: apps.py:139
 msgid "Seen"
 msgstr "Widziane"
 
-#: apps.py:145
+#: apps.py:146
 msgid "Object"
 msgstr "Obiekt"
 
-#: apps.py:150 models.py:46 models.py:105
+#: apps.py:151 models.py:46 models.py:105
 msgid "Event type"
 msgstr "Typ zdarzenia"
 
-#: classes.py:91
+#: classes.py:90
 msgid "Event list export to CSV"
 msgstr ""
 
-#: classes.py:119
+#: classes.py:118
 msgid "Events exported."
 msgstr ""
 
-#: classes.py:121
+#: classes.py:120
 #, python-format
 msgid ""
 "The event list has been exported and is available for download using the "
@@ -135,7 +136,7 @@ msgstr "Oznacz wszystkie jako widziane"
 msgid "Subscriptions"
 msgstr "Subskrypcje"
 
-#: literals.py:12
+#: literals.py:14
 #, python-format
 msgid "Unknown or obsolete event type: %s"
 msgstr "Nieznany lub nieaktualny typ zdarzenia: %s"
@@ -192,11 +193,23 @@ msgstr ""
 msgid "View the events of an object"
 msgstr ""
 
-#: queues.py:13
+#: queues.py:7
+msgid "Events fast"
+msgstr ""
+
+#: queues.py:10
+msgid "Events slow"
+msgstr ""
+
+#: queues.py:16
+msgid "Commit an event"
+msgstr ""
+
+#: queues.py:21
 msgid "Clear event querysets"
 msgstr ""
 
-#: queues.py:17
+#: queues.py:25
 msgid "Export event querysets"
 msgstr ""
 
@@ -223,6 +236,12 @@ msgstr ""
 #: serializers.py:84
 msgid "Verb"
 msgstr "Słowo"
+
+#: settings.py:13
+msgid ""
+"Disables asynchronous events mode. All events will be committed in the same "
+"process that triggers them. This was the behavior prior to version 4.5."
+msgstr ""
 
 #: views/clear_views.py:27
 msgid ""
@@ -301,7 +320,7 @@ msgstr "Brak powiadomień"
 
 #: views/notification_views.py:45
 msgid "Mark the selected notification as read?"
-msgstr ""
+msgstr "Oznaczyć wybrane powiadomienie jako przeczytane?"
 
 #: views/notification_views.py:60
 msgid "Notification marked as read."
@@ -309,11 +328,11 @@ msgstr ""
 
 #: views/notification_views.py:72
 msgid "Mark all notification as read?"
-msgstr ""
+msgstr "Oznaczyć wszystkie powiadomienia jako przeczytane?"
 
 #: views/notification_views.py:79
 msgid "All notifications marked as read."
-msgstr ""
+msgstr "Wszystkie powiadomienia oznaczone jako przeczytane."
 
 #: views/subscription_views.py:38
 #, python-format

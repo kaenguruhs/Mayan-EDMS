@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 05:20+0000\n"
-"PO-Revision-Date: 2023-01-05 02:53+0000\n"
+"POT-Creation-Date: 2023-10-25 16:03+0000\n"
+"PO-Revision-Date: 2023-09-06 21:36+0000\n"
 "Last-Translator: Thanh Long Hoàng <hoangthanhlong@gmail.com>, 2023\n"
 "Language-Team: Vietnamese (https://app.transifex.com/rosarior/teams/13584/vi/)\n"
 "MIME-Version: 1.0\n"
@@ -22,6 +22,10 @@ msgstr ""
 
 #: apps.py:28 events.py:6
 msgid "Locales"
+msgstr ""
+
+#: dependencies.py:11
+msgid "Transifex Client"
 msgstr ""
 
 #: events.py:10
@@ -36,11 +40,11 @@ msgstr ""
 msgid "Edit locale profile"
 msgstr ""
 
-#: models.py:21
+#: models.py:20
 msgid "User"
 msgstr "Người dùng"
 
-#: models.py:25
+#: models.py:24
 msgid "Timezone"
 msgstr ""
 

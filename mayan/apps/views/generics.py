@@ -26,8 +26,9 @@ from .icons import (
     icon_remove_all, icon_assign_remove_add, icon_assign_remove_remove
 )
 from .view_mixins import (
-    ExtraDataDeleteViewMixin, DownloadViewMixin, DynamicFormViewMixin,
-    ExternalObjectViewMixin, ExtraContextViewMixin, FormExtraKwargsViewMixin,
+    ExtraDataDeleteViewMixin, DownloadViewMixin,
+    DynamicFieldSetFormViewMixin, ExternalObjectViewMixin,
+    ExtraContextViewMixin, FormExtraKwargsViewMixin,
     ListModeViewMixin, ModelFormFieldsetsViewMixin, MultipleObjectViewMixin,
     ObjectActionViewMixin, ObjectNameViewMixin, RedirectionViewMixin,
     RestrictedQuerysetViewMixin, SortingViewMixin, ViewIconMixin,
@@ -465,19 +466,21 @@ class FormView(
     template_name = 'appearance/generic_form.html'
 
 
-class DynamicFormView(DynamicFormViewMixin, FormView):
+class DynamicFormView(
+    DynamicFieldSetFormViewMixin, FormView
+):
     """Form view that uses a single dynamic form."""
 
 
 class MultipleObjectFormActionView(
     ExtraContextViewMixin, ObjectActionViewMixin,
     ViewPermissionCheckViewMixin, RestrictedQuerysetViewMixin,
-    MultipleObjectViewMixin, FormExtraKwargsViewMixin, RedirectionViewMixin,
-    ViewIconMixin, DjangoFormView
+    MultipleObjectViewMixin, FormExtraKwargsViewMixin,
+    RedirectionViewMixin, ViewIconMixin, DjangoFormView
 ):
     """
-    This view will present a form and upon receiving a POST request will
-    perform an action on an object or queryset.
+    This view will present a form and upon receiving a POST request
+    will perform an action on an object or queryset.
     """
     template_name = 'appearance/generic_form.html'
 
@@ -505,12 +508,12 @@ class MultipleObjectFormActionView(
         self.view_action(form=form)
         return super().form_valid(form=form)
 
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         try:
-            return super().get_queryset()
+            return super().get_queryset(**kwargs)
         except ImproperlyConfigured:
             self.queryset = self.get_source_queryset()
-            return super().get_queryset()
+            return super().get_queryset(**kwargs)
 
 
 class MultipleObjectConfirmActionView(
@@ -862,7 +865,7 @@ class MultipleObjectDownloadView(
 
 
 class SingleObjectDynamicFormCreateView(
-    DynamicFormViewMixin, SingleObjectCreateView
+    DynamicFieldSetFormViewMixin, SingleObjectCreateView
 ):
     """
     A form that will allow creation of a single instance from the values
@@ -934,7 +937,7 @@ class SingleObjectEditView(
 
 
 class SingleObjectDynamicFormEditView(
-    DynamicFormViewMixin, SingleObjectEditView
+    DynamicFieldSetFormViewMixin, SingleObjectEditView
 ):
     """
     A form that will allow editing a single instance from the values

@@ -22,6 +22,7 @@ from .permissions import (
 class StorageApp(MayanAppConfig):
     app_namespace = 'storage'
     app_url = 'storage'
+    has_rest_api = True
     has_tests = True
     name = 'mayan.apps.storage'
     verbose_name = _('Storage')
@@ -76,4 +77,6 @@ class StorageApp(MayanAppConfig):
                 link_download_file_delete, link_download_file_download,
             ), sources=(DownloadFile,)
         )
-        menu_tools.bind_links(links=(link_download_file_list,))
+        menu_tools.bind_links(
+            links=(link_download_file_list,)
+        )

@@ -15,6 +15,7 @@ from django.conf import settings
 from django.conf.urls import url
 from django.contrib.contenttypes.models import ContentType
 from django.db import connection, connections, models
+from django.db.models import Q
 from django.db.models.signals import post_save, pre_save
 from django.http import HttpResponse
 from django.http.response import FileResponse
@@ -309,11 +310,11 @@ class RandomPrimaryKeyModelMonkeyPatchMixin:
 
     def setUp(self):
         if self.random_primary_key_enable:
-            self.method_save_original = models.Model.save
+            self.method_original_save = models.Model.save
 
-            def method_save_new(instance, *args, **kwargs):
+            def method_new_save(instance, *args, **kwargs):
                 if instance.pk:
-                    return self.method_save_original(
+                    return self.method_original_save(
                         instance, *args, **kwargs
                     )
                 else:
@@ -349,12 +350,13 @@ class RandomPrimaryKeyModelMonkeyPatchMixin:
 
                     return result
 
-            setattr(models.Model, 'save', method_save_new)
+            setattr(models.Model, 'save', method_new_save)
+
         super().setUp()
 
     def tearDown(self):
         if self.random_primary_key_enable:
-            models.Model.save = self.method_save_original
+            models.Model.save = self.method_original_save
         super().tearDown()
 
 
@@ -661,6 +663,28 @@ class TestModelTestCaseMixin(ContentTypeTestCaseMixin, PermissionTestMixin):
                 setattr(Meta, key, value)
 
         return Meta
+
+
+class TestMixinObjectCreationTrack:
+    _test_object_model = None
+    _test_object_name = None
+
+    def _test_object_set(self, test_object_name=None):
+        test_object_name = test_object_name or self._test_object_name
+
+        try:
+            _test_object = self._test_object_model.objects.get(
+                ~Q(pk__in=self._test_object_pk_list)
+            )
+        except self._test_object_model.DoesNotExist:
+            _test_object = None
+
+        setattr(self, test_object_name, _test_object)
+
+    def _test_object_track(self):
+        self._test_object_pk_list = list(
+            self._test_object_model.objects.values_list('pk', flat=True)
+        )
 
 
 class TestServerTestCaseMixin:

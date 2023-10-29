@@ -18,7 +18,7 @@ BinaryDependency(
     module=__name__, name='file', path=DEFAULT_FILE_PATH
 )
 PythonDependency(
-    copyright_text='''
+    legal_text='''
         The MIT License (MIT)
 
         Copyright (c) 2001-2014 Adam Hupp
@@ -40,5 +40,5 @@ PythonDependency(
         LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
         SOFTWARE.
-    ''', module=__name__, name='python-magic', version_string='==0.4.26'
+    ''', module=__name__, name='python-magic', version_string='==0.4.27'
 )

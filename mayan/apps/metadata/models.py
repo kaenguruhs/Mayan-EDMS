@@ -4,14 +4,15 @@ from django.urls import reverse
 from django.utils.module_loading import import_string
 from django.utils.translation import ugettext_lazy as _
 
-from mayan.apps.common.validators import YAMLValidator
 from mayan.apps.common.serialization import yaml_load
+from mayan.apps.common.validators import YAMLValidator
 from mayan.apps.databases.model_mixins import ExtraDataModelMixin
-from mayan.apps.documents.models import Document, DocumentType
-from mayan.apps.events.classes import (
+from mayan.apps.documents.models.document_models import Document
+from mayan.apps.documents.models.document_type_models import DocumentType
+from mayan.apps.events.decorators import method_event
+from mayan.apps.events.event_managers import (
     EventManagerMethodAfter, EventManagerSave
 )
-from mayan.apps.events.decorators import method_event
 
 from .events import (
     event_document_metadata_added, event_document_metadata_edited,

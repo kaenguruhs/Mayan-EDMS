@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-03 05:20+0000\n"
+"POT-Creation-Date: 2023-10-25 16:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,6 +19,10 @@ msgstr ""
 
 #: apps.py:28 events.py:6
 msgid "Locales"
+msgstr ""
+
+#: dependencies.py:11
+msgid "Transifex Client"
 msgstr ""
 
 #: events.py:10
@@ -33,11 +37,11 @@ msgstr ""
 msgid "Edit locale profile"
 msgstr ""
 
-#: models.py:21
+#: models.py:20
 msgid "User"
 msgstr ""
 
-#: models.py:25
+#: models.py:24
 msgid "Timezone"
 msgstr ""
 
