@@ -148,7 +148,6 @@ USER mayan
 # for MBA
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 RUN export PATH=$PATH:$HOME/.cargo/bin \
-
 && set -a \
 && . /config.env \
 && set +a \
@@ -200,10 +199,10 @@ CMD ["run_all"]
 RUN set -a \
 && . /config.env \
 && set +a \
-&& ${PROJECT_INSTALL_DIR}bin/mayan-edms.py platformtemplate docker_entrypoint > /usr/local/bin/entrypoint.sh \
+&& ${PROJECT_INSTALL_DIR}bin/mayan-edms.py platform_template docker_entrypoint > /usr/local/bin/entrypoint.sh \
 && chown mayan:mayan /usr/local/bin/entrypoint.sh \
 && chmod +x /usr/local/bin/entrypoint.sh \
-&& ${PROJECT_INSTALL_DIR}bin/mayan-edms.py platformtemplate docker_supervisord > ${SUPERVISOR_CONFIGURATION_DIRECTORY}${SUPERVISOR_CONFIGURATION_FILENAME} \
+&& ${PROJECT_INSTALL_DIR}bin/mayan-edms.py platform_template docker_supervisord > ${SUPERVISOR_CONFIGURATION_DIRECTORY}${SUPERVISOR_CONFIGURATION_FILENAME} \
 && apt-get clean autoclean \
 && apt-get autoremove --purge --yes \
 && rm -rf /var/lib/apt/lists/* \
