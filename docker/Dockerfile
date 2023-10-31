@@ -5,7 +5,7 @@
 #              Mayan EDMS.
 ####
 
-FROM debian:11.7-slim as base_image
+FROM debian:12.1-slim as base_image
 
 LABEL maintainer="Roberto Rosario roberto.rosario@mayan-edms.com"
 
@@ -30,29 +30,25 @@ set -x \
 apt-get update \
 && apt-get install --no-install-recommends --yes \
     ca-certificates \
-    exiftool \
+    file \
     fonts-arphic-uming \
     fonts-arphic-ukai \
     fonts-unfonts-core \
     fuse \
     ghostscript \
-    git-core \
-    gpgv \
+    git \
     gnupg1 \
     graphviz \
     libarchive-zip-perl \
+    libfile-mimeinfo-perl \
+    libimage-exiftool-perl \
+    libmariadb3 \
+    libpq5 \
     libreoffice-calc-nogui \
     libreoffice-draw-nogui \
     libreoffice-impress-nogui \
     libreoffice-math-nogui \
     libreoffice-writer-nogui \
-    libfile-mimeinfo-perl \
-    libfuse2 \
-    libldap-2.4-2 \
-    libmagic1 \
-    libmariadb3 \
-    libpq5 \
-    libsasl2-2 \
     poppler-utils \
     python3-distutils \
     sane-utils \
@@ -61,7 +57,6 @@ apt-get update \
     tesseract-ocr \
 # install for MBA
     curl \
-    file \
 # Remove make and build dependencies.
 && apt-get remove --purge --yes \
     make \
@@ -75,7 +70,7 @@ apt-get update \
     libgstreamer-plugins-base1.0-0 \
 && apt-get autoremove --purge --yes \
 # Add mayan user.
-&& adduser mayan --disabled-password --disabled-login --gecos "" \
+&& adduser mayan --disabled-password --gecos "" \
 # Pillow can't find zlib or libjpeg on aarch64 (ODROID C2).
 && if [ "$(uname -m)" = "aarch64" ]; then \
     ln -s /usr/lib/aarch64-linux-gnu/libz.so /usr/lib/ \
