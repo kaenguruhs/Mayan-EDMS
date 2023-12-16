@@ -32,14 +32,13 @@ class ReleaseNoteExporter:
 
         for element in tree:
             if element.attrib.get('id') not in ignore_ids_list:
-
                 if element.tag == 'div':
-                    if not element.attrib.get('id') in ignore_ids_list:
+                    if element.attrib.get('id') not in ignore_ids_list:
                         result.extend(
                             ReleaseNoteExporter.filter_elements(tree=element)
                         )
                 else:
-                    if not element.attrib.get('id') in ignore_ids_list:
+                    if element.attrib.get('id') not in ignore_ids_list:
                         result.append(
                             etree.tostring(element).replace(b'\n', b' ')
                         )
@@ -67,6 +66,17 @@ class ReleaseNoteExporter:
                     result = (
                         '- `GitLab issue #{} '
                         '<https://gitlab.com/mayan-edms/mayan-edms/issues/{}>`_ {}'.format(
+                            line_parts[1], line_parts[1], line_parts[2]
+                        )
+                    )
+
+                    content.append(result)
+                elif ':github-issue:' in line:
+                    line_parts = line.split('`')
+
+                    result = (
+                        '- `GitHub issue #{} '
+                        '<https://github.com/mayan-edms/mayan-edms/issues/{}>`_ {}'.format(
                             line_parts[1], line_parts[1], line_parts[2]
                         )
                     )
