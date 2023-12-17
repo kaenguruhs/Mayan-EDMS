@@ -5,7 +5,7 @@
 #              Mayan EDMS.
 ####
 
-FROM debian:12.1-slim as base_image
+FROM debian:12.2-slim as base_image
 
 LABEL maintainer="Roberto Rosario roberto.rosario@mayan-edms.com"
 
