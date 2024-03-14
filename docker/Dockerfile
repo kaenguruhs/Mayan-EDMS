@@ -5,7 +5,7 @@
 #              Mayan EDMS.
 ####
 
-FROM debian:12.4-slim as base_image
+FROM debian:12.5-slim as base_image
 
 LABEL maintainer="Roberto Rosario roberto.rosario@mayan-edms.com"
 
@@ -50,7 +50,6 @@ apt-get update \
     libreoffice-math-nogui \
     libreoffice-writer-nogui \
     poppler-utils \
-    python3-distutils \
     sane-utils \
     sudo \
     supervisor \
