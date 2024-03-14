@@ -1,3 +1,33 @@
+4.5.9 (2024-02-05)
+==================
+- Minor query optimizations.
+- Changes from version 4.4.12.
+- Update dependency version:
+
+  - django-test-migrations from 1.1.0 to 1.3.0.
+  - pypdf from 3.14.0 to 3.17.4 due to CVE-2023-46250.
+  - safety from 3.0.1 to 2.3.5.
+
+- Don't raise an error if a form view has no form defined. This can be the
+  case for dynamic forms based on ACL where the current user has no access
+  for any of the fields.
+- Complete the changes started in version 4.5 to normalize how the
+  project/installation title and URL are calculated. The setting
+  ``COMMON_PROJECT_URL`` is now removed as its intended purpose is now
+  performed by the settings ``ORGANIZATIONS_INSTALLATION_URL`` and
+  ``ORGANIZATIONS_URL_BASE_PATH``. This change also fixes the title of the
+  REST API documentation showing the text 'None' when the
+  ``COMMON_PROJECT_TITLE`` setting was left to its default value.
+- Update Docker image tags:
+
+  - debian from 12.2-slim to 12.4-slim.
+  - elastic from 7.17.9 to 7.17.17.
+  - keycloak from 20.0.1 to 20.0.5-0.
+  - postgresql from 13.11-alpine to 13.13-alpine.
+  - python from 3.11.4-slim to 3.11.7-slim.
+  - rabbitmq from 3.12.2-alpine to 3.12.12-alpine.
+  - redis from 7.0.12-alpine to 7.0.15-alpine.
+
 4.5.8 (2023-12-07)
 ==================
 - Code style fixes.
@@ -433,6 +463,61 @@
   - Preserve document creation user to allow quota tests to
     access the user uploading the document.
 
+4.4.12 (2024-02-03)
+===================
+- Translation file updates.
+- Fix logging issue when unexpected cache file access problems are
+  encountered.
+- Backport minor query optimizations.
+- Update dependency versions:
+
+  - wheel from 0.37.0 to 0.42.0 due to CVE-2022-40898.
+  - sentry-sdk from 1.12.1 to 1.40.0 due to CVE-2023-28117.
+  - redis from 4.2.2 to 4.6.0 due to CVE-2023-28858.
+  - pycryptodome from 3.10.4 to 3.20.0 due to PVE-2021-42084.
+  - pip from 23.2.1 to 23.3.2 due to CVE-2023-5752.
+  - dateparser from 1.1.1 to 1.2.0 due to PVE-2023-62361.
+  - extract-msg from 0.36.4 to 0.47.0.
+  - PyPDF2 from 1.28.4 to 1.28.6.
+  - Pillow from 9.4.0 to 10.2.0 due to CVE-2023-44271.
+  - twine from 3.8.0 to 4.0.2.
+  - Update CairoSVG from 2.5.2 to 2.7.1 due to CVE-2023-27586.
+  - ipython from 8.21.0 to 7.32.0 due to CVE-2023-24816.
+  - amqp from 5.1.0 to 5.2.0.
+  - flake8 from 4.0.1 to 7.0.0.
+
+- Update the deprecated/removed Pillow constants:
+  https://pillow.readthedocs.io/en/stable/deprecations.html#constants
+  Replace ANTIALIASING with LANCZOS.
+
+4.4.11 (2023-12-10)
+===================
+- Fix test asserts. Fix test that were asserting for True values instead of
+  asserting for equality.
+- Fix document file page search content field label.
+- Continue purge loops even during errors. Update the cache and cache
+  partition purge loop to continue executing even when there are files that
+  cannot be purged. Cache partition files will be skipped and retried on the
+  next purge execution.
+- Code style fixes.
+
+4.4.10 (2023-12-07)
+===================
+- Support Django series in setup generation script.
+- Add missing mailing profile ``default`` field to creation and edit forms.
+- Update dependencies:
+
+  - Update Django from version 3.2.22 to 3.2.23.
+  - ``redis`` from version 4.2.0 to 4.2.2.
+  - ``drf-yasg`` from version 1.21.4 to 1.21.7.
+
+- Code style fixes.
+- Fix typos in comments, help texts, transformations labels.
+- Use right field when sorting document file pages
+- Generate markup for GitHub issues
+- Tweak main view horizontal margins to avoid sidebar issue in recent
+  Firefox versions.
+
 4.4.9 (2023-10-15)
 ==================
 - Fix the ``add_file`` method for the ``TarArchive`` class.
@@ -442,7 +527,8 @@
 - Fix editing existing metadata workflow actions.
 - Update the Docker image ``entrypoint.sh`` to skip changing the ownership
   of files if ``MAYAN_COMMON_DISABLE_LOCAL_STORAGE`` is set to any truthy
-  value (True, true, T, t, Yes, yes, Y, y, 1).
+  value (``True``, ``true``, ``T``, ``t``, ``Yes``, ``yes``, ``Y``, ``y``,
+  ``1``).
 - Backport periodic task import checking.
 - Backport source periodic task changes.
 - Update PyYAML from version 6.0 to 6.0.1.
@@ -933,6 +1019,49 @@
   - Add configurable remote branch for GitOps.
   - Support a local environment config file names ``config-local.env``.
     This file is ignored by Git and meant to override values of ``config.env``.
+
+4.3.12 (2023-12-10)
+===================
+- Don't install Docker when deploying. Update the GitLab CI deployment
+  stage to not install the Docker runtime.
+- Fix document file page search content field label.
+- Fix test asserts. Fix test that were asserting for True values instead of
+  asserting for equality.
+- Continue purge loops even during errors. Update the cache and cache
+  partition purge loop to continue executing even when there are files that
+  cannot be purged. Cache partition files will be skipped and retried on the
+  next purge execution.
+- Add event asserts in tests.
+- Fix the workflow metadata action ``select2`` widget.
+- Code style fixes.
+- Use long form for the command options in the Dockerfile.
+- Skip Docker volume ownership code. Update the Docker image
+  ``entrypoint.sh`` to skip changing the ownership of files if
+  ``MAYAN_COMMON_DISABLE_LOCAL_STORAGE`` is set to any truthy value
+  (``True``, ``true``, ``T``, ``t``, ``Yes``, ``yes``, ``Y``, ``y``, ``1``).
+- Backport source periodic task changes. Use a constant instead of a literal
+  to track the name of the source action execute task.
+- Fix the `add_file` method of ``TarArchive``.
+
+4.3.11 (2023-12-08)
+===================
+- Use correct field when sorting document file pages.
+- Fix typos in comments and transformations labels.
+- Code style fixes.
+- Fix code style warning E713.
+- Update dependencies:
+
+  - Update Django from version 3.2.20 to 3.2.23.
+  - ``redis`` from version 4.2.0 to 4.2.2.
+  - ``drf-yasg`` from version 1.20.0 to 1.21.7.
+  - ``PyYAML`` from version 6.0 to 6.0.1.
+
+- Add missing mailing profile ``default`` field to creation and edit forms.
+- Support Django series in setup generation script.
+- Use Mayan CLI full path in DockerFile.
+- Generate markup for GitHub issues.
+- Workaround Cython and PyYAML dependency bug from unpinned requirement
+  version.
 
 4.3.10 (2023-07-14)
 ===================
@@ -1573,6 +1702,30 @@
 - Disable the settings edit link when local storage is disabled.
 - Display a warning message in the setting edit view when local storage is
   disabled.
+
+4.2.18 (2023-12-09)
+===================
+- Update the cache and cache partition purge loop to continue executing even
+  when there are files that cannot be purged. Cache partition files will be
+  skipped and retried on the next purge execution.
+- Fix document file page search content field label.
+- Upgrade Django from version 3.2.19 to 3.2.23.
+- Generate markup for GitHub issues.
+- Fix a setting help text typo.
+- Add missing mailing profile ``default`` field to creation and edit forms.
+- Support Django series in setup generation script.
+- Use Mayan CLI full path in DockerFile.
+- Update the GitLab CI deployment stage to not install the Docker runtime.
+- Backport source periodic task changes.
+- Update the Docker image ``entrypoint.sh`` to skip changing the ownership
+  of files if ``MAYAN_COMMON_DISABLE_LOCAL_STORAGE`` is set to any truthy
+  value (True, true, T, t, Yes, yes, Y, y, 1).
+- Fix the ``add_file`` method of the ``TarArchive`` class.
+- Fix ``select2`` widget in the metadata edit workflow action form.
+- Update ``PyYAML`` from version 5.4.1 to 6.0.1.
+- Update ``drf-yasg`` from version 1.20.0 to 1.21.7.
+- Fix test that were asserting for True values instead of
+  asserting for equality.
 
 4.2.17 (2023-07-10)
 ===================
