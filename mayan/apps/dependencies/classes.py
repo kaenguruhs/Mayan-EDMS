@@ -1,5 +1,5 @@
-import json
 from io import BytesIO
+import json
 import logging
 from packaging import version
 import pkg_resources
@@ -33,7 +33,7 @@ logger = logging.getLogger(name=__name__)
 
 
 class Provider:
-    """Base provider class"""
+    """Base provider class."""
 
 
 class PyPIRespository(Provider):
@@ -49,7 +49,7 @@ class NPMRegistryRespository(Provider):
 
 
 class OperatingSystemProvider(Provider):
-    """Placeholder for the OS provider"""
+    """Placeholder for the OS provider."""
 
 
 class DependencyGroup:
@@ -227,11 +227,21 @@ class Dependency(AppsModuleLoaderMixin):
                     template.format(
                         dependency.name,
                         str(dependency.class_name_verbose_name),
-                        str(dependency.get_version_string()),
-                        str(dependency.app_label_verbose_name()),
-                        str(dependency.get_environments_verbose_name()),
-                        str(dependency.get_other_data()),
-                        str(result['check'])
+                        str(
+                            dependency.get_version_string()
+                        ),
+                        str(
+                            dependency.app_label_verbose_name()
+                        ),
+                        str(
+                            dependency.get_environments_verbose_name()
+                        ),
+                        str(
+                            dependency.get_other_data()
+                        ),
+                        str(
+                            result['check']
+                        )
                     )
                 )
         else:
@@ -265,7 +275,9 @@ class Dependency(AppsModuleLoaderMixin):
         dependencies = cls._registry.values()
         if subclass_only:
             dependencies = [
-                dependency for dependency in dependencies if isinstance(dependency, cls)
+                dependency for dependency in dependencies if isinstance(
+                    dependency, cls
+                )
             ]
 
         return Dependency.return_sorted(dependencies=dependencies)
@@ -340,7 +352,7 @@ class Dependency(AppsModuleLoaderMixin):
 
     def download(self):
         """
-        Download the dependency from a repository
+        Download the dependency from a repository.
         """
         raise NotImplementedError
 
@@ -408,7 +420,7 @@ class Dependency(AppsModuleLoaderMixin):
 
     def check(self):
         """
-        Returns the version found or an exception
+        Returns the version found or an exception.
         """
         if self._check():
             return True
@@ -491,12 +503,12 @@ class Dependency(AppsModuleLoaderMixin):
 
     def verify(self):
         """
-        Verify the integrity of the dependency
+        Verify the integrity of the dependency.
         """
         raise NotImplementedError
 
 
-# Depedency subclasses
+# Dependency subclasses.
 
 
 class BinaryDependency(Dependency):
@@ -609,19 +621,19 @@ class JavaScriptDependency(Dependency):
 
             path_install = self.get_install_path()
 
-            # Clear the installation path of previous content
+            # Clear the installation path of previous content.
             shutil.rmtree(
                 path=str(path_install), ignore_errors=True
             )
 
-            # Scoped packages are nested under a parent directory
-            # create it to avoid rename errors.
+            # Scoped packages are nested under a parent directory create it
+            # to avoid rename errors.
             path_install.mkdir(parents=True)
 
-            # Copy the content under the dependency's extracted content folder
-            # 'package' to the final location.
-            # We do a copy and delete instead of move because os.rename doesn't
-            # support renames across filesystems.
+            # Copy the content under the dependency's extracted content
+            # folder 'package' to the final location.
+            # We do a copy and delete instead of move because os.rename
+            # doesn't support renames across filesystems.
             path_uncompressed_package = Path(temporary_directory, 'package')
             shutil.rmtree(
                 path=str(path_install)
@@ -631,7 +643,7 @@ class JavaScriptDependency(Dependency):
                 dst=str(path_install)
             )
 
-            # Clean up temporary directory used for download
+            # Clean up temporary directory used for download.
             shutil.rmtree(path=self.path_cache, ignore_errors=True)
 
     def download(self):
@@ -865,7 +877,7 @@ class GoogleFontDependency(Dependency):
             mkdtemp()
         )
         # Use .css to keep the same ContentType, otherwise the webserver
-        # will use the generic octet and the browser will ignore the import
+        # will use the generic octet and the browser will ignore the import.
         # https://www.w3.org/TR/2013/CR-css-cascade-3-20131003/#content-type
         self.path_import_file = self.path_cache / 'import.css'
 
@@ -906,7 +918,7 @@ class GoogleFontDependency(Dependency):
     def extract(self, replace_list=None):
         path_install = self.get_install_path()
 
-        # Clear the installation path of previous content
+        # Clear the installation path of previous content.
         shutil.rmtree(
             path=str(path_install), ignore_errors=True
         )

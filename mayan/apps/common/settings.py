@@ -59,10 +59,11 @@ setting_extra_apps = namespace.add_setting(
         'beyond those normally installed by Mayan EDMS. Each string '
         'should be a dotted Python path to: an application configuration '
         'class (preferred), or a package containing an application. '
+        'These apps will be installed after the default apps. '
         'Example: [\'app_1\', \'app_2\']'
     )
 )
-setting_extra_apps = namespace.add_setting(
+setting_extra_apps_pre = namespace.add_setting(
     default=DEFAULT_COMMON_EXTRA_APPS_PRE,
     global_name='COMMON_EXTRA_APPS_PRE',
     help_text=_(

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mayan EDMS\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-03 21:14+0000\n"
+"POT-Creation-Date: 2024-03-03 15:09+0000\n"
 "PO-Revision-Date: 2023-09-06 21:36+0000\n"
 "Last-Translator: Mathias Behrle <mathiasb@m9s.biz>, 2023\n"
 "Language-Team: German (Germany) (https://app.transifex.com/rosarior/teams/13584/de_DE/)\n"
@@ -50,11 +50,11 @@ msgstr "Ziel"
 msgid "Action object"
 msgstr "Aktionsobjekt"
 
-#: apps.py:105 forms.py:10 forms.py:67
+#: apps.py:105 forms.py:10 forms.py:71
 msgid "Namespace"
 msgstr "Namensraum"
 
-#: apps.py:110 forms.py:14 forms.py:71 serializers.py:21 serializers.py:46
+#: apps.py:110 forms.py:16 forms.py:77 serializers.py:21 serializers.py:46
 msgid "Label"
 msgstr "Bezeichner"
 
@@ -74,11 +74,11 @@ msgstr "Ereignistyp"
 msgid "Event list export to CSV"
 msgstr "Ereignisliste nach CSV exportieren"
 
-#: classes.py:118
+#: classes.py:121
 msgid "Events exported."
 msgstr "Ereignisse exportiert."
 
-#: classes.py:120
+#: classes.py:123
 #, python-format
 msgid ""
 "The event list has been exported and is available for download using the "
@@ -95,15 +95,15 @@ msgstr "Ereignisse zurückgesetzt"
 msgid "Events exported"
 msgstr "Ereignisse exportiert"
 
-#: forms.py:18 forms.py:75
+#: forms.py:22 forms.py:83
 msgid "Subscription"
 msgstr "Subskription"
 
-#: forms.py:20 forms.py:77
+#: forms.py:24 forms.py:85
 msgid "No"
 msgstr "Nein"
 
-#: forms.py:21 forms.py:78
+#: forms.py:25 forms.py:86
 msgid "Subscribed"
 msgstr "Subskribiert"
 
@@ -111,11 +111,11 @@ msgstr "Subskribiert"
 msgid "System"
 msgstr "System"
 
-#: links.py:55 links.py:100 views/clear_views.py:63
+#: links.py:55 links.py:100 views/clear_views.py:65
 msgid "Clear events"
 msgstr "Ereignisse zurücksetzen"
 
-#: links.py:59 links.py:107 views/export_views.py:60
+#: links.py:59 links.py:107 views/export_views.py:64
 msgid "Export events"
 msgstr "Ereignisse exportieren"
 
@@ -257,16 +257,16 @@ msgstr ""
 "Diese Aktion ist nicht umkehrbar. Der Vorgang wird im Hintergrund "
 "ausgeführt."
 
-#: views/clear_views.py:51
+#: views/clear_views.py:53
 msgid "Event list clear task queued successfully."
 msgstr "Task für die Löschung der Ereignisliste erfolgreich eingereicht."
 
-#: views/clear_views.py:84
+#: views/clear_views.py:86
 #, python-format
 msgid "Clear events of: %s"
 msgstr "Ereignisse löschen für %s"
 
-#: views/clear_views.py:109
+#: views/clear_views.py:111
 #, python-format
 msgid "Clear events of type: %s"
 msgstr "Ereignisse löschen für Typ %s"
@@ -297,7 +297,7 @@ msgstr "Keine Ereignisse diesen Typs vorhanden"
 msgid "Events of type: %s"
 msgstr "Ereignisse des Typs %s"
 
-#: views/export_views.py:27
+#: views/export_views.py:28
 msgid ""
 "The process will be performed in the background. The exported events will be"
 " available in the downloads area."
@@ -305,16 +305,16 @@ msgstr ""
 "Dieser Prozess wird im Hintergrund ausgeführt. Die exportierten Ereignisse "
 "werden im Downloadbereich verfügbar sein."
 
-#: views/export_views.py:47
+#: views/export_views.py:51
 msgid "Event list export task queued successfully."
 msgstr "Export der Ereignisliste erfolgreich eingereiht."
 
-#: views/export_views.py:81
+#: views/export_views.py:85
 #, python-format
 msgid "Export events of: %s"
 msgstr "Ereignisse für %s exportieren"
 
-#: views/export_views.py:100
+#: views/export_views.py:104
 #, python-format
 msgid "Export events of type: %s"
 msgstr "Ereignisse für Typ %s exportieren"

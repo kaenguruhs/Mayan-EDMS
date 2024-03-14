@@ -1,7 +1,7 @@
-from mayan.apps.rest_api import generics
 from mayan.apps.documents.api_views.api_view_mixins import (
     ParentObjectDocumentAPIViewMixin
 )
+from mayan.apps.rest_api import generics
 from mayan.apps.views.generics import DownloadViewMixin
 
 from .permissions import permission_document_file_download
@@ -16,7 +16,7 @@ class APIDocumentFileDownloadView(
     """
     lookup_url_kwarg = 'document_file_id'
     mayan_object_permissions = {
-        'GET': (permission_document_file_download,),
+        'GET': (permission_document_file_download,)
     }
 
     def get_download_file_object(self):
